@@ -10,13 +10,21 @@ public class MissionManager : MonoBehaviour {
 
 	List<GameObject> missionGameObjectList = new List<GameObject>();
 
-	float missionListingHeight = 45;
+	float missionListingHeight = 25;
 	float missionListXPos = 66;
 
-	GameObject missionListObject, missionDetailsObject;
+	GameObject missionListObject, missionDetailsObject, titleSplashObject, timeLeftObject, difficultyObject;
+	GameObject headerObject;
+
 
 	int selecttedMissionIndex = 4, lastMissionIndex;
 
+	Vector3 freeSpaceMidpoint;
+
+	float listWidth = 0;
+
+	Vector2 targetListSize, targetListingSize, targetDetailSize, targetSplashSize;
+	Vector3 targetListPos, targetListingPos, targetDetailPos, targetSplashPos;
 	struct Objective{
 		public string objectiveName;
 		public int objectiveValue;
@@ -29,6 +37,14 @@ public class MissionManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		missionDetailsObject = GameObject.Find("Mission Details");
+		missionDetailsObject.GetComponent<RectTransform>().anchorMin = new Vector2(0,1);
+		missionDetailsObject.GetComponent<RectTransform>().anchorMax = new Vector2(0,1);
+
+
+		titleSplashObject = GameObject.Find("Title Splash");
+
+
+
 		for(int i = 0; i < 20; i++){
 			GenerateMission();
 		}
@@ -40,10 +56,59 @@ public class MissionManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		missionListObject.GetComponent<RectTransform>().localPosition = Vector3.Lerp(missionListObject.GetComponent<RectTransform>().localPosition,
-		                                                                             new Vector3((-Screen.width/2 + (selecttedMissionIndex * -7))+320,0,0),
-		                                                                             Time.deltaTime*5);
+		ScaleAndPositionUI();
+		CheckInput();
+	}
 
+	void ScaleAndPositionUI(){
+		//Set Title Size and Position
+		targetSplashSize = new Vector2(Screen.width/6,Screen.height/6);
+		targetSplashPos = new Vector3(Screen.width/2 - (targetSplashSize.x * 1.8f),Screen.height/2 - (targetSplashSize.y * 1.3f),0);
+		if(titleSplashObject.GetComponent<RectTransform>().sizeDelta != targetSplashSize) titleSplashObject.GetComponent<RectTransform>().sizeDelta = targetSplashSize;
+		if(titleSplashObject.GetComponent<RectTransform>().localPosition != targetSplashPos)titleSplashObject.GetComponent<RectTransform>().localPosition = Vector3.Lerp(titleSplashObject.GetComponent<RectTransform>().localPosition, targetSplashPos, Time.deltaTime*3);
+		
+		//Set List Size and Position
+		targetListSize = new Vector2(Screen.width/4, (missionList.Count * missionListingHeight));
+		targetListPos = new Vector3(((-Screen.width/7f) + (selecttedMissionIndex * -7) + (-Screen.width/32)),0,0);
+		if(missionListObject.GetComponent<RectTransform>().sizeDelta != targetListSize)missionListObject.GetComponent<RectTransform>().sizeDelta = targetListSize;
+		if(missionListObject.GetComponent<RectTransform>().localPosition != targetListPos)missionListObject.GetComponent<RectTransform>().localPosition = Vector3.Lerp(missionListObject.GetComponent<RectTransform>().localPosition, targetListPos, Time.deltaTime*5);
+		
+		//Set Listing Size and Position
+		for(int i =0; i < missionGameObjectList.Count; i++){
+			targetListingSize = new Vector2(targetListSize.x - Screen.width/24, 30);
+			targetListingPos = new Vector3((i*7) - Screen.width/12 + ((Screen.width/24)),	(i*missionListingHeight) - ((sortedMissionList.Count/2)*missionListingHeight) + (0),0);
+			if(missionGameObjectList[i].GetComponent<RectTransform>().sizeDelta != targetListingSize){
+				missionGameObjectList[i].GetComponent<RectTransform>().sizeDelta = targetListingSize;
+				missionGameObjectList[i].transform.Find("Title").GetComponent<RectTransform>().localPosition = new Vector3(0,0,0);
+				missionGameObjectList[i].transform.Find("DaysLeft").GetComponent<RectTransform>().localPosition = new Vector3(-missionGameObjectList[i].GetComponent<RectTransform>().sizeDelta.x/2 + 15,0,0);
+				missionGameObjectList[i].transform.Find("Difficulty").GetComponent<RectTransform>().localPosition = new Vector3((missionGameObjectList[i].GetComponent<RectTransform>().sizeDelta.x/2) - 35 ,0,0);
+				listWidth = missionGameObjectList[i].GetComponent<RectTransform>().sizeDelta.x;
+
+			}
+
+
+
+			if(missionGameObjectList[i].GetComponent<RectTransform>().localPosition != targetListingPos) 	missionGameObjectList[i].GetComponent<RectTransform>().localPosition = targetListingPos;
+		}
+
+		headerObject.GetComponent<RectTransform>().sizeDelta = new Vector2(targetListSize.x - Screen.width/24, 30);
+		headerObject.GetComponent<RectTransform>().localPosition = new Vector3((sortedMissionList.Count*7) - Screen.width/30,	(sortedMissionList.Count*missionListingHeight) - (((sortedMissionList.Count+2)/2)*missionListingHeight),0);
+		headerObject.transform.Find("Mission").GetComponent<RectTransform>().localPosition = new Vector3(0,0,0);
+		headerObject.transform.Find("TimeLeft").GetComponent<RectTransform>().localPosition = new Vector3(-headerObject.GetComponent<RectTransform>().sizeDelta.x/2 + 15,0,0);
+		headerObject.transform.Find("Difficulty").GetComponent<RectTransform>().localPosition = new Vector3((headerObject.GetComponent<RectTransform>().sizeDelta.x/2) - 35 ,0,0);
+
+
+		//timeLeftObject.GetComponent<RectTransform>().localPosition = new Vector3((-listWidth/2) +90 ,timeLeftObject.GetComponent<RectTransform>().localPosition.y + 1,0);
+
+		//Set Detail SIze and Position
+		targetDetailSize = new Vector2((Screen.width/3), Screen.width/3);
+		targetDetailPos  = new Vector3(((Screen.width/6) + (selecttedMissionIndex * -7)),-Screen.height/12,0);
+		if(missionDetailsObject.GetComponent<RectTransform>().sizeDelta != targetDetailSize)missionDetailsObject.GetComponent<RectTransform>().sizeDelta = targetDetailSize;  
+		if(missionDetailsObject.GetComponent<RectTransform>().localPosition != targetDetailPos)missionDetailsObject.GetComponent<RectTransform>().localPosition = Vector3.Lerp(missionDetailsObject.GetComponent<RectTransform>().localPosition, targetDetailPos, Time.deltaTime * 4);
+
+	}
+
+	void CheckInput(){
 		if(Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow)){
 			if(selecttedMissionIndex + 1 < sortedMissionList.Count){
 				lastMissionIndex = selecttedMissionIndex;
@@ -192,23 +257,33 @@ public class MissionManager : MonoBehaviour {
 
 	void DisplayMissionsList(){
 		missionListObject = GameObject.Find("Canvas").transform.Find("MissionMenu").Find("MissionSelect").Find("MissionList").gameObject;
-		missionListObject.GetComponent<RectTransform>().sizeDelta = new Vector2(600, (missionList.Count * missionListingHeight) + 5 );
-		missionListObject.GetComponent<RectTransform>().localPosition = new Vector3((-Screen.width/2)+300,0,0);
+		missionListObject.GetComponent<RectTransform>().anchorMin = new Vector2(0,1);
+		missionListObject.GetComponent<RectTransform>().anchorMax = new Vector2(0,1);
 
 		for(int i =0; i < sortedMissionList.Count; i++){
 			GameObject missionObject = Instantiate(Resources.Load("UI/MissionListing"), transform.position, Quaternion.identity) as GameObject;
+			missionObject.GetComponent<RectTransform>().anchorMin = new Vector2(0,1);
+			missionObject.GetComponent<RectTransform>().anchorMax = new Vector2(0,1);
+
 			missionObject.transform.parent = missionListObject.transform;
-			missionObject.GetComponent<RectTransform>().localPosition = new Vector3(-66+(i*7),	(i*missionListingHeight) - ((sortedMissionList.Count/2)*missionListingHeight) + (0),	0);
 			missionObject.transform.Find("DaysLeft").GetComponent<Text>().text = sortedMissionList[i].daysRemaining.ToString();
 			missionObject.transform.Find("Difficulty").GetComponent<Text>().text = sortedMissionList[i].difficulty;
 			missionObject.transform.Find("Title").GetComponent<Text>().text = sortedMissionList[i].missionName;
 			missionObject.GetComponent<MissionListing>().SetDifficultyColor(sortedMissionList[i].difficulty);
 			missionGameObjectList.Add(missionObject);
 		}
+
+		headerObject = Instantiate(Resources.Load("UI/MissionHeader"), transform.position, Quaternion.identity) as GameObject;
+		headerObject.transform.parent = missionListObject.transform;
+		//headerObject.GetComponent<RectTransform>().localPosition = new Vector3((sortedMissionList.Count*7) - Screen.width/12 + ((Screen.width/24)),	(sortedMissionList.Count*missionListingHeight) - ((sortedMissionList.Count/2)*missionListingHeight) + (0),0);
+	
+		timeLeftObject   = headerObject.transform.Find("TimeLeft").gameObject;
+		difficultyObject = headerObject.transform.Find("Difficulty").gameObject;
+
 	}
 
 	void DisplayMissionDetails(){
-		missionDetailsObject.transform.localPosition = new Vector3((Screen.width/2) - (missionDetailsObject.GetComponent<RectTransform>().sizeDelta.x/2),0,0);
+		//missionDetailsObject.transform.localPosition = new Vector3((Screen.width/2) - (missionDetailsObject.GetComponent<RectTransform>().sizeDelta.x/2),0,0);
 		missionDetailsObject.transform.Find("Objective").Find("ObjectiveDescription Part1").GetComponent<Text>().text = sortedMissionList[selecttedMissionIndex].missionDescription;
 		missionDetailsObject.transform.Find("Target Item").Find("TargetDescription").GetComponent<Text>().text = "Item: " +sortedMissionList[selecttedMissionIndex].missionObjective + "\n Value: " +sortedMissionList[selecttedMissionIndex].objectiveValue +" credits";	
 	}

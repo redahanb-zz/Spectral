@@ -3,7 +3,15 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Layout
+  - Wall Section
+  - Wall Pillar
+  - Empty Tile
+  - Room Tile
+  - Tile
+  - Enemy
+  - Wall
   layers:
   - Default
   - TransparentFX

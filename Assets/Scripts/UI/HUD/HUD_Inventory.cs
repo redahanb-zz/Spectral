@@ -34,7 +34,7 @@ public class HUD_Inventory : MonoBehaviour {
 		for(int i = 0; i < size ; i++){
 			// position their rect-transforms according to their index and the size of the array
 			panelPosition = new Vector3( -1*((size*panelSize)/2) + panelSize/2 + i*panelSize, 20, 0);
-			inventoryIcons[i] = Instantiate(Resources.Load("UI/HUD/Inventory/HUD_Panel_Inv"), panelPosition, Quaternion.identity) as GameObject;
+			inventoryIcons[i] = Instantiate(Resources.Load("UI/HUD/Inventory/HUD_Button_Inv"), panelPosition, Quaternion.identity) as GameObject;
 			
 			// set the parent and keep the position relative to the parent
 			inventoryIcons[i].transform.SetParent(gameObject.transform, false);

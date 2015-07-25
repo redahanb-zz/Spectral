@@ -9,14 +9,19 @@ public class ScreenFade : MonoBehaviour {
 	RawImage rImg;
 	RectTransform rTrans;
 
+	public float lastInterval, timeNow, myTime;
+
 	// Use this for initialization
 	void Start () {
+
+
 		fadeObject = transform.Find("Fade").gameObject;
 		fadeObject.SetActive(true);
 		rImg = transform.Find("Fade").GetComponent<RawImage>();
+		//rImg.color = new Color(rImg.color.r, rImg.color.g, rImg.color.g, 1);
 		rTrans = transform.Find("Fade").GetComponent<RectTransform>();
 		rTrans.sizeDelta = new Vector2(Screen.width, Screen.height);
-		Invoke("ToggleCanFade", 2);
+		fadeToColor = false;
 	}
 
 	public void ToggleCanFade(){
@@ -25,11 +30,19 @@ public class ScreenFade : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		timeNow = Time.realtimeSinceStartup;
+		myTime = timeNow - lastInterval;
+		lastInterval = timeNow;
+
+		print( rImg.color.a);
+
 		if(fadeToColor){
-			rImg.color = Color.Lerp(rImg.color, new Color(rImg.color.r, rImg.color.g, rImg.color.g, 1), Time.deltaTime);
+			rImg.color = Color.Lerp(rImg.color, new Color(rImg.color.r, rImg.color.g, rImg.color.g, 1), 0.01f);
 		}
 		else{
-			rImg.color = Color.Lerp(rImg.color, new Color(rImg.color.r, rImg.color.g, rImg.color.g, 0), Time.deltaTime);
+			rImg.color = Color.Lerp(rImg.color, new Color(rImg.color.r, rImg.color.g, rImg.color.g, 0), 0.01f);
 		}
+
+		lastInterval = timeNow;
 	}
 }

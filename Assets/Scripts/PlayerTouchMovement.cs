@@ -3,7 +3,7 @@ using System.Collections;
 
 public class PlayerTouchMovement : MonoBehaviour {
 
-	GameObject destinationMarker;
+	GameObject player;
 
 	Ray ray;
 	RaycastHit hit;
@@ -11,7 +11,7 @@ public class PlayerTouchMovement : MonoBehaviour {
 	GameObject markerObject;
 	// Use this for initialization
 	void Start () {
-		destinationMarker = Resources.Load("DestinationMarker") as GameObject;
+		player = GameObject.FindGameObjectWithTag("Player");
 	}
 	
 	// Update is called once per frame
@@ -22,9 +22,10 @@ public class PlayerTouchMovement : MonoBehaviour {
 			ray = Camera.main.ScreenPointToRay (Input.GetTouch(0).position);
 			if (Input.GetTouch(i).phase == TouchPhase.Began){
 				if (Physics.Raycast(ray, out hit)){
-					spawnPosition = hit.point;
-					if(markerObject)markerObject.transform.position = spawnPosition;
-					else markerObject = Instantiate(destinationMarker, spawnPosition, transform.rotation) as GameObject;
+					if(hit.transform.tag == "Tile"){
+						spawnPosition = hit.point;
+						if(player)player.transform.position = new Vector3(hit.point.x, player.transform.position.y, hit.point.z);
+					}
 				}
 
 			}

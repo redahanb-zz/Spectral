@@ -34,8 +34,6 @@ public class ScreenFade : MonoBehaviour {
 		myTime = timeNow - lastInterval;
 		lastInterval = timeNow;
 
-		print( rImg.color.a);
-
 		if(fadeToColor){
 			rImg.color = Color.Lerp(rImg.color, new Color(rImg.color.r, rImg.color.g, rImg.color.g, 1), 0.01f);
 		}

@@ -18,7 +18,9 @@ public class CameraTrigger : MonoBehaviour {
 	void OnTriggerEnter(Collider c){
 		if(c.tag == "Player"){
 			print("[CameraTrigger] Detected Player");
-			cController.targetCamera = transform.Find("CameraPosRot(Clone)");
+			if(transform.Find("CameraPosRot(Clone)")) cController.targetCamera = transform.Find("CameraPosRot(Clone)").transform;
+			else cController.targetCamera = transform.Find("CameraPosRot").transform;
+
 			cController.target = c.transform;
 		}
 	}

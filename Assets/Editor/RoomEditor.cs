@@ -6,7 +6,7 @@ using System.Linq;
 public class RoomEditor : EditorWindow {
 
 	GameObject 	newLevelObject,newRoomObject, newWallPillarObject, newWallSectionObject, exteriorObject, boundaryObject,
-				roomGroupObject;
+				roomGroupObject, navMeshPlaneObject;
 
 
 	private int roomX, roomZ,
@@ -95,6 +95,7 @@ public class RoomEditor : EditorWindow {
 			roomGroupObject.transform.parent = newLevelObject.transform;
 
 
+
 			newRoomObject = Instantiate(Resources.Load("_Room Editor/Default Rooms/Room Large"), Vector3.zero + new Vector3(0,1000,0), Quaternion.identity) as GameObject;
 			newRoomObject.transform.parent = roomGroupObject.transform;
 			newRoomObject.name = "[0,0] Landing Pad";
@@ -102,6 +103,8 @@ public class RoomEditor : EditorWindow {
 			exteriorObject = Instantiate(Resources.Load("_Room Editor/Components/Basic Exterior"), newRoomObject.transform.position + new Vector3(0,-0.1f,0), Quaternion.identity) as GameObject; 
 			exteriorObject.transform.parent = newRoomObject.transform;
 			exteriorObject.name = "Exterior";
+
+
 
 			GameObject landingPadMarker = Instantiate(Resources.Load("_Room Editor/Components/Landing Pad Marker"), Vector3.zero, Quaternion.identity) as GameObject; 
 			landingPadMarker.transform.parent = newRoomObject.transform;
@@ -140,7 +143,12 @@ public class RoomEditor : EditorWindow {
 			boundaryObject = Instantiate(Resources.Load("_Room Editor/Components/Room Boundary"), newRoomObject.transform.position, Quaternion.identity) as GameObject;
 			boundaryObject.transform.parent = newRoomObject.transform;
 			boundaryObject.name = "Boundary";
-			
+
+			navMeshPlaneObject = Instantiate(Resources.Load("_Room Editor/Components/Nav Mesh Floor"), newRoomObject.transform.position + new Vector3(0,0.06f,0), Quaternion.identity) as GameObject; 
+			navMeshPlaneObject.transform.parent = newRoomObject.transform;
+			navMeshPlaneObject.transform.eulerAngles = new Vector3(90,0,0);
+			navMeshPlaneObject.name = "Nav Mesh Floor";
+
 			roomScript = newRoomObject.GetComponent<Room>();
 			roomScript.xIndex = Selection.activeTransform.GetComponent<Room>().xIndex;
 			roomScript.zIndex = Selection.activeTransform.GetComponent<Room>().zIndex;
@@ -192,7 +200,12 @@ public class RoomEditor : EditorWindow {
 				boundaryObject = Instantiate(Resources.Load("_Room Editor/Components/Room Boundary"), newRoomObject.transform.position, Quaternion.identity) as GameObject;
 				boundaryObject.transform.parent = newRoomObject.transform;
 				boundaryObject.name = "Boundary";
-				
+
+				navMeshPlaneObject = Instantiate(Resources.Load("_Room Editor/Components/Nav Mesh Floor"), newRoomObject.transform.position + new Vector3(0,0.06f,0), Quaternion.identity) as GameObject; 
+				navMeshPlaneObject.transform.parent = newRoomObject.transform;
+				navMeshPlaneObject.transform.eulerAngles = new Vector3(90,0,0);
+				navMeshPlaneObject.name = "Nav Mesh Floor";
+
 				roomScript = newRoomObject.GetComponent<Room>();
 				roomScript.xIndex = newRoomX;
 				roomScript.zIndex = newRoomZ;

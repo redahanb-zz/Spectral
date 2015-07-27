@@ -189,7 +189,25 @@ ModelImporter:
     optimizeGameObjects: 0
     motionNodeName: 
     animationImportErrors: 
-    animationImportWarnings: 
+    animationImportWarnings: 'MuscleClip ''MOB1_M1_Run_F''conversion warning: ''Root/Hips/LeftUpLeg/LeftLeg/LeftFoot''
+      has translation animation. It is not supported.
+
+
+      MuscleClip ''MOB1_M1_Run_F'' conversion warning: ''Root/Hips/Spine/Spine1/Spine2''
+      is between humanoid transforms and has rotation animation. This might lower
+      retargeting quality.
+
+
+      MuscleClip ''MOB1_M1_Run_F'' conversion warning: ''Root/Hips/Spine/Spine1/Spine2/Neck/Neck1''
+      is between humanoid transforms and has rotation animation. This might lower
+      retargeting quality.
+
+
+      MuscleClip ''MOB1_M1_Run_F''conversion warning: ''Root/Hips/RightUpLeg/RightLeg/RightFoot''
+      has translation animation. It is not supported.
+
+
+'
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
     animationCompression: 3

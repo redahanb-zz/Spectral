@@ -17,7 +17,6 @@ public class PlayerTouchMovement : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-
 		for (var i = 0; i < Input.touchCount; i++) {
 			ray = Camera.main.ScreenPointToRay (Input.GetTouch(0).position);
 			if (Input.GetTouch(i).phase == TouchPhase.Began){

@@ -59,11 +59,10 @@ public class PlayerInventory : MonoBehaviour {
 //				print ("Change colour!!");
 //			}
 //		}
-		
+
 	}
 	
 	public void addItem(GameObject pickup) {
-		
 		//		if(playerInventory[highlightedSlot] == null){
 		//			pickup.GetComponent<InventoryItem> ().pickUpItem (); // move the object to the player's position and hide it
 		//			playerInventory [highlightedSlot] = pickup; // put item in selected slot
@@ -84,6 +83,15 @@ public class PlayerInventory : MonoBehaviour {
 		playerInventory[highlightedSlot].transform.position = dropLocation;
 		playerInventory[highlightedSlot].gameObject.SetActive (true);
 		//inventoryUI.inventoryIcons [highlightedSlot].transform.GetChild(0).transform.GetComponent<Image> ().sprite = inventoryUI.defaultSprite;
+		//inventoryUI.inventoryIcons [highlightedSlot].transform.GetChild(1).transform.GetComponent<Text> ().text = "-";
+	}
+
+	public void dropItem(int index){
+		Vector3 dropLocation = GameObject.FindWithTag ("Player").transform.position + (GameObject.FindWithTag ("Player").transform.forward*0.3f) + Vector3.up;
+		playerInventory[index].transform.position = dropLocation;
+		playerInventory[index].gameObject.SetActive (true);
+		playerInventory [index] = null;
+		//inventoryUI.inventoryIcons [index].transform.GetChild(0).transform.GetComponent<Image> ().sprite = inventoryUI.defaultIcon;
 		//inventoryUI.inventoryIcons [highlightedSlot].transform.GetChild(1).transform.GetComponent<Text> ().text = "-";
 	}
 	

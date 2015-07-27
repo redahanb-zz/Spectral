@@ -28,6 +28,7 @@ GameObject:
   - 222: {fileID: 22222700}
   - 114: {fileID: 11401942}
   - 114: {fileID: 11407578}
+  - 114: {fileID: 11402846}
   m_Layer: 5
   m_Name: HUD_Button_Inv
   m_TagString: HUD_Inv
@@ -56,6 +57,18 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &11402846
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 183362}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 478a9cf64786249aea1f704f563dd85b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  index: 0
 --- !u!114 &11407578
 MonoBehaviour:
   m_ObjectHideFlags: 1

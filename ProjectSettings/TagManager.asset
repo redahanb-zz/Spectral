@@ -13,6 +13,7 @@ TagManager:
   - Enemy
   - Wall
   - HUD_Inv
+  - Pickup
   layers:
   - Default
   - TransparentFX

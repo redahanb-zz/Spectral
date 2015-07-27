@@ -6,16 +6,20 @@ public class HUD_Inventory : MonoBehaviour {
 
 	public GameObject[] inventoryIcons;
 	public int panelSize;
+	int inventorySize;
+	PlayerInventory playerInventory;
+	public Sprite defaultIcon;
 
 	// Use this for initialization
 	void Start () {
-		int inventorySize = GameObject.Find("GameManager").GetComponent<PlayerInventory>().inventorySize;
+		playerInventory = GameObject.Find ("GameManager").GetComponent<PlayerInventory> ();
+		inventorySize = playerInventory.inventorySize;
 		buildInventoryUI (inventorySize);
 	}
 	
 	// Update is called once per frame
 	void Update () {
-	
+		updateIcon ();
 	}
 
 	public void buildInventoryUI(int size) {
@@ -40,6 +44,7 @@ public class HUD_Inventory : MonoBehaviour {
 			// set the parent and keep the position relative to the parent
 			inventoryIcons[i].transform.SetParent(gameObject.transform, false);
 			inventoryIcons[i].GetComponent<RectTransform>().anchoredPosition = new Vector2(-1*((size*panelSize)/2) + panelSize/2 + i*panelSize, 20);
+			inventoryIcons[i].GetComponent<SimpleIndex>().index = i;
 			
 			// name them as an index for the UI array
 			inventoryIcons[i].gameObject.name = "Cell " + i.ToString();
@@ -47,6 +52,19 @@ public class HUD_Inventory : MonoBehaviour {
 	}	
 
 	public void updateIcon(){
-
+		for (int i = 0; i < inventorySize; i++) {
+			if(playerInventory.playerInventory[i]){
+				Image itemIcon = inventoryIcons[i].transform.GetChild(0).transform.GetComponent<Image>();
+				itemIcon.sprite = playerInventory.playerInventory[i].GetComponent<InventoryItem>().itemIcon;
+				Color iconColor = playerInventory.playerInventory[i].GetComponent<InventoryItem>().itemColor;
+				iconColor.a = 1;
+				itemIcon.color = iconColor;
+			} else {
+				// icon is default
+				Image itemIcon = inventoryIcons[i].transform.GetChild(0).transform.GetComponent<Image>();
+				itemIcon.sprite = defaultIcon;
+				itemIcon.color = Color.white;
+			}
+		}
 	}
 }

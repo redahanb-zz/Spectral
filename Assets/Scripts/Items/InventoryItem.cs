@@ -7,21 +7,21 @@ public class InventoryItem : MonoBehaviour {
 	public Color itemColor;
 	public Sprite itemIcon;
 	public int itemValue;
-	AudioSource impactSound;
+	//AudioSource impactSound;
 
 	//ButtonManager buttonManager;
 
 	// Use this for initialization
 	void Start () {
-		impactSound = GetComponent<AudioSource> ();
+		//impactSound = GetComponent<AudioSource> ();
 		transform.GetComponent<Renderer> ().material.color = itemColor;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		if(impactSound.mute && Time.time > 3.0f){
-			impactSound.mute = false;
-		}
+//		if(impactSound.mute && Time.time > 3.0f){
+//			impactSound.mute = false;
+//		}
 
 //		if (!buttonManager) {
 //			if(GameObject.FindWithTag("Player")) {
@@ -84,7 +84,7 @@ public class InventoryItem : MonoBehaviour {
 		drawLoc.y += 0.01f;
 		GameObject echo = Instantiate (Resources.Load("FootfallFX"), drawLoc, Quaternion.Euler(90,0,0)) as GameObject;
 		echo.GetComponent<SpriteRenderer> ().color = Color.red;
-		AudioSource.PlayClipAtPoint (impactSound.clip, transform.position);
+		//AudioSource.PlayClipAtPoint (impactSound.clip, transform.position);
 	}
 	
 }

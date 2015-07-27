@@ -7,8 +7,10 @@ using UnityEngine.UI;
 public class TouchInventory : MonoBehaviour {
 	
 	EventSystem eventSystem;
-
-	Text text;
+	
+	float touchBeganTime;
+	float touchHoldTime = 1.0f;
+	bool dragging = false;
 
 	//Vector2 startLocation;
 	//Vector2 endLocation;
@@ -18,28 +20,30 @@ public class TouchInventory : MonoBehaviour {
 	void Start () {
 		eventSystem = GameObject.Find ("EventSystem").GetComponent<EventSystem>();
 
-		text = GameObject.Find ("ReportText").GetComponent<Text> ();
 	}
 	
 	// Update is called once per frame
 	void Update () {
 
-		print (eventSystem.currentSelectedGameObject);
-
 		foreach(Touch touch in Input.touches){
 
-			if(touch.phase == TouchPhase.Began){
-				text.text = "Finger ID: " + touch.fingerId.ToString();
+			if(touch.phase == TouchPhase.Began && eventSystem.IsPointerOverGameObject() ){
+				touchBeganTime = Time.time;
+				//floatImage = Instantiate(eventSystem.currentSelectedGameObject.transform.GetChild(0).gameObject, touch.position, Quaternion.identity) as GameObject;
+				//floatImage.transform.SetParent(GameObject.Find("Canvas").transform);
+
+			} else if(touch.phase == TouchPhase.Stationary && (Time.time - touchBeganTime) >= touchHoldTime && !dragging){
+				dragging = true;
 				floatImage = Instantiate(eventSystem.currentSelectedGameObject.transform.GetChild(0).gameObject, touch.position, Quaternion.identity) as GameObject;
 				floatImage.transform.SetParent(GameObject.Find("Canvas").transform);
-				//startLocation = touch.position;
+				floatImage.transform.localScale = new Vector3 (2.0f, 2.0f, 2.0f);
+			} 
 
-			} else if (touch.phase == TouchPhase.Moved){
+			else if (touch.phase == TouchPhase.Moved && dragging){
 				floatImage.transform.position = touch.position;
-			} else if(touch.phase == TouchPhase.Ended){
-				//endLocation = touch.position;
+			} else if(touch.phase == TouchPhase.Ended && dragging){
 				floatImage.SetActive(false);
-				Destroy(floatImage);
+				dragging = false;
 			}
 		}
 	}

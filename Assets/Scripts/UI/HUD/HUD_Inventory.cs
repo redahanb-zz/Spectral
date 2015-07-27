@@ -4,12 +4,13 @@ using UnityEngine.UI;
 
 public class HUD_Inventory : MonoBehaviour {
 
-	GameObject[] inventoryIcons;
+	public GameObject[] inventoryIcons;
 	public int panelSize;
 
 	// Use this for initialization
 	void Start () {
-		buildInventoryUI (5);
+		int inventorySize = GameObject.Find("GameManager").GetComponent<PlayerInventory>().inventorySize;
+		buildInventoryUI (inventorySize);
 	}
 	
 	// Update is called once per frame
@@ -42,7 +43,10 @@ public class HUD_Inventory : MonoBehaviour {
 			
 			// name them as an index for the UI array
 			inventoryIcons[i].gameObject.name = "Cell " + i.ToString();
-		}
-		
+		}	
 	}	
+
+	public void updateIcon(){
+
+	}
 }

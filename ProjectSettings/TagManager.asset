@@ -12,6 +12,7 @@ TagManager:
   - Tile
   - Enemy
   - Wall
+  - HUD_Inv
   layers:
   - Default
   - TransparentFX

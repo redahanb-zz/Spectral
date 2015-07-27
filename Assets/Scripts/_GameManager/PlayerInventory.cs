@@ -8,7 +8,7 @@ public class PlayerInventory : MonoBehaviour {
 	public int inventorySize;
 	public int highlightedSlot = 0;
 	
-	public HUD_Inventory inventoryUI;
+	HUD_Inventory inventoryUI;
 	
 	// Use this for initialization
 	void Start () {

@@ -3,7 +3,7 @@ using System.Collections;
 
 public class PlayerNavmeshTest : MonoBehaviour {
 
-	TimeTest 		timetest;
+	TimeScaler 		timeScale;
 
 	Animator 		playerAnimator;
 	NavMeshAgent 	agent;
@@ -36,7 +36,7 @@ public class PlayerNavmeshTest : MonoBehaviour {
 		playerAnimator 	= GetComponent<Animator>();
 		agent 			= GetComponent<NavMeshAgent>();
 		agent.SetDestination(transform.position);
-		timetest 		= GameObject.Find("Time Manager").GetComponent<TimeTest>();
+		timeScale 		= GameObject.Find("Time Manager").GetComponent<TimeScaler>();
 	}
 	
 	// Update is called once per frame
@@ -101,7 +101,7 @@ public class PlayerNavmeshTest : MonoBehaviour {
 	}
 
 	void CrouchWalk(){
-		playerAnimator.SetFloat("animationSpeed", timetest.currentScale * moveSpeed);
+		playerAnimator.SetFloat("animationSpeed", timeScale.currentScale * moveSpeed);
 		distance 			= Vector3.Distance(transform.position, targetPosition);
 
 		//agent.speed		= playerAnimator.GetFloat("animationSpeed");
@@ -119,7 +119,7 @@ public class PlayerNavmeshTest : MonoBehaviour {
 
 
 
-		float runSpeed = 3.0f;
+		//float runSpeed = 3.0f;
 		agent.SetDestination(targetPosition);
 
 		distance = Vector3.Distance(transform.position, targetPosition);
@@ -165,14 +165,14 @@ public class PlayerNavmeshTest : MonoBehaviour {
 
 
 
-		if(!timetest.timeSlowed){
+		if(!timeScale.timeSlowed){
 			ClearPath();
 		}
 
-		if(!destinationObject && timetest.timeSlowed)
+		if(!destinationObject && timeScale.timeSlowed)
 			destinationObject = Instantiate(Resources.Load("DestinationMarker"), targetPosition, Quaternion.identity) as GameObject;
 
-		if(!pathObject && timetest.timeSlowed){
+		if(!pathObject && timeScale.timeSlowed){
 			pathObject = Instantiate(Resources.Load("PathIndicator"), transform.position + new Vector3(0,0.01f,0) + (transform.forward * 0.4f), Quaternion.identity) as GameObject;
 			agent.SetDestination(targetPosition);
 			pathObject.transform.eulerAngles = transform.eulerAngles;

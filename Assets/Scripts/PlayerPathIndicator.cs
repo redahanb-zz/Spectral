@@ -1,11 +1,11 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class PlayerPathIndicator : MonoBehaviour {
 
 	public Vector3 targetPosition = Vector3.zero;
 	NavMeshAgent agent;
-	TimeTest tt;
+	TimeScaler tt;
 
 	LineRenderer line;
 
@@ -24,7 +24,7 @@ public class PlayerPathIndicator : MonoBehaviour {
 	void Start () {
 		//Invoke("DestroySelf", 5);
 
-		//tt = GameObject.Find("TimeManager").GetComponent<TimeTest>();
+		//tt = GameObject.Find("TimeManager").GetComponent<TimeScaler>();
 	}
 
 	public void SetPlayer(GameObject g){

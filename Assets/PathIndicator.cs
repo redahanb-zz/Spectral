@@ -5,17 +5,20 @@ public class PathIndicator : MonoBehaviour {
 	
 	CharacterController controller;
 	
-	NavMeshPath path;
+	NavMeshPath 		path;
 	
-	bool pathSet = false;
-	int currentPathIndex = 1;
-	float distanceToNextCorner = 100;
-	GameObject destinationObject;
+	bool 				pathSet = false;
 
-	TimeTest timeTest;
+	int 				currentPathIndex = 1;
+
+	float 				distanceToNextCorner = 100;
+
+	GameObject	 		destinationObject;
+
+	TimeScaler timeScale;
 
 	void Start(){
-		timeTest = GameObject.Find("Time Manager").GetComponent<TimeTest>();
+		timeScale = GameObject.Find("Time Manager").GetComponent<TimeScaler>();
 	}
 	
 	// Use this for initialization

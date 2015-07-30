@@ -10,12 +10,12 @@ public class ScreenDarken : MonoBehaviour {
 	RectTransform rTrans;
 	float darkenSpeed = 2.0f, darkenAlpha = 0.6f;
 
-	TimeTest tm;
+	TimeScaler tm;
 
 	public float lastInterval, timeNow, myTime;
 	// Use this for initialization
 	void Start () {
-		tm = GameObject.Find("Time Manager").GetComponent<TimeTest>();
+		tm = GameObject.Find("Time Manager").GetComponent<TimeScaler>();
 		lastInterval = Time.realtimeSinceStartup;
 		darkenObject = transform.Find("Darken").gameObject;
 		darkenObject.SetActive(true);

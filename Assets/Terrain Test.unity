@@ -8921,7 +8921,17 @@ Prefab:
       propertyPath: m_RootOrder
       value: 6
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 11494272, guid: 855af520f4825d44ab451ddf5736e7f4, type: 2}
+      propertyPath: slowScale
+      value: .100000001
+      objectReference: {fileID: 0}
+    - target: {fileID: 11494272, guid: 855af520f4825d44ab451ddf5736e7f4, type: 2}
+      propertyPath: currentScale
+      value: .100000001
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 11421994, guid: 855af520f4825d44ab451ddf5736e7f4, type: 2}
+    - {fileID: 11494272, guid: 855af520f4825d44ab451ddf5736e7f4, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: 855af520f4825d44ab451ddf5736e7f4, type: 2}
   m_IsPrefabParent: 0
 --- !u!1 &204013760
@@ -13096,7 +13106,7 @@ Prefab:
     - target: {fileID: 11489472, guid: 9ca22113ccfd1754f8f6db028105a2ea, type: 2}
       propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1012033594}
+      objectReference: {fileID: 0}
     - target: {fileID: 11489472, guid: 9ca22113ccfd1754f8f6db028105a2ea, type: 2}
       propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: ResumeTime
@@ -13104,7 +13114,7 @@ Prefab:
     - target: {fileID: 11489472, guid: 9ca22113ccfd1754f8f6db028105a2ea, type: 2}
       propertyPath: m_Delegates.Array.data[1].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1012033594}
+      objectReference: {fileID: 0}
     - target: {fileID: 11489472, guid: 9ca22113ccfd1754f8f6db028105a2ea, type: 2}
       propertyPath: m_Delegates.Array.data[1].callback.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: SlowTime
@@ -38256,12 +38266,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1011141083}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &1012033594 stripped
-MonoBehaviour:
-  m_PrefabParentObject: {fileID: 11494272, guid: 855af520f4825d44ab451ddf5736e7f4,
-    type: 2}
-  m_PrefabInternal: {fileID: 201924958}
-  m_Script: {fileID: 11500000, guid: fae3de4d8015d25418026639d688bbaa, type: 3}
 --- !u!1 &1015100429
 GameObject:
   m_ObjectHideFlags: 0
@@ -70341,6 +70345,29 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1949520215}
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1950847845 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 146484, guid: 855af520f4825d44ab451ddf5736e7f4, type: 2}
+  m_PrefabInternal: {fileID: 201924958}
+--- !u!114 &1950847847
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1950847845}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8155f30d41e3ae74187643c5dc669f8a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timeSlowed: 1
+  myDeltaTime: 0
+  slowScale: .100000001
+  normalScale: 1
+  currentScale: .100000001
+  lastInterval: 0
+  timeNow: 0
+  myTime: 0
 --- !u!1 &1955372782
 GameObject:
   m_ObjectHideFlags: 0

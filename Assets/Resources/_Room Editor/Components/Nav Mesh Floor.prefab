@@ -11,7 +11,7 @@ GameObject:
   - 33: {fileID: 3386494}
   - 64: {fileID: 6442136}
   - 23: {fileID: 2319112}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Nav Mesh Floor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -92,6 +92,10 @@ Prefab:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: ceb037e4b963e5942b167f10baadeac6, type: 2}
+    - target: {fileID: 0}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 126328}

@@ -19,7 +19,7 @@ public class InfoTrigger : MonoBehaviour {
 
 	void OnTriggerEnter(Collider c){
 		if(c.tag == "Player"){
-			print ("PLAYER ENTERED TRIGGER");
+			//print ("PLAYER ENTERED TRIGGER");
 			rInfo.textVisible = true;
 			sDark.canDarken = true;
 		}

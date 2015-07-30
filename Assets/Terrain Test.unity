@@ -8932,6 +8932,7 @@ Prefab:
     m_RemovedComponents:
     - {fileID: 11421994, guid: 855af520f4825d44ab451ddf5736e7f4, type: 2}
     - {fileID: 11494272, guid: 855af520f4825d44ab451ddf5736e7f4, type: 2}
+    - {fileID: 11422546, guid: 855af520f4825d44ab451ddf5736e7f4, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: 855af520f4825d44ab451ddf5736e7f4, type: 2}
   m_IsPrefabParent: 0
 --- !u!1 &204013760
@@ -25939,7 +25940,19 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 19526446, guid: fa77aaf96d3f68343af10a167ce1f448, type: 2}
       propertyPath: m_AngularSpeed
-      value: 22222
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 19526446, guid: fa77aaf96d3f68343af10a167ce1f448, type: 2}
+      propertyPath: m_Speed
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 19526446, guid: fa77aaf96d3f68343af10a167ce1f448, type: 2}
+      propertyPath: m_StoppingDistance
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 19526446, guid: fa77aaf96d3f68343af10a167ce1f448, type: 2}
+      propertyPath: m_Acceleration
+      value: 60
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 11419332, guid: fa77aaf96d3f68343af10a167ce1f448, type: 2}
@@ -36879,7 +36892,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 971259947}
   m_LocalRotation: {x: .239117622, y: .369643867, z: -.0990457758, w: .892399132}
-  m_LocalPosition: {x: -.649999976, y: 2.07999992, z: -.649999976}
+  m_LocalPosition: {x: -.490999997, y: 1.43900001, z: -.47299999}
   m_LocalScale: {x: .465116262, y: .333333343, z: .465116262}
   m_Children: []
   m_Father: {fileID: 1052761501}
@@ -36917,7 +36930,7 @@ Camera:
   near clip plane: .300000012
   far clip plane: 1000
   field of view: 60
-  orthographic: 0
+  orthographic: 1
   orthographic size: 5
   m_Depth: 0
   m_CullingMask:
@@ -54008,7 +54021,7 @@ Camera:
   near clip plane: .300000012
   far clip plane: 1000
   field of view: 45
-  orthographic: 0
+  orthographic: 1
   orthographic size: 5
   m_Depth: -1
   m_CullingMask:

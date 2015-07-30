@@ -136,7 +136,10 @@ public class PlayerNavmeshTest : MonoBehaviour {
 	}
 
 	void SetSpeed(){
-		turnDistance = Vector3.Distance(transform.position, path.corners[currentPathIndex]);
+		print ("Set Speed");
+		print(currentPathIndex +" : " +path.corners.Length);
+		if(path.corners.Length > 2)turnDistance = Vector3.Distance(transform.position, path.corners[currentPathIndex]);
+		else turnDistance = Vector3.Distance(transform.position, targetPosition);
 		if(turnDistance > 3.5f)targetSpeed = maxSpeed;
 		else if(transform.forward != (path.corners[currentPathIndex] - transform.position)) targetSpeed = 0.5f;
 		else targetSpeed = 0.5f;
@@ -145,8 +148,8 @@ public class PlayerNavmeshTest : MonoBehaviour {
 		currentSpeed = Mathf.Lerp(currentSpeed, targetSpeed, Time.deltaTime * 3);
 		playerAnimator.SetFloat("movementSpeed" , currentSpeed);
 
-		//transform.LookAt(new Vector3(path.corners[currentPathIndex].x, transform.position.y, path.corners[currentPathIndex].z));
-		SmoothLookAt(new Vector3(path.corners[currentPathIndex].x, transform.position.y, path.corners[currentPathIndex].z));
+		if(path.corners.Length > 2)SmoothLookAt(new Vector3(path.corners[currentPathIndex].x, transform.position.y, path.corners[currentPathIndex].z));
+		else SmoothLookAt(targetPosition);
 	}
 
 	void SmoothLookAt(Vector3 targetPosition){
@@ -155,15 +158,8 @@ public class PlayerNavmeshTest : MonoBehaviour {
 	}
 
 	void PathIndicator(){
-
-		//if(distance < 0.5f)ClearPath();
-
 		GetPath();
 		SetSpeed();
-
-
-
-
 
 		if(!timeScale.timeSlowed){
 			ClearPath();

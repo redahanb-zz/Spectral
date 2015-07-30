@@ -19,6 +19,7 @@ public class PlayerPathIndicator : MonoBehaviour {
 	GameObject pingObject, playerObject;
 	PathPing pPing;
 
+
 	// Use this for initialization
 	void Start () {
 		//Invoke("DestroySelf", 5);

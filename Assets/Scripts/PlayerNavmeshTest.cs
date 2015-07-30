@@ -7,12 +7,18 @@ public class PlayerNavmeshTest : MonoBehaviour {
 
 	Animator 		playerAnimator;
 	NavMeshAgent 	agent;
+	NavMeshPath		path;
 
 	Ray 			ray;
 	RaycastHit 		rayHit;
 
+	int 			currentPathIndex = 1;
+
 	float 			distance = 0f,
-					moveSpeed = 1f;
+					moveSpeed = 1f,
+					currentSpeed = 0f,
+					maxSpeed = 7.0f,
+					turnDistance = 100, targetSpeed = 0;
 
 	Vector3 		targetPosition;
 
@@ -29,14 +35,16 @@ public class PlayerNavmeshTest : MonoBehaviour {
 	void Start () {
 		playerAnimator 	= GetComponent<Animator>();
 		agent 			= GetComponent<NavMeshAgent>();
+		agent.SetDestination(transform.position);
 		timetest 		= GameObject.Find("Time Manager").GetComponent<TimeTest>();
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		hasPath = agent.hasPath;
-		MoveStateManager();
 		GetInput();
+		MoveStateManager();
+
 		DebugScript();
 	}
 
@@ -50,6 +58,7 @@ public class PlayerNavmeshTest : MonoBehaviour {
 	//Assigns action per state and sets the animator move state
 	void MoveStateManager(){
 		playerAnimator.SetInteger("moveState", (int)currentMoveState);
+
 		switch(currentMoveState){
 			case MoveState.Idle: 		Idle(); 		break;
 			case MoveState.CrouchWalk: 	CrouchWalk(); 	break;
@@ -63,11 +72,14 @@ public class PlayerNavmeshTest : MonoBehaviour {
 		
 		if(Input.GetMouseButtonDown(0)){
 			if (Physics.Raycast(ray, out rayHit, 100f)){
+				//print("Tag: " +rayHit.transform.tag + "   Name: " +rayHit.transform.name);
 				if(rayHit.transform.tag == "Tile"){
+
+					//print("" +Vector3.Distance(transform.position, new Vector3(rayHit.point.x, transform.position.y, rayHit.point.z)));
 					if(Vector3.Distance(transform.position, new Vector3(rayHit.point.x, transform.position.y, rayHit.point.z)) > 1){
+						ClearPath();
 						targetPosition 		= new Vector3(rayHit.point.x, transform.position.y, rayHit.point.z);
 						currentMoveState 	= MoveState.Run;
-						ClearPath();
 					}
 					else{
 						currentMoveState = MoveState.Idle;
@@ -91,7 +103,6 @@ public class PlayerNavmeshTest : MonoBehaviour {
 	void CrouchWalk(){
 		playerAnimator.SetFloat("animationSpeed", timetest.currentScale * moveSpeed);
 		distance 			= Vector3.Distance(transform.position, targetPosition);
-		agent.destination 	= targetPosition;
 
 		//agent.speed		= playerAnimator.GetFloat("animationSpeed");
 		if(distance > 0.5f){
@@ -107,36 +118,71 @@ public class PlayerNavmeshTest : MonoBehaviour {
 	void Run(){
 
 
-		PathIndicator();
-
 
 		float runSpeed = 3.0f;
+		agent.SetDestination(targetPosition);
 
-		distance 			= Vector3.Distance(transform.position, targetPosition);
-		agent.destination 	= targetPosition;
+		distance = Vector3.Distance(transform.position, targetPosition);
+
+
+		PathIndicator();
 		if(distance > 0.5f){
 
 		}
 		else{
-			//agent.Stop();
 			Destroy(destinationObject);
 			currentMoveState = MoveState.Idle;
 		}
 	}
-	
 
+	void SetSpeed(){
+		turnDistance = Vector3.Distance(transform.position, path.corners[currentPathIndex]);
+		if(turnDistance > 3.5f)targetSpeed = maxSpeed;
+		else if(transform.forward != (path.corners[currentPathIndex] - transform.position)) targetSpeed = 0.5f;
+		else targetSpeed = 0.5f;
+		
+		print("Distance: " +turnDistance +"   Speed: " +currentSpeed +"   Target Speed: " +targetSpeed);
+		currentSpeed = Mathf.Lerp(currentSpeed, targetSpeed, Time.deltaTime * 3);
+		playerAnimator.SetFloat("movementSpeed" , currentSpeed);
+
+		//transform.LookAt(new Vector3(path.corners[currentPathIndex].x, transform.position.y, path.corners[currentPathIndex].z));
+		SmoothLookAt(new Vector3(path.corners[currentPathIndex].x, transform.position.y, path.corners[currentPathIndex].z));
+	}
+
+	void SmoothLookAt(Vector3 targetPosition){
+		Quaternion rotation = Quaternion.LookRotation(targetPosition - transform.position);
+		transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * 7.5f);
+	}
 
 	void PathIndicator(){
-		if(distance < 0.5f)ClearPath();
 
-		if(!destinationObject)
-		destinationObject = Instantiate(Resources.Load("DestinationMarker"), targetPosition, Quaternion.identity) as GameObject;
+		//if(distance < 0.5f)ClearPath();
 
-		if(!pathObject){
-			pathObject = Instantiate(Resources.Load("PlayerPathIndicator"), transform.position + (transform.forward * 1f), Quaternion.identity) as GameObject;
-			pathObject.GetComponent<PlayerPathIndicator>().targetPosition = targetPosition + new Vector3(0,0f,0);
-			pathObject.GetComponent<PlayerPathIndicator>().SetPlayer(gameObject);
+		GetPath();
+		SetSpeed();
+
+
+
+
+
+		if(!timetest.timeSlowed){
+			ClearPath();
 		}
+
+		if(!destinationObject && timetest.timeSlowed)
+			destinationObject = Instantiate(Resources.Load("DestinationMarker"), targetPosition, Quaternion.identity) as GameObject;
+
+		if(!pathObject && timetest.timeSlowed){
+			pathObject = Instantiate(Resources.Load("PathIndicator"), transform.position + new Vector3(0,0.01f,0) + (transform.forward * 0.4f), Quaternion.identity) as GameObject;
+			agent.SetDestination(targetPosition);
+			pathObject.transform.eulerAngles = transform.eulerAngles;
+			pathObject.GetComponent<PathIndicator>().SetPath(agent.path);
+		}
+	}
+
+	void GetPath(){
+		currentPathIndex = 1;
+		path = agent.path;
 	}
 
 	void ClearPath(){

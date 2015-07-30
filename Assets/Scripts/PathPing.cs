@@ -44,7 +44,8 @@ public class PathPing : MonoBehaviour {
 				print("Length: " +path.corners.Length +"   Index: " +currentPathIndex);
 
 
-				transform.Translate((transform.position - path.corners[currentPathIndex]) * 0.05f);
+				transform.position = Vector3.MoveTowards(transform.position, path.corners[currentPathIndex], 0.1f);
+				//transform.Translate((transform.position - path.corners[currentPathIndex]) * 0.05f);
 				transform.LookAt(path.corners[currentPathIndex]);
 			}
 			else{

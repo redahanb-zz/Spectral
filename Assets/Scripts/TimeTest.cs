@@ -6,7 +6,7 @@ public class TimeTest : MonoBehaviour {
 
 	Text t;
 	
-	bool timeSlowed = true;
+	public bool timeSlowed = true;
 	float myDeltaTime, slowScale = 0.1f, normalScale = 1f;
 	float changeSpeed = 0.8f;
 	public float currentScale = 0.2f;

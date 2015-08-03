@@ -5,13 +5,13 @@ using UnityEngine.UI;
 public class PlayerInventory : MonoBehaviour {
 		
 	public GameObject[] playerInventory;
-	public int inventorySize;
+	public int inventorySize = 0;
 	public int highlightedSlot = 0;
 	
 	HUD_Inventory inventoryUI;
 	
 	// Use this for initialization
-	void Start () {
+	void Awake () {
 		inventorySize = 6; // This value should be loaded from the player data file, as its size can be upgraded in between missions
 		playerInventory = new GameObject[inventorySize]; // array of inventory items
 		inventoryUI = GameObject.Find("HUD_Inventory").GetComponent<HUD_Inventory>(); // assign refernece to invetory HUD

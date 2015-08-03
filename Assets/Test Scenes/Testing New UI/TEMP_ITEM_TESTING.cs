@@ -12,7 +12,7 @@ public class TEMP_ITEM_TESTING : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		cubes = GameObject.FindGameObjectsWithTag ("Pickup");
-		playerInventory = GameObject.Find ("GameManager").GetComponent<PlayerInventory> ();
+		playerInventory = GameObject.Find("Inventory Manager").GetComponent<PlayerInventory>();
 	}
 	
 	// Update is called once per frame

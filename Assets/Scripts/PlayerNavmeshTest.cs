@@ -1,7 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.EventSystems;
 
 public class PlayerNavmeshTest : MonoBehaviour {
+
+	EventSystem eventSystem;
 
 	TimeScaler 		timeScale;
 
@@ -40,6 +43,7 @@ public class PlayerNavmeshTest : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		eventSystem = GameObject.Find ("EventSystem").GetComponent<EventSystem> ();
 		customDeltaTime = Time.deltaTime;
 		playerAnimator 	= GetComponent<Animator>();
 		agent 			= GetComponent<NavMeshAgent>();
@@ -73,7 +77,7 @@ public class PlayerNavmeshTest : MonoBehaviour {
 			case MoveState.Run: 		Run(); 			break;
 		}
 
-		print("Double Tap: " +doubleTap + "   MoveState: (" +(int)currentMoveState +") " +currentMoveState +"   AnimState: " +playerAnimator.GetFloat("moveState"));
+		//print("Double Tap: " +doubleTap + "   MoveState: (" +(int)currentMoveState +") " +currentMoveState +"   AnimState: " +playerAnimator.GetFloat("moveState"));
 	}
 
 	//Get input from the Player
@@ -81,14 +85,15 @@ public class PlayerNavmeshTest : MonoBehaviour {
 		timeSinceLastClick = timeSinceLastClick + customDeltaTime;
 
 		ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-		
-		if(Input.GetMouseButtonDown(0) && timeScale.timeSlowed){
+
+		print ("Pointer over GamerObject: " + eventSystem.IsPointerOverGameObject());
+		if(Input.GetMouseButtonDown(0) && timeScale.timeSlowed ){
 			if(timeSinceLastClick < 1)
 				doubleTap = true;
 			else 
 				doubleTap = false;
 			timeSinceLastClick = 0;
-
+			print ("RAYCAST: MOUSE");
 			//Mouse Input
 			if (Physics.Raycast(ray, out rayHit, 100f)){
 				if(rayHit.transform.tag == "Tile"){
@@ -110,9 +115,9 @@ public class PlayerNavmeshTest : MonoBehaviour {
 		//Touch Input
 		for (var i = 0; i < Input.touchCount; i++) {
 
-			if ((Input.GetTouch(i).phase == TouchPhase.Began) && (Input.touchCount < 2) && (timeSinceLastClick > 0.3f)){
+			if ((Input.GetTouch(i).phase == TouchPhase.Began) && (Input.touchCount < 2) && (timeSinceLastClick > 0.3f) && !eventSystem.IsPointerOverGameObject() ){
 				ray = Camera.main.ScreenPointToRay (Input.GetTouch(0).position);
-
+				print ("RAYCAST: TOUCH");
 				if(timeSinceLastClick < 1)
 					doubleTap = true;
 				else 

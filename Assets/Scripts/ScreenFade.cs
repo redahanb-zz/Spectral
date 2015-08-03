@@ -35,10 +35,10 @@ public class ScreenFade : MonoBehaviour {
 		lastInterval = timeNow;
 
 		if(fadeToColor){
-			rImg.color = Color.Lerp(rImg.color, new Color(rImg.color.r, rImg.color.g, rImg.color.g, 1), 0.01f);
+			rImg.color = Color.Lerp(rImg.color, new Color(rImg.color.r, rImg.color.g, rImg.color.g, 1), 0.04f);
 		}
 		else{
-			rImg.color = Color.Lerp(rImg.color, new Color(rImg.color.r, rImg.color.g, rImg.color.g, 0), 0.01f);
+			rImg.color = Color.Lerp(rImg.color, new Color(rImg.color.r, rImg.color.g, rImg.color.g, 0), 0.04f);
 		}
 
 		lastInterval = timeNow;

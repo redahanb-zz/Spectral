@@ -8,8 +8,8 @@ public class InfoTrigger : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		rInfo = GameObject.Find("RoomInfo").GetComponent<RoomInfo>();
-		sDark = GameObject.Find("Screen Darken").GetComponent<ScreenDarken>();
+	//	rInfo = GameObject.Find("RoomInfo").GetComponent<RoomInfo>();
+	//	sDark = GameObject.Find("Screen Darken").GetComponent<ScreenDarken>();
 	}
 	
 	// Update is called once per frame
@@ -20,22 +20,22 @@ public class InfoTrigger : MonoBehaviour {
 	void OnTriggerEnter(Collider c){
 		if(c.tag == "Player"){
 			//print ("PLAYER ENTERED TRIGGER");
-			rInfo.textVisible = true;
-			sDark.canDarken = true;
+		//	rInfo.textVisible = true;
+		//	sDark.canDarken = true;
 		}
 	}
 
 	void OnTriggerStay(Collider c){
 		if(c.tag == "Player"){
-			rInfo.textVisible = true;
-			sDark.canDarken = true;
+		//	rInfo.textVisible = true;
+		//	sDark.canDarken = true;
 		}
 	}
 
 	void OnTriggerExit(Collider c){
 		if(c.tag == "Player"){
-			rInfo.textVisible = false;
-			sDark.canDarken = false;
+		//	rInfo.textVisible = false;
+		//	sDark.canDarken = false;
 		}
 	}
 }

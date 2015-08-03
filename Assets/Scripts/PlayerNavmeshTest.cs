@@ -45,13 +45,24 @@ public class PlayerNavmeshTest : MonoBehaviour {
 		agent 			= GetComponent<NavMeshAgent>();
 		agent.SetDestination(transform.position);
 		timeScale 		= GameObject.Find("Time Manager").GetComponent<TimeScaler>();
+		Invoke("ToggleCanMove", 0.1f);
+
+	}
+
+	public void ToggleCanMove(){
+		canMove = !canMove;
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		hasPath = agent.hasPath;
-		GetInput();
-		MoveStateManager();
+		if(canMove){
+			GetInput();
+			MoveStateManager();
+		}
+		else{
+			StopMoving();
+		}
 
 		DebugScript();
 	}
@@ -73,7 +84,7 @@ public class PlayerNavmeshTest : MonoBehaviour {
 			case MoveState.Run: 		Run(); 			break;
 		}
 
-		print("Double Tap: " +doubleTap + "   MoveState: (" +(int)currentMoveState +") " +currentMoveState +"   AnimState: " +playerAnimator.GetFloat("moveState"));
+		//print("Double Tap: " +doubleTap + "   MoveState: (" +(int)currentMoveState +") " +currentMoveState +"   AnimState: " +playerAnimator.GetFloat("moveState"));
 	}
 
 	//Get input from the Player
@@ -191,7 +202,18 @@ public class PlayerNavmeshTest : MonoBehaviour {
 
 		else{ targetSpeed = walkSpeed;   agent.speed = 2;}
 
-		if(transform.forward != dir){ targetSpeed = walkSpeed;  agent.speed = 1;}
+		//if(transform.forward != dir){ targetSpeed = walkSpeed;  agent.speed = 1;}
+
+		Quaternion q = Quaternion.LookRotation(head);
+		Vector3 v3Euler = q.eulerAngles;
+
+		float rotDistance = Vector3.Distance(transform.eulerAngles, v3Euler);
+		//print(rotDistance);
+		//if(transform.eulerAngles == v3Euler)print("ASD");
+
+		if(rotDistance > 5){ targetSpeed = walkSpeed;  agent.speed = 1;}
+		//print(transform.eulerAngles + " : " + v3Euler);
+
 
 		currentSpeed = Mathf.Lerp(currentSpeed, targetSpeed, Time.deltaTime * 3);
 		playerAnimator.SetFloat("movementSpeed" , currentSpeed);
@@ -216,14 +238,14 @@ public class PlayerNavmeshTest : MonoBehaviour {
 		else turnDistance = Vector3.Distance(transform.position, targetPosition);
 
 		//If near corner, walk.	Otherwise, run.
-		if(turnDistance > 0.7f){targetSpeed = sneakSpeed;   agent.speed = 2;}
+		if(turnDistance > 0.5f){targetSpeed = sneakSpeed;   agent.speed = 2;}
 		else{ targetSpeed = stopSpeed;   agent.speed = 1;}
 
 		//If not facing direction of next corner, walk
 		if(transform.forward != dir){ targetSpeed = walkSpeed;  agent.speed = 1;}
 
 		//Update current speed
-		currentSpeed = Mathf.Lerp(currentSpeed, targetSpeed, Time.deltaTime * 3);
+		currentSpeed = Mathf.Lerp(currentSpeed, targetSpeed, Time.deltaTime * 5);
 		playerAnimator.SetFloat("movementSpeed" , currentSpeed);
 
 		//Look at next corner
@@ -234,6 +256,10 @@ public class PlayerNavmeshTest : MonoBehaviour {
 	void SmoothLookAt(Vector3 targetPosition){
 		Quaternion rotation = Quaternion.LookRotation(targetPosition - transform.position);
 		transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * 8.5f);
+	}
+
+	public void StopMoving(){
+		currentMoveState = MoveState.Idle;
 	}
 
 	void PathIndicator(){

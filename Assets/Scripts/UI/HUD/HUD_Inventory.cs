@@ -12,8 +12,9 @@ public class HUD_Inventory : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		playerInventory = GameObject.Find ("GameManager").GetComponent<PlayerInventory> ();
+		playerInventory = GameObject.Find ("Inventory Manager").GetComponent<PlayerInventory> ();
 		inventorySize = playerInventory.inventorySize;
+		//print (inventorySize);
 		buildInventoryUI (inventorySize);
 	}
 	
@@ -24,6 +25,7 @@ public class HUD_Inventory : MonoBehaviour {
 
 	public void buildInventoryUI(int size) {
 		// Take size from player inventory, instantiate UI box for each slot, plus bookend graphics
+		//print ("Building Inventory: " + size);
 		inventoryIcons = new GameObject[size];
 		Vector3 panelPosition;
 

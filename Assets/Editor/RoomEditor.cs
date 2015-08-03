@@ -105,6 +105,13 @@ public class RoomEditor : EditorWindow {
 			exteriorObject.name = "Exterior";
 
 
+			if(!GameObject.FindGameObjectWithTag("MainCamera"))Debug.Log("[LEVEL EDITOR] There is no Main Camera in the scene.");
+			else{
+				GameObject mainCamObject = Camera.main.gameObject;
+				if(!mainCamObject.GetComponent<CameraController>()) mainCamObject.AddComponent<CameraController>();
+				mainCamObject.transform.position = newRoomObject.transform.position + new Vector3(-10, 8, -10);
+				mainCamObject.transform.eulerAngles = new Vector3(30,45,0);
+			}
 
 			GameObject landingPadMarker = Instantiate(Resources.Load("_Room Editor/Components/Landing Pad Marker"), Vector3.zero, Quaternion.identity) as GameObject; 
 			landingPadMarker.transform.parent = newRoomObject.transform;

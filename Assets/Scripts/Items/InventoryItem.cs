@@ -3,18 +3,23 @@ using System.Collections;
 
 public class InventoryItem : MonoBehaviour {
 
+	PlayerInventory playerInventory;
+
 	public string itemName;
 	public Color itemColor;
 	public Sprite itemIcon;
 	public int itemValue;
-	//AudioSource impactSound;
 
+	GameObject pickupButton;
+
+	//AudioSource impactSound;
 	//ButtonManager buttonManager;
 
 	// Use this for initialization
 	void Start () {
 		//impactSound = GetComponent<AudioSource> ();
 		transform.GetComponent<Renderer> ().material.color = itemColor;
+		playerInventory = GameObject.Find ("Inventory Manager").GetComponent<PlayerInventory> ();
 	}
 	
 	// Update is called once per frame
@@ -85,6 +90,15 @@ public class InventoryItem : MonoBehaviour {
 		GameObject echo = Instantiate (Resources.Load("FootfallFX"), drawLoc, Quaternion.Euler(90,0,0)) as GameObject;
 		echo.GetComponent<SpriteRenderer> ().color = Color.red;
 		//AudioSource.PlayClipAtPoint (impactSound.clip, transform.position);
+	}
+
+	public void addItemToInventory(){
+		playerInventory.addItem (gameObject);
+		pickupButton.GetComponent<ItemInfoButton>().deactivateButton();
+	}
+
+	public void identifyButton(GameObject button){
+		pickupButton = button;
 	}
 	
 }

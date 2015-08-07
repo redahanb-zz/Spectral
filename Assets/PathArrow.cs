@@ -28,12 +28,12 @@ public class PathArrow : MonoBehaviour {
 
 			if(hit.transform.name == transform.name){
 				//Arrow is visible
-				print("VISIBLE");
+				//print("VISIBLE");
 				arrowRenderer.material = Resources.Load("Chevron Visible") as Material;
 			}
 			else{
 				//Arrow is hidden
-				print("HIDDEN");
+				//print("HIDDEN");
 				arrowRenderer.material = Resources.Load("Chevron Hidden") as Material;
 			}
 		}

@@ -46,6 +46,9 @@ public class PlayerController : MonoBehaviour {
 	timeSinceLastClick = 0;
 
 	Renderer		playerRenderer;
+
+	public Color targetcolor = Color.grey;
+
 	
 	// Use this for initialization
 	void Start () {
@@ -73,6 +76,8 @@ public class PlayerController : MonoBehaviour {
 			MoveStateManager();
 		}
 		else StopMoving();
+
+		playerRenderer.material.color = Color.Lerp(playerRenderer.material.color, targetcolor, 2*Time.deltaTime);
 	}
 
 	//Assigns action per state and sets the animator move state
@@ -175,13 +180,15 @@ public class PlayerController : MonoBehaviour {
 
 	void BlendWhileStanding(){
 		if(isBlending){
+			print ("Player color: " + playerRenderer.material.color);
+			print ("Wall color: " + rayHit.transform.GetComponent<Renderer>().material.color);
 			if(playerRenderer.material.color == rayHit.transform.GetComponent<Renderer>().material.color){
-				//print("Player cannot be seen.");
+				print("Player cannot be seen.");
 				isVisible = false;
 			}
 			else{
 				isVisible = true;
-				//print("Player is visible to enemies.");
+				print("Player is visible to enemies.");
 			}
 		}
 	}

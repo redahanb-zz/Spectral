@@ -13,6 +13,7 @@ public class EnemySight : MonoBehaviour {
 	
 	private SphereCollider coll;
 	private GameObject player;
+	private PlayerController playerController;
 	//private Light visionlight;
 	//private SpriteRenderer visionConeSprite;
 	//PlayerColorChanger pcc;
@@ -99,6 +100,7 @@ public class EnemySight : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		coll = GetComponent<SphereCollider> ();
+		playerController = player.GetComponent<PlayerController> ();
 		patrolling = true;
 		alerted = false;
 
@@ -116,6 +118,10 @@ public class EnemySight : MonoBehaviour {
 			//pcc = player.GetComponent<PlayerColorChanger> ();
 		} else {
 			//print( pcc.isBlending);
+		}
+
+		if(!playerController && GameObject.FindWithTag("Player")){
+			playerController = player.GetComponent<PlayerController> ();
 		}
 
 		Debug.DrawRay (transform.position, transform.forward);
@@ -179,6 +185,7 @@ public class EnemySight : MonoBehaviour {
 	}
 
 	void checkSight() {
+		print ("Checkingsight");
 		if (Vector3.Distance (transform.position, player.transform.position) < 7.0f) {
 			//print ("player in range");
 			playerInSight = false;
@@ -187,14 +194,19 @@ public class EnemySight : MonoBehaviour {
 			
 			if (angle <= 50.0f) {
 				//print("player in field of view");
+				print ("In range...");
 				RaycastHit hit;
-				if (Physics.Raycast (transform.position, direction, out hit, coll.radius)) {
+				if (Physics.Raycast (transform.position + Vector3.up, direction, out hit, coll.radius)) {
 					//print ("raycast hit: " + hit.collider.gameObject.name);
+					print (hit.collider.gameObject);
 					Debug.DrawRay(transform.position + Vector3.up, direction);
 					if (hit.collider.gameObject.tag == "Player") {
+						if(playerController.isVisible){
+							print ("Player in sight!");
+							playerInSight = true;
+							lastPlayerSighting = player.transform.position;
+						}
 
-						playerInSight = true;
-						lastPlayerSighting = player.transform.position;
 
 						//int camoIndex = player.GetComponent<PlayerColorChanger>().camoIndex;
 						//bool isBlending = player.GetComponent<PlayerColorChanger>().isBlending;

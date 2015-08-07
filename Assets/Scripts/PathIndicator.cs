@@ -19,6 +19,15 @@ public class PathIndicator : MonoBehaviour {
 
 	void Start(){
 		timeScale = GameObject.Find("Time Manager").GetComponent<TimeScaler>();
+		InvokeRepeating("CreatePathArrow", 0.01f, 0.007f);
+	}
+
+	void CreatePathArrow(){
+		if(timeScale.currentScale < 0.11f){
+
+		GameObject arrowObject = Instantiate(Resources.Load("Path Arrow"), transform.position + new Vector3(0,0.1f,0), Quaternion.identity) as GameObject;
+		arrowObject.transform.eulerAngles = transform.eulerAngles;
+		}
 	}
 	
 	// Use this for initialization
@@ -40,8 +49,12 @@ public class PathIndicator : MonoBehaviour {
 
 			if(currentPathIndex != path.corners.Length){ 
 					distanceToNextCorner = Vector3.Distance(transform.position, path.corners[currentPathIndex]);
-					transform.position = Vector3.MoveTowards(transform.position, path.corners[currentPathIndex], 0.1f);
+					transform.position = Vector3.MoveTowards(transform.position, path.corners[currentPathIndex], 0.08f);
 					transform.LookAt(path.corners[currentPathIndex]);
+			}
+			else{ 
+				//print("END OF PATH REACHED");
+				Destroy(gameObject);
 			}
 
 		}

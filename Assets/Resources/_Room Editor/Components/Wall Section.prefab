@@ -488,7 +488,7 @@ GameObject:
   - 33: {fileID: 3345462}
   - 65: {fileID: 6520142}
   - 23: {fileID: 2370624}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: 2 Wall Base Curved Right
   m_TagString: Wall Section
   m_Icon: {fileID: 0}
@@ -1139,7 +1139,7 @@ GameObject:
   - 33: {fileID: 3318640}
   - 65: {fileID: 6582904}
   - 23: {fileID: 2387138}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: 3 Wall Base Curved Left
   m_TagString: Wall Section
   m_Icon: {fileID: 0}
@@ -1513,7 +1513,7 @@ GameObject:
   - 33: {fileID: 3335362}
   - 65: {fileID: 6526410}
   - 23: {fileID: 2369714}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: 1 Wall Base
   m_TagString: Wall Section
   m_Icon: {fileID: 0}
@@ -1897,7 +1897,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 178300}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.709788561, y: 2.7846899, z: 148.959747}
+  m_LocalPosition: {x: -2.60400009, y: 11.0438843, z: 108.687225}
   m_LocalScale: {x: 2, y: 3, z: .200000003}
   m_Children:
   - {fileID: 466488}

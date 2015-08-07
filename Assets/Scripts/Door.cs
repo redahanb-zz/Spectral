@@ -18,7 +18,10 @@ public class Door : MonoBehaviour {
 					targetRightDoorPosition;
 
 	GameObject		roomTextObject, 
-					canvasObject;
+					canvasObject,
+					playerObject,
+					destinationRoomObject,
+					destinationDoorObject;
 
 	RectTransform 	rTransform;
 
@@ -26,9 +29,29 @@ public class Door : MonoBehaviour {
 
 	Vector3 openScale, closedScale, targetScale;
 
+	int roomX, roomZ;
+
+	ScreenFade sFade;
+
+	float currentTime, targetTime, timer = 0, timedAmount = 2;
+	
+	public float lastInterval, timeNow, myTime;
+
+	bool startTimer = false;
+
+	Room currentRoom;
+
+	RoomInformation roomInfo;
 
 	// Use this for initialization
 	void Start () {
+
+		currentRoom = transform.parent.parent.parent.parent.GetComponent<Room>();
+		if(currentRoom){
+			roomX = currentRoom.xIndex;
+			roomZ = currentRoom.zIndex;
+		}
+
 		leftDoor 	= transform.Find("LeftDoor");
 		rightDoor 	= transform.Find("RightDoor");
 
@@ -46,58 +69,161 @@ public class Door : MonoBehaviour {
 		targetRightDoorPosition		= rightDoorClosedPosition;
 
 		canvasObject = GameObject.Find("Canvas");
+		sFade = GameObject.Find("Screen Fade").GetComponent<ScreenFade>();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		if(doorOpen){
-			targetLeftDoorPosition		= leftDoorOpenPosition;
-			targetRightDoorPosition		= rightDoorOpenPosition;
-			targetScale = openScale;
-		}
-		else{
-			targetLeftDoorPosition		= leftDoorClosedPosition;
-			targetRightDoorPosition		= rightDoorClosedPosition;
-			targetScale = closedScale;
-		}
+		timeNow = Time.realtimeSinceStartup;
+		myTime = timeNow - lastInterval;
+		Timer();
+		if(doorOpen)OpenDoor();
+		else CloseDoor();
+		MoveAndScaleDoorDoor();
+		lastInterval = timeNow;
+	}
 
+	void Timer(){
+		if(startTimer){
+			//print(timeNow - currentTime);
+			if(timer >= (targetTime)){
+				Teleport();
+				timer = 0;
+				startTimer = false;
+			}
+			else{
+				timer = timeNow;
+			}
+		}
+	}
+
+	void OpenDoor(){
+		targetLeftDoorPosition		= leftDoorOpenPosition;
+		targetRightDoorPosition		= rightDoorOpenPosition;
+		targetScale = openScale;
+	}
+
+	void CloseDoor(){
+		targetLeftDoorPosition		= leftDoorClosedPosition;
+		targetRightDoorPosition		= rightDoorClosedPosition;
+		targetScale = closedScale;
+	}
+
+	void MoveAndScaleDoorDoor(){
 		leftDoor.position 	= Vector3.Lerp(leftDoor.position, 	targetLeftDoorPosition, 	Time.deltaTime * 3);
 		rightDoor.position 	= Vector3.Lerp(rightDoor.position, 	targetRightDoorPosition, 	Time.deltaTime * 3);
-
 		leftDoor.transform.localScale = Vector3.Lerp(leftDoor.transform.localScale, 	targetScale, 	Time.deltaTime * 3); 
 		rightDoor.transform.localScale = Vector3.Lerp(leftDoor.transform.localScale, 	targetScale, 	Time.deltaTime * 3); 
-//		if(roomTextObject){
-//			rTransform.anchorMin = viewportPoint;  
-//			rTransform.anchorMax = viewportPoint; 
-//		}
 	}
 
 	void OnTriggerEnter(Collider c){
 		if(c.tag == "Player"){
 			doorOpen = true;
-			roomTextObject = Instantiate( Resources.Load("Room Info"), canvasObject.transform.position, Quaternion.identity) as GameObject;
-			roomTextObject.GetComponent<RoomInformation>().SetTarget(transform);
-//			roomTextObject.transform.parent = canvasObject.transform;
-//			rTransform = roomTextObject.GetComponent<RectTransform>();
-//			Vector2 viewportPoint = Camera.main.WorldToViewportPoint(transform.position);
-//			rTransform.anchorMin = viewportPoint;  
-//			rTransform.anchorMax = viewportPoint; 
-
-			//rTransform.set = new Rect(viewportPoint.x, viewportPoint.y, rTransform.sizeDelta.x, rTransform.sizeDelta.y);
-			//roomTextObject.GetComponent<RectTransform>().position = GetComponent<Camera>().WorldToScreenPoint(transform.position);
+			playerObject = c.gameObject;
+			if(!roomTextObject) roomTextObject = Instantiate( Resources.Load("Room Info"), canvasObject.transform.position, Quaternion.identity) as GameObject;
+			roomInfo = roomTextObject.GetComponent<RoomInformation>();
+			roomInfo.displayInfo = true;
+			roomInfo.SetDoor(this);
+			roomInfo.SetTarget(transform);
 		}
 	}
 	
 	void OnTriggerStay(Collider c){
 		if(c.tag == "Player"){
 			doorOpen = true;
+			roomInfo = roomTextObject.GetComponent<RoomInformation>();
+			roomInfo.displayInfo = true;
+			roomInfo.SetDoor(this);
+			roomInfo.SetTarget(transform);
 		}
 	}
 	
 	void OnTriggerExit(Collider c){
 		if(c.tag == "Player"){
 			doorOpen = false;
-			Destroy(roomTextObject);
+			//Destroy(roomTextObject);
+			roomInfo.displayInfo = false;
 		}
 	}
+
+	void GetAssociatedDoorway(){
+		string doorName = transform.parent.parent.name;
+		
+		switch (doorName) {
+		case "Door North":	
+			if(GameObject.Find("["+(roomX)+","+(roomZ + 1)+"]")){
+				destinationRoomObject = GameObject.Find("["+(roomX)+","+(roomZ + 1)+"]");
+				if(destinationRoomObject.transform.Find("Doors").Find("Door South"))destinationDoorObject =	destinationRoomObject.transform.Find("Doors").Find("Door South").Find("RoomInfoTrigger").gameObject;
+				else Debug.Log("[Door Trigger] Cannot find the associated Door in the next room.");
+				Debug.Log("[Door Trigger] Teleported North"); 
+			}
+			else Debug.Log("[Door Trigger] Cannot find the next room.");
+			break;
+			
+		case "Door South":	
+			if(GameObject.Find("["+(roomX)+","+(roomZ - 1)+"]")){
+				destinationRoomObject = GameObject.Find("["+(roomX)+","+(roomZ - 1)+"]");
+				if(destinationRoomObject.transform.Find("Doors").Find("Door North"))destinationDoorObject =	destinationRoomObject.transform.Find("Doors").Find("Door North").Find("RoomInfoTrigger").gameObject;
+				else Debug.Log("[Door Trigger] Cannot find the associated Door in the next room.");
+				Debug.Log("[Door Trigger] Teleported South"); 
+			}
+			else Debug.Log("[Door Trigger] Cannot find the next room.");
+			break;
+			
+		case "Door East" :	
+			if(GameObject.Find("["+(roomX + 1)+","+(roomZ)+"]")){
+				destinationRoomObject = GameObject.Find("["+(roomX + 1)+","+(roomZ)+"]");
+				if(destinationRoomObject.transform.Find("Doors").Find("Door West"))destinationDoorObject =	destinationRoomObject.transform.Find("Doors").Find("Door West").Find("RoomInfoTrigger").gameObject;
+				else Debug.Log("[Door Trigger] Cannot find the associated Door in the next room.");
+				Debug.Log("[Door Trigger] Teleported East"); 
+			}
+			else Debug.Log("[Door Trigger] Cannot find the next room.");
+			break;
+			
+		case "Door West" :	
+			if(GameObject.Find("["+(roomX - 1)+","+(roomZ)+"]")){
+				destinationRoomObject = GameObject.Find("["+(roomX - 1)+","+(roomZ)+"]");
+				if(destinationRoomObject.transform.Find("Doors").Find("Door East"))destinationDoorObject =	destinationRoomObject.transform.Find("Doors").Find("Door East").Find("RoomInfoTrigger").gameObject;
+				else Debug.Log("[Door Trigger] Cannot find the associated Door in the next room.");
+				Debug.Log("[Door Trigger] Teleported West"); 
+			}
+			else Debug.Log("[Door Trigger] Cannot find the next room.");
+			break;
+			
+		default:	
+			if(GameObject.Find("["+(roomX)+","+(roomZ + 1)+"]")){
+				destinationRoomObject = GameObject.Find("["+(roomX)+","+(roomZ + 1)+"]");
+				if(destinationRoomObject.transform.Find("Doors").Find("Door South"))destinationDoorObject =	destinationRoomObject.transform.Find("Doors").Find("Door South").Find("RoomInfoTrigger").gameObject;
+				else Debug.Log("[Door Trigger] Cannot find the associated Door in the next room.");
+				Debug.Log("[Door Trigger] Teleported North"); 
+			}
+			else Debug.Log("[Door Trigger] Cannot find the next room.");
+			break;
+		}
+		
+		
+		print("Teleporting to " +destinationDoorObject.transform.parent);
+	}
+	
+	void Teleport(){
+		PlayerController pControl = playerObject.GetComponent<PlayerController> ();
+		pControl.StopMoving ();
+		
+		playerObject.SetActive(false);
+		playerObject.transform.position = new Vector3(destinationDoorObject.transform.position.x,transform.position.y,destinationDoorObject.transform.position.z); 
+		Camera.main.transform.position = playerObject.transform.position + new Vector3(-10,10,-10);
+		playerObject.SetActive(true);
+		sFade.fadeToColor = false;
+	}
+
+	public void StartNewTeleport(){
+		currentTime = timeNow;
+		targetTime = currentTime + timedAmount;
+		GetAssociatedDoorway();
+		sFade.fadeToColor = true;
+		startTimer = true;
+	}
+
+
+
 }

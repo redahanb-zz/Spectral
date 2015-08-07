@@ -4,7 +4,7 @@ using System.Collections;
 public class UIRotateAroundParent : MonoBehaviour {
 
 	float rotateSpeed = 120;
-
+	public bool rotateRight = true;
 	// Use this for initialization
 	void Start () {
 	
@@ -12,6 +12,7 @@ public class UIRotateAroundParent : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		transform.RotateAround(transform.parent.position, Vector3.forward, rotateSpeed * 0.01f);
+		if(rotateRight) transform.RotateAround(transform.parent.position, Vector3.forward, rotateSpeed * 0.01f);
+		else transform.RotateAround(transform.parent.position, -Vector3.forward, rotateSpeed * 0.01f);
 	}
 }

@@ -98,7 +98,7 @@ public class RoomEditor : EditorWindow {
 
 			newRoomObject = Instantiate(Resources.Load("_Room Editor/Default Rooms/Room Large"), Vector3.zero + new Vector3(0,1000,0), Quaternion.identity) as GameObject;
 			newRoomObject.transform.parent = roomGroupObject.transform;
-			newRoomObject.name = "[0,0] Landing Pad";
+			newRoomObject.name = "[0,0]";
 
 			exteriorObject = Instantiate(Resources.Load("_Room Editor/Components/Basic Exterior"), newRoomObject.transform.position + new Vector3(0,-0.1f,0), Quaternion.identity) as GameObject; 
 			exteriorObject.transform.parent = newRoomObject.transform;
@@ -272,7 +272,7 @@ public class RoomEditor : EditorWindow {
 			newWallSectionObject = Instantiate(Resources.Load("_Room Editor/Components/Wall Section"), Selection.activeTransform.position + new Vector3(0,0,1), Quaternion.identity) as GameObject;
 			newWallSectionObject.transform.eulerAngles = new Vector3(0,90,0);
 			newWallSectionObject.transform.parent = Selection.activeTransform.parent.parent;
-			Selection.activeGameObject = newWallPillarObject.transform.Find("Pillar Normal").gameObject;
+			Selection.activeGameObject = newWallPillarObject.transform.Find("1 Pillar Normal").gameObject;
 		}
 		if (GUI.Button(new Rect(125, 180, 50, 50), "South")){
 			newWallPillarObject = Instantiate(Resources.Load("_Room Editor/Components/Wall Pillar"), Selection.activeTransform.position + new Vector3(0,0,-2), Quaternion.identity) as GameObject;
@@ -280,7 +280,7 @@ public class RoomEditor : EditorWindow {
 			newWallSectionObject = Instantiate(Resources.Load("_Room Editor/Components/Wall Section"), Selection.activeTransform.position + new Vector3(0,0,-1), Quaternion.identity) as GameObject;
 			newWallSectionObject.transform.eulerAngles = new Vector3(0,90,0);
 			newWallSectionObject.transform.parent = Selection.activeTransform.parent.parent;
-			Selection.activeGameObject = newWallPillarObject.transform.Find("Pillar Normal").gameObject;
+			Selection.activeGameObject = newWallPillarObject.transform.Find("1 Pillar Normal").gameObject;
 		}
 		if (GUI.Button(new Rect(175, 130, 50, 50), "East")){
 			newWallPillarObject = Instantiate(Resources.Load("_Room Editor/Components/Wall Pillar"), Selection.activeTransform.position + new Vector3(2,0,0), Quaternion.identity) as GameObject;
@@ -288,7 +288,7 @@ public class RoomEditor : EditorWindow {
 			newWallSectionObject = Instantiate(Resources.Load("_Room Editor/Components/Wall Section"), Selection.activeTransform.position + new Vector3(1,0,0), Quaternion.identity) as GameObject;
 			newWallSectionObject.transform.eulerAngles = new Vector3(0,180,0);
 			newWallSectionObject.transform.parent = Selection.activeTransform.parent.parent;
-			Selection.activeGameObject = newWallPillarObject.transform.Find("Pillar Normal").gameObject;
+			Selection.activeGameObject = newWallPillarObject.transform.Find("1 Pillar Normal").gameObject;
 		}
 		if (GUI.Button(new Rect(75, 130, 50, 50), "West")){
 			newWallPillarObject = Instantiate(Resources.Load("_Room Editor/Components/Wall Pillar"), Selection.activeTransform.position + new Vector3(-2,0,0), Quaternion.identity) as GameObject;
@@ -296,12 +296,28 @@ public class RoomEditor : EditorWindow {
 			newWallSectionObject = Instantiate(Resources.Load("_Room Editor/Components/Wall Section"), Selection.activeTransform.position + new Vector3(-1,0,0), Quaternion.identity) as GameObject;
 			newWallSectionObject.transform.eulerAngles = new Vector3(0,180,0);
 			newWallSectionObject.transform.parent = Selection.activeTransform.parent.parent;
-			Selection.activeGameObject = newWallPillarObject.transform.Find("Pillar Normal").gameObject;
+			Selection.activeGameObject = newWallPillarObject.transform.Find("1 Pillar Normal").gameObject;
 		}
 	}
 
 	void TogglePillarObject(){
-
+		//Debug.Log("[LEVEL EDITOR] Replacing wall section with Wall.");
+		foreach(Transform wallPillar in Selection.transforms){
+			foreach(Transform wallPillarComponent in wallPillar.transform.parent){
+				if(wallPillarComponent.gameObject.activeSelf == true){
+					switch(wallPillarComponent.name){
+					case "1 Pillar Normal" 			: wallPillarComponent.transform.parent.Find("2 Pillar Half").gameObject.SetActive(true); break;
+					case "2 Pillar Half" 			: wallPillarComponent.transform.parent.Find("3 Pillar Base").gameObject.SetActive(true); break;
+					case "3 Pillar Base" 			: wallPillarComponent.transform.parent.Find("4 Pillar Round").gameObject.SetActive(true); break;
+					case "4 Pillar Round" 			: wallPillarComponent.transform.parent.Find("5 Pillar Round Half").gameObject.SetActive(true); break;
+					case "5 Pillar Round Half" 		: wallPillarComponent.transform.parent.Find("6 Pillar Round Base").gameObject.SetActive(true); break;
+					case "6 Pillar Round Base" 		: wallPillarComponent.transform.parent.Find("1 Pillar Normal").gameObject.SetActive(true); break;
+					}
+					wallPillarComponent.gameObject.SetActive(false);
+					break;
+				}
+			}
+		}
 	}
 
 	void EditWallSectionMenu(){

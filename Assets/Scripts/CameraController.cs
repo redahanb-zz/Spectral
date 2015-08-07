@@ -40,7 +40,7 @@ public class CameraController : MonoBehaviour {
 
 			if(target && lookAtTarget){
 				Quaternion rotation = Quaternion.LookRotation(target.position - transform.position);
-				transform.rotation = Quaternion.Slerp(transform.rotation, rotation, 0.01f * damping);
+				transform.rotation = Quaternion.Slerp(transform.rotation, rotation, 0.003f * damping);
 			}	
 		
 		}

@@ -100,7 +100,7 @@ public class EnemySight : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		coll = GetComponent<SphereCollider> ();
-		playerController = player.GetComponent<PlayerController> ();
+		//playerController = player.GetComponent<PlayerController> ();
 		patrolling = true;
 		alerted = false;
 

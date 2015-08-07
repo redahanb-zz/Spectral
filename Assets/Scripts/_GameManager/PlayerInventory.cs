@@ -87,12 +87,14 @@ public class PlayerInventory : MonoBehaviour {
 	}
 
 	public void dropItem(int index){
-		Vector3 dropLocation = GameObject.FindWithTag ("Player").transform.position + (GameObject.FindWithTag ("Player").transform.forward*0.3f);
-		playerInventory[index].transform.position = dropLocation;
-		playerInventory[index].gameObject.SetActive (true);
-		playerInventory [index] = null;
-		//inventoryUI.inventoryIcons [index].transform.GetChild(0).transform.GetComponent<Image> ().sprite = inventoryUI.defaultIcon;
-		//inventoryUI.inventoryIcons [highlightedSlot].transform.GetChild(1).transform.GetComponent<Text> ().text = "-";
+		if(playerInventory[index]){
+			Vector3 dropLocation = GameObject.FindWithTag ("Player").transform.position + (GameObject.FindWithTag ("Player").transform.forward*0.3f);
+			playerInventory[index].transform.position = dropLocation;
+			playerInventory[index].gameObject.SetActive (true);
+			playerInventory [index] = null;
+			//inventoryUI.inventoryIcons [index].transform.GetChild(0).transform.GetComponent<Image> ().sprite = inventoryUI.defaultIcon;
+			//inventoryUI.inventoryIcons [highlightedSlot].transform.GetChild(1).transform.GetComponent<Text> ().text = "-";
+		}
 	}
 	
 	public void throwItem(){

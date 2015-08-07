@@ -79,7 +79,7 @@ public class PlayerInventory : MonoBehaviour {
 	}
 		
 	public void dropItem(){
-		Vector3 dropLocation = GameObject.FindWithTag ("Player").transform.position + (GameObject.FindWithTag ("Player").transform.forward*0.3f) + Vector3.up;
+		Vector3 dropLocation = GameObject.FindWithTag ("Player").transform.position + (GameObject.FindWithTag ("Player").transform.forward*0.3f);
 		playerInventory[highlightedSlot].transform.position = dropLocation;
 		playerInventory[highlightedSlot].gameObject.SetActive (true);
 		//inventoryUI.inventoryIcons [highlightedSlot].transform.GetChild(0).transform.GetComponent<Image> ().sprite = inventoryUI.defaultSprite;
@@ -87,7 +87,7 @@ public class PlayerInventory : MonoBehaviour {
 	}
 
 	public void dropItem(int index){
-		Vector3 dropLocation = GameObject.FindWithTag ("Player").transform.position + (GameObject.FindWithTag ("Player").transform.forward*0.3f) + Vector3.up;
+		Vector3 dropLocation = GameObject.FindWithTag ("Player").transform.position + (GameObject.FindWithTag ("Player").transform.forward*0.3f);
 		playerInventory[index].transform.position = dropLocation;
 		playerInventory[index].gameObject.SetActive (true);
 		playerInventory [index] = null;

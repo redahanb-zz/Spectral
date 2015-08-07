@@ -108,6 +108,7 @@ public class HUD_Inv_Button : MonoBehaviour {
 			countUp = false;
 			dragImage.SetActive(false);
 			dragImage.transform.position = transform.position;
+			playerInventory.dropItem(slotIndex);
 		}
 	}
 	

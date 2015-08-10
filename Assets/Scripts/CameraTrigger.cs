@@ -8,6 +8,8 @@ public class CameraTrigger : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		cController = Camera.main.GetComponent<CameraController>();
+		GetComponent<Renderer>().enabled = false;
+
 	}
 	
 	// Update is called once per frame

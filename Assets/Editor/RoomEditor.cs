@@ -5,7 +5,7 @@ using System.Linq;
 
 public class RoomEditor : EditorWindow {
 
-	GameObject 	newLevelObject,newRoomObject, newWallPillarObject, newWallSectionObject, exteriorObject, boundaryObject,
+	GameObject 	newLevelObject,newRoomObject, newWallPillarObject, newWallSectionObject, newFloorTileObject, exteriorObject, boundaryObject,
 				roomGroupObject, navMeshPlaneObject;
 
 
@@ -32,8 +32,8 @@ public class RoomEditor : EditorWindow {
 	[MenuItem ("Window/Level Editor/Room Editor")]
 	static void Init () {
 		RoomEditor window = (RoomEditor)EditorWindow.GetWindow (typeof (RoomEditor));
-		window.minSize = new Vector2(300,300);
-		window.maxSize = new Vector2(300,300);
+		window.minSize = new Vector2(300,330);
+		window.maxSize = new Vector2(300,330);
 		window.maximized = true;
 		window.Show();
 	}
@@ -44,6 +44,8 @@ public class RoomEditor : EditorWindow {
 			if(Selection.activeGameObject.GetComponent<Room>())CreateNewRoomMenu();
 			else if(Selection.activeGameObject.tag == "Wall Section")EditWallSectionMenu();
 			else if(Selection.activeGameObject.tag == "Wall Pillar")EditWallPillarMenu();
+			else if(Selection.activeGameObject.tag == "Tile")EditTileMenu();
+			else if(Selection.activeGameObject.tag == "Load Door")LoadDoorMenu();
 		}
 		else CreateLevelMenu();
 		Repaint();
@@ -94,16 +96,7 @@ public class RoomEditor : EditorWindow {
 			roomGroupObject = new GameObject("Rooms");
 			roomGroupObject.transform.parent = newLevelObject.transform;
 
-
-
-			newRoomObject = Instantiate(Resources.Load("_Room Editor/Default Rooms/Room Large"), Vector3.zero + new Vector3(0,1000,0), Quaternion.identity) as GameObject;
-			newRoomObject.transform.parent = roomGroupObject.transform;
-			newRoomObject.name = "[0,0]";
-
-			exteriorObject = Instantiate(Resources.Load("_Room Editor/Components/Basic Exterior"), newRoomObject.transform.position + new Vector3(0,-0.1f,0), Quaternion.identity) as GameObject; 
-			exteriorObject.transform.parent = newRoomObject.transform;
-			exteriorObject.name = "Exterior";
-
+			CreateRoom(0,0);
 
 			if(!GameObject.FindGameObjectWithTag("MainCamera"))Debug.Log("[LEVEL EDITOR] There is no Main Camera in the scene.");
 			else{
@@ -112,12 +105,6 @@ public class RoomEditor : EditorWindow {
 				mainCamObject.transform.position = newRoomObject.transform.position + new Vector3(-10, 8, -10);
 				mainCamObject.transform.eulerAngles = new Vector3(30,45,0);
 			}
-
-			GameObject landingPadMarker = Instantiate(Resources.Load("_Room Editor/Components/Landing Pad Marker"), Vector3.zero, Quaternion.identity) as GameObject; 
-			landingPadMarker.transform.parent = newRoomObject.transform;
-			landingPadMarker.name = "Landing Pad Marker";
-			landingPadMarker.transform.eulerAngles = new Vector3(90,0,0);
-
 
 			roomScript = newRoomObject.GetComponent<Room>();
 			roomScript.xIndex = 0;
@@ -128,43 +115,114 @@ public class RoomEditor : EditorWindow {
 	}
 
 
-
+	void LoadDoorMenu(){
+		GUI.Label (new Rect(0, 0, 300, 20), "Change Door:", EditorStyles.whiteBoldLabel);
+		if (GUI.Button(new Rect(125, 80, 50, 50), "North")){
+			GameObject doorObject = Instantiate(Resources.Load("_Room Editor/Components/Load Doors/Door North"), Selection.activeTransform.position, Quaternion.identity) as GameObject;
+			doorObject.transform.parent = Selection.activeTransform.parent;
+			DestroyImmediate(Selection.activeGameObject);
+			Selection.activeGameObject = doorObject;
+		}
+		if (GUI.Button(new Rect(125, 180, 50, 50), "South")){
+			GameObject doorObject = Instantiate(Resources.Load("_Room Editor/Components/Load Doors/Door South"), Selection.activeTransform.position, Quaternion.identity) as GameObject;
+			doorObject.transform.parent = Selection.activeTransform.parent;
+			doorObject.transform.eulerAngles = new Vector3(0,180,0);
+			DestroyImmediate(Selection.activeGameObject);
+			Selection.activeGameObject = doorObject;
+		}
+		if (GUI.Button(new Rect(175, 130, 50, 50), "East")){
+			GameObject doorObject = Instantiate(Resources.Load("_Room Editor/Components/Load Doors/Door East"), Selection.activeTransform.position, Quaternion.identity) as GameObject;
+			doorObject.transform.parent = Selection.activeTransform.parent;
+			doorObject.transform.eulerAngles = new Vector3(0,90,0);
+			DestroyImmediate(Selection.activeGameObject);
+			Selection.activeGameObject = doorObject;
+		}
+		if (GUI.Button(new Rect(75, 130, 50, 50), "West")){
+			GameObject doorObject = Instantiate(Resources.Load("_Room Editor/Components/Load Doors/Door West"), Selection.activeTransform.position, Quaternion.identity) as GameObject;
+			doorObject.transform.parent = Selection.activeTransform.parent;
+			doorObject.transform.eulerAngles = new Vector3(0,-90,0);
+			DestroyImmediate(Selection.activeGameObject);
+			Selection.activeGameObject = doorObject;
+		}
+	}
 
 	//CREATE ROOM MENU_____________________________________________________________________________________________________
 	void CreateNewRoomMenu(){
-		GUI.Label (new Rect(0, 0, 300, 30), "", EditorStyles.helpBox);
-		selectedRoomTemplate = (RoomTemplateOptions) EditorGUILayout.EnumPopup("Replace room:", selectedRoomTemplate);
-		GUI.Label (new Rect(0, 0, 300, 20), "Replace Room:", EditorStyles.whiteBoldLabel);
+//		GUI.Label (new Rect(0, 0, 300, 30), "", EditorStyles.helpBox);
+//		selectedRoomTemplate = (RoomTemplateOptions) EditorGUILayout.EnumPopup("Replace room:", selectedRoomTemplate);
+//		GUI.Label (new Rect(0, 0, 300, 20), "Replace Room:", EditorStyles.whiteBoldLabel);
+//
+//
+//		if (GUI.Button(new Rect(0, 30, 300, 20), "Replace")){
+//			Debug.Log("[LEVEL EDITOR] Replacing selected Room.");
+//			switch(selectedRoomTemplate){
+//				case RoomTemplateOptions.Normal : newRoomObject = Instantiate(Resources.Load("_Room Editor/Default Rooms/Room Normal"), Selection.activeGameObject.transform.position, Quaternion.identity) as GameObject; break;
+//				case RoomTemplateOptions.Small : newRoomObject = Instantiate(Resources.Load("_Room Editor/Default Rooms/Room Small"), Selection.activeGameObject.transform.position, Quaternion.identity) as GameObject; break;
+//				case RoomTemplateOptions.Large : newRoomObject = Instantiate(Resources.Load("_Room Editor/Default Rooms/Room Large"), Selection.activeGameObject.transform.position, Quaternion.identity) as GameObject; break;
+//				case RoomTemplateOptions.Wide : newRoomObject = Instantiate(Resources.Load("_Room Editor/Default Rooms/Room Wide"), Selection.activeGameObject.transform.position, Quaternion.identity) as GameObject; break;
+//				case RoomTemplateOptions.Long : newRoomObject = Instantiate(Resources.Load("_Room Editor/Default Rooms/Room Long"), Selection.activeGameObject.transform.position, Quaternion.identity) as GameObject; break;
+//			}
+//
+//			boundaryObject = Instantiate(Resources.Load("_Room Editor/Components/Room Boundary"), newRoomObject.transform.position, Quaternion.identity) as GameObject;
+//			boundaryObject.transform.parent = newRoomObject.transform;
+//			boundaryObject.name = "Boundary";
+//
+//			navMeshPlaneObject = Instantiate(Resources.Load("_Room Editor/Components/Nav Mesh Floor"), newRoomObject.transform.position + new Vector3(0,0.06f,0), Quaternion.identity) as GameObject; 
+//			navMeshPlaneObject.transform.parent = newRoomObject.transform;
+//			navMeshPlaneObject.transform.eulerAngles = new Vector3(90,0,0);
+//			navMeshPlaneObject.name = "Nav Mesh Floor";
+//
+//			roomScript = newRoomObject.GetComponent<Room>();
+//			roomScript.xIndex = Selection.activeTransform.GetComponent<Room>().xIndex;
+//			roomScript.zIndex = Selection.activeTransform.GetComponent<Room>().zIndex;
+//
+//			newRoomObject.name = "["+roomScript.xIndex+","+roomScript.zIndex+"]";
+//
+//			DestroyImmediate(Selection.activeGameObject);
+//			Selection.activeGameObject = newRoomObject;
+//		}
 
-
-		if (GUI.Button(new Rect(0, 30, 300, 20), "Replace")){
-			Debug.Log("[LEVEL EDITOR] Replacing selected Room.");
-			switch(selectedRoomTemplate){
-				case RoomTemplateOptions.Normal : newRoomObject = Instantiate(Resources.Load("_Room Editor/Default Rooms/Room Normal"), Selection.activeGameObject.transform.position, Quaternion.identity) as GameObject; break;
-				case RoomTemplateOptions.Small : newRoomObject = Instantiate(Resources.Load("_Room Editor/Default Rooms/Room Small"), Selection.activeGameObject.transform.position, Quaternion.identity) as GameObject; break;
-				case RoomTemplateOptions.Large : newRoomObject = Instantiate(Resources.Load("_Room Editor/Default Rooms/Room Large"), Selection.activeGameObject.transform.position, Quaternion.identity) as GameObject; break;
-				case RoomTemplateOptions.Wide : newRoomObject = Instantiate(Resources.Load("_Room Editor/Default Rooms/Room Wide"), Selection.activeGameObject.transform.position, Quaternion.identity) as GameObject; break;
-				case RoomTemplateOptions.Long : newRoomObject = Instantiate(Resources.Load("_Room Editor/Default Rooms/Room Long"), Selection.activeGameObject.transform.position, Quaternion.identity) as GameObject; break;
-			}
-
-			boundaryObject = Instantiate(Resources.Load("_Room Editor/Components/Room Boundary"), newRoomObject.transform.position, Quaternion.identity) as GameObject;
-			boundaryObject.transform.parent = newRoomObject.transform;
-			boundaryObject.name = "Boundary";
-
-			navMeshPlaneObject = Instantiate(Resources.Load("_Room Editor/Components/Nav Mesh Floor"), newRoomObject.transform.position + new Vector3(0,0.06f,0), Quaternion.identity) as GameObject; 
-			navMeshPlaneObject.transform.parent = newRoomObject.transform;
-			navMeshPlaneObject.transform.eulerAngles = new Vector3(90,0,0);
-			navMeshPlaneObject.name = "Nav Mesh Floor";
-
-			roomScript = newRoomObject.GetComponent<Room>();
-			roomScript.xIndex = Selection.activeTransform.GetComponent<Room>().xIndex;
-			roomScript.zIndex = Selection.activeTransform.GetComponent<Room>().zIndex;
-
-			newRoomObject.name = "["+roomScript.xIndex+","+roomScript.zIndex+"]";
-
-			DestroyImmediate(Selection.activeGameObject);
-			Selection.activeGameObject = newRoomObject;
-		}
+//		if (GUI.Button(new Rect(0, 0, 300, 30), "Create Navmesh for Floor")){
+//			GameObject navMeshObject = new GameObject();
+//			navMeshObject.name = "New Mesh Object";
+//			navMeshObject.AddComponent<MeshFilter>();
+//			navMeshObject.AddComponent<MeshRenderer>();
+//
+//			
+//			foreach(Transform t in Selection.transforms){
+//				t.parent =  selectedMeshGroup.transform;
+//			}
+//			
+//			selectedMeshGroup.transform.position = Vector3.zero;
+//			selectedMeshGroup.transform.rotation = Quaternion.identity;
+//			
+//			MeshFilter[] meshFilters = Selection.activeTransform.GetComponentsInChildren<MeshFilter>();
+//			
+//			CombineInstance[] combine = new CombineInstance[meshFilters.Length-1];
+//			int index = 0;
+//			for (var i = 0; i < meshFilters.Length; i++){
+//				if(mesh
+//				if (meshFilters[i].sharedMesh == null) continue;
+//				combine[index].mesh = meshFilters[i].sharedMesh;
+//				combine[index++].transform = meshFilters[i].transform.localToWorldMatrix;
+//				meshFilters[i].transform.GetComponent<Renderer>().enabled = false;
+//			}
+//			
+//			selectedMeshGroup.GetComponent<MeshFilter>().sharedMesh = new Mesh();
+//			selectedMeshGroup.GetComponent<MeshFilter>().sharedMesh.CombineMeshes (combine);
+//			selectedMeshGroup.GetComponent<Renderer>().material = meshFilters[1].GetComponent<Renderer>().sharedMaterial;
+//			
+//			while(selectedMeshGroup.transform.childCount != 0){
+//				DestroyImmediate(selectedMeshGroup.transform.GetChild(0).gameObject);
+//			}
+//			
+//			selectedMeshGroup.name = newMeshName;
+//			Selection.activeGameObject = selectedMeshGroup;
+//			
+//			DestroyImmediate(meshObject);
+//
+//
+//		}
 
 		GUI.Label (new Rect(0, 60, 300, 20), "Create Room:", EditorStyles.whiteBoldLabel);
 		if (GUI.Button(new Rect(125, 80, 50, 50), "North")){
@@ -188,27 +246,33 @@ public class RoomEditor : EditorWindow {
 
 	void CreateRoom(int xModifier, int zModifier){
 		Debug.Log("[LEVEL EDITOR] Creating new Room.");
-		roomScript = Selection.activeTransform.GetComponent<Room>();
-		int newRoomX = roomScript.xIndex + xModifier;
-		int newRoomZ = roomScript.zIndex + zModifier;
+		int newRoomX = 0, newRoomZ = 0;
 
-		if((newRoomX == 0) && (newRoomZ == 0))Debug.Log("[LEVEL EDITOR] A room already exists in that location.");
-		else{
-			if(GameObject.Find("["+newRoomX+","+newRoomZ+"]")){
+		if(Selection.activeGameObject)
+		if(Selection.activeTransform.GetComponent<Room>()){
+			roomScript = Selection.activeTransform.GetComponent<Room>();
+			newRoomX = roomScript.xIndex + xModifier;
+			newRoomZ = roomScript.zIndex + zModifier;
+		}
+
+		//if((newRoomX == 0) && (newRoomZ == 0))Debug.Log("[LEVEL EDITOR] A room already exists in that location.");
+		//else{
+			if(GameObject.Find("["+newRoomX+","+newRoomZ+"]"))
 				Debug.Log("[LEVEL EDITOR] A room already exists in that location.");
-			}
+			
 			else{
 				Debug.Log("[LEVEL EDITOR] Creating a new room.");
-				newRoomObject = Instantiate(Resources.Load("_Room Editor/Default Rooms/Room Normal"), Vector3.zero + new Vector3(newRoomX * 150,0,newRoomZ * 150), Quaternion.identity) as GameObject;
+				newRoomObject = new GameObject();// 
 				if(!roomGroupObject)roomGroupObject = Selection.activeTransform.parent.gameObject;
 				newRoomObject.transform.parent = roomGroupObject.transform;
 				newRoomObject.name = "["+newRoomX+","+newRoomZ+"]";
-				
-				boundaryObject = Instantiate(Resources.Load("_Room Editor/Components/Room Boundary"), newRoomObject.transform.position, Quaternion.identity) as GameObject;
+				newRoomObject.AddComponent<Room>();
+
+				boundaryObject = Instantiate(Resources.Load("_Room Editor/Components/Room Boundary"), Vector3.zero + new Vector3(newRoomX * 150,0,newRoomZ * 150), Quaternion.identity) as GameObject;
 				boundaryObject.transform.parent = newRoomObject.transform;
 				boundaryObject.name = "Boundary";
 
-				navMeshPlaneObject = Instantiate(Resources.Load("_Room Editor/Components/Nav Mesh Floor"), newRoomObject.transform.position + new Vector3(0,0.06f,0), Quaternion.identity) as GameObject; 
+				navMeshPlaneObject = Instantiate(Resources.Load("_Room Editor/Components/Nav Mesh Floor"), newRoomObject.transform.position + new Vector3(0,0.228f,0), Quaternion.identity) as GameObject; 
 				navMeshPlaneObject.transform.parent = newRoomObject.transform;
 				navMeshPlaneObject.transform.eulerAngles = new Vector3(90,0,0);
 				navMeshPlaneObject.name = "Nav Mesh Floor";
@@ -216,10 +280,37 @@ public class RoomEditor : EditorWindow {
 				roomScript = newRoomObject.GetComponent<Room>();
 				roomScript.xIndex = newRoomX;
 				roomScript.zIndex = newRoomZ;
+
+				GameObject tileObject = new GameObject("Tiles");
+				tileObject.transform.parent = newRoomObject.transform;
+
+				GameObject wallsObject = new GameObject("Walls");
+				wallsObject.transform.parent = newRoomObject.transform;
+
+				GameObject pillarObject = Instantiate(Resources.Load("_Room Editor/Components/Wall Pillar"), Vector3.zero + new Vector3(newRoomX * 150,0,newRoomZ * 150) + new Vector3(-0.9f,1.725f,-0.9f), Quaternion.identity) as GameObject;
+				pillarObject.transform.parent = newRoomObject.transform.Find("Walls");
 				
+				GameObject doorsObject = new GameObject("Doors");
+				doorsObject.transform.parent = newRoomObject.transform;
+
+				GameObject triggersObject = new GameObject("Camera Triggers");
+				triggersObject.transform.parent = newRoomObject.transform;
+
+				GameObject newCamTrigger = Instantiate(Resources.Load("_Room Editor/Components/Camera Trigger"), Vector3.zero + new Vector3(newRoomX * 150,10,newRoomZ * 150), Quaternion.identity) as GameObject;
+				newCamTrigger.transform.parent = triggersObject.transform;
+
+				GameObject startingTileObject = Instantiate(Resources.Load("_Room Editor/Components/Floor Tile"), Vector3.zero + new Vector3(newRoomX * 150,0,newRoomZ * 150), Quaternion.identity) as GameObject;
+				startingTileObject.transform.parent = tileObject.transform;
+
+				GameObject roomCoordinates = Instantiate(Resources.Load("_Room Editor/Components/Room Coordinates"), Vector3.zero + new Vector3(newRoomX * 150,50,newRoomZ * 150), Quaternion.identity) as GameObject; 
+				roomCoordinates.transform.parent = newRoomObject.transform;
+				roomCoordinates.transform.eulerAngles = new Vector3(90,0,0);
+				roomCoordinates.GetComponent<TextMesh>().text = "[" +newRoomX +"," +newRoomZ +"]";
+				roomCoordinates.name = "Room Coordinates";
+
 				Selection.activeGameObject = newRoomObject;
 			}
-		}
+		//}
 	}
 	
 	void CleanRoom(){
@@ -254,6 +345,107 @@ public class RoomEditor : EditorWindow {
 	
 	//EDIT COMPONENT MENU's________________________________________________________________________________________________
 	void EditTileMenu(){
+		//Replace Tiles
+		if (GUI.Button(new Rect(0, 0, 150, 20), "Next Tile Object")){
+			foreach(Transform tile in Selection.transforms){
+				foreach(Transform tileType in tile.transform.parent.parent.parent){
+					if(tileType.gameObject.activeSelf == true){
+						switch(tileType.name){
+							case "Normal" 		: tileType.transform.parent.Find("Corner").gameObject.SetActive(true); break;
+							case "Corner" 		: tileType.transform.parent.Find("Outer Curve").gameObject.SetActive(true); break;
+							case "Outer Curve" 	: tileType.transform.parent.Find("Inner Curve").gameObject.SetActive(true); break;
+							case "Inner Curve" 	: tileType.transform.parent.Find("Normal").gameObject.SetActive(true); break;
+							default				: tileType.transform.parent.parent.Find("Normal").gameObject.SetActive(true); break;
+						}
+						tileType.gameObject.SetActive(false);
+						break;
+					}
+				}
+			}
+		}
+		if (GUI.Button(new Rect(150, 0, 150, 20), "Toggle Surface")){
+			foreach(Transform tile in Selection.transforms){
+				foreach(Transform floor in tile.transform.parent){
+					if(floor.gameObject.activeSelf == true){
+						switch(floor.name){
+						case "1 Normal Floor" 	: floor.transform.parent.Find("2 Wood Floor").gameObject.SetActive(true); break;
+						case "2 Wood Floor" 	: floor.transform.parent.Find("1 Normal Floor").gameObject.SetActive(true); break;
+						default					: floor.transform.parent.parent.Find("1 Normal Floor").gameObject.SetActive(true); break;
+						}
+						floor.gameObject.SetActive(false);
+						break;
+					}
+				}
+			}
+		}
+		//New Tiles
+		GUI.Label (new Rect(0, 20, 300, 20), "Create New Floor Tiles", EditorStyles.whiteBoldLabel);
+		if (GUI.Button(new Rect(125, 50, 50, 50), "North")){
+			newFloorTileObject = Instantiate(Resources.Load("_Room Editor/Components/Floor Tile"), Selection.activeTransform.parent.parent.position + new Vector3(0,0,2), Quaternion.identity) as GameObject;
+			newFloorTileObject.transform.parent = Selection.activeTransform.parent.parent.parent.parent;
+			Selection.activeTransform = newFloorTileObject.transform.Find("Normal").Find("Floor").Find("1 Normal Floor");
+		}
+		if (GUI.Button(new Rect(125, 150, 50, 50), "South")){
+			newFloorTileObject = Instantiate(Resources.Load("_Room Editor/Components/Floor Tile"), Selection.activeTransform.parent.parent.position + new Vector3(0,0,-2), Quaternion.identity) as GameObject;
+			newFloorTileObject.transform.parent = Selection.activeTransform.parent.parent.parent.parent;
+			Selection.activeTransform = newFloorTileObject.transform.Find("Normal").Find("Floor").Find("1 Normal Floor");
+		}
+		if (GUI.Button(new Rect(175, 100, 50, 50), "East")){
+			newFloorTileObject = Instantiate(Resources.Load("_Room Editor/Components/Floor Tile"), Selection.activeTransform.parent.parent.position + new Vector3(2,0,0), Quaternion.identity) as GameObject;
+			newFloorTileObject.transform.parent = Selection.activeTransform.parent.parent.parent.parent;
+			Selection.activeTransform = newFloorTileObject.transform.Find("Normal").Find("Floor").Find("1 Normal Floor");
+		}
+		if (GUI.Button(new Rect(75, 100, 50, 50), "West")){
+			newFloorTileObject = Instantiate(Resources.Load("_Room Editor/Components/Floor Tile"), Selection.activeTransform.parent.parent.position + new Vector3(-2,0,0), Quaternion.identity) as GameObject;
+			newFloorTileObject.transform.parent = Selection.activeTransform.parent.parent.parent.parent;
+			Selection.activeTransform = newFloorTileObject.transform.Find("Normal").Find("Floor").Find("1 Normal Floor");
+		}
+
+		if (GUI.Button(new Rect(0, 75, 50, 50), "Above")){
+			newFloorTileObject = Instantiate(Resources.Load("_Room Editor/Components/Floor Tile"), Selection.activeTransform.parent.parent.position + new Vector3(0,3,0), Quaternion.identity) as GameObject;
+			newFloorTileObject.transform.parent = Selection.activeTransform.parent.parent.parent.parent;
+			Selection.activeTransform = newFloorTileObject.transform.Find("Normal").Find("Floor").Find("1 Normal Floor");
+		}
+		if (GUI.Button(new Rect(0, 125, 50, 50), "Below")){
+			newFloorTileObject = Instantiate(Resources.Load("_Room Editor/Components/Floor Tile"), Selection.activeTransform.parent.parent.position + new Vector3(0,-3,0), Quaternion.identity) as GameObject;
+			newFloorTileObject.transform.parent = Selection.activeTransform.parent.parent.parent.parent;
+			Selection.activeTransform = newFloorTileObject.transform.Find("Normal").Find("Floor").Find("1 Normal Floor");
+		}
+
+
+
+		GUI.Label (new Rect(0, 200, 120, 20), "Create Blocks and Triggers", EditorStyles.whiteBoldLabel);
+		if (GUI.Button(new Rect(0, 220, 150, 20), "Create Load Door")){
+			GameObject doorObject = Instantiate(Resources.Load("_Room Editor/Components/Load Doors/Door North"), Selection.activeTransform.position + new Vector3(-1f,2.1f,-1f), Quaternion.identity) as GameObject;
+			doorObject.transform.parent = Selection.activeTransform.parent.parent.parent.parent.parent.Find("Doors");
+			Selection.activeTransform = doorObject.transform;
+		}
+		if (GUI.Button(new Rect(150, 220, 150, 20), "Create Block")){
+			GameObject blockObject = Instantiate(Resources.Load("_Room Editor/Components/Block"), Selection.activeTransform.position + new Vector3(0,1.725f,0), Quaternion.identity) as GameObject;
+			blockObject.transform.parent = Selection.activeTransform.parent.parent.parent.parent;
+			blockObject.transform.localPosition = new Vector3(0,1.725f,0);
+			Selection.activeTransform = blockObject.transform;
+		}
+
+
+
+		//Rotate
+		GUI.Label (new Rect(0, 240, 300, 20), "Rotate Tile(s)", EditorStyles.whiteBoldLabel);
+		if (GUI.Button(new Rect(150, 260, 150, 40), "Clockwise")){
+			foreach(Transform tile in Selection.transforms)tile.parent.parent.parent.eulerAngles += new Vector3(0,45,0);
+		}
+		if (GUI.Button(new Rect(0, 260, 150, 40), "Anti-Clockwise")){
+			foreach(Transform tile in Selection.transforms)tile.parent.parent.parent.eulerAngles += new Vector3(0,45,0);
+		}
+
+
+	}
+
+	void ToggleTileObject(){
+
+	}
+
+	void ToggleFloorSurface(){
 
 	}
 
@@ -298,6 +490,18 @@ public class RoomEditor : EditorWindow {
 			newWallSectionObject.transform.parent = Selection.activeTransform.parent.parent;
 			Selection.activeGameObject = newWallPillarObject.transform.Find("1 Pillar Normal").gameObject;
 		}
+
+		if (GUI.Button(new Rect(0, 100, 50, 50), "Above")){
+			newWallPillarObject = Instantiate(Resources.Load("_Room Editor/Components/Wall Pillar"), Selection.activeTransform.position + new Vector3(0,3,0), Quaternion.identity) as GameObject;
+			newWallPillarObject.transform.parent = Selection.activeTransform.parent.parent;
+			Selection.activeGameObject = newWallPillarObject.transform.Find("1 Pillar Normal").gameObject;
+		}
+		if (GUI.Button(new Rect(0, 150, 50, 50), "Below")){
+			newWallPillarObject = Instantiate(Resources.Load("_Room Editor/Components/Wall Pillar"), Selection.activeTransform.position + new Vector3(0,-3,0), Quaternion.identity) as GameObject;
+			newWallPillarObject.transform.parent = Selection.activeTransform.parent.parent;
+			Selection.activeGameObject = newWallPillarObject.transform.Find("1 Pillar Normal").gameObject;
+		}
+
 	}
 
 	void TogglePillarObject(){

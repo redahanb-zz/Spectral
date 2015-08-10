@@ -17,6 +17,8 @@ TagManager:
   - Door
   - Physics Object
   - Blend Surface
+  - Block
+  - Load Door
   layers:
   - Default
   - TransparentFX

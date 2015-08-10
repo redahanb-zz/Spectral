@@ -96,7 +96,7 @@ public class PlayerController : MonoBehaviour {
 	void GetInput(){
 		timeSinceLastClick = timeSinceLastClick + customDeltaTime;
 		ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-		
+		//print( eventSystem.IsPointerOverGameObject());
 		if(Input.GetMouseButtonDown(0) && timeScale.timeSlowed ){
 			
 			//Check for DOuble Tap
@@ -108,7 +108,7 @@ public class PlayerController : MonoBehaviour {
 			
 			if(!eventSystem.IsPointerOverGameObject())
 			if (Physics.Raycast(ray, out rayHit, 100f)){
-				
+				print(rayHit.transform);
 				switch(rayHit.transform.tag){
 				case "Tile" : 
 					//print("Floor");

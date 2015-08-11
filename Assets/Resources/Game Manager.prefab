@@ -23,11 +23,25 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 438666}
-  - 114: {fileID: 11421994}
-  - 114: {fileID: 11422546}
-  - 114: {fileID: 11494272}
+  - 114: {fileID: 11413698}
   m_Layer: 0
   m_Name: Time Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &170178
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 430538}
+  - 114: {fileID: 11476634}
+  m_Layer: 0
+  m_Name: Inventory Manager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -60,6 +74,7 @@ Transform:
   m_Children:
   - {fileID: 413568}
   - {fileID: 438666}
+  - {fileID: 430538}
   m_Father: {fileID: 0}
   m_RootOrder: 0
 --- !u!4 &413568
@@ -74,6 +89,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 409092}
   m_RootOrder: 0
+--- !u!4 &430538
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 170178}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 409092}
+  m_RootOrder: 2
 --- !u!4 &438666
 Transform:
   m_ObjectHideFlags: 1
@@ -86,29 +113,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 409092}
   m_RootOrder: 1
---- !u!114 &11421994
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 146484}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0ba5314c27ffe954783810f2b7b5e9c4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &11422546
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 146484}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e7114148facd1034287bba626cc1a6fc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &11494272
+--- !u!114 &11413698
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -127,6 +132,20 @@ MonoBehaviour:
   lastInterval: 0
   timeNow: 0
   myTime: 0
+--- !u!114 &11476634
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 170178}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35bcee5353573428cafb1df3ce25b019, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerInventory: []
+  inventorySize: 0
+  highlightedSlot: 0
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

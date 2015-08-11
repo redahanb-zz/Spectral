@@ -4,6 +4,7 @@ using System.Collections;
 public class InventoryItem : MonoBehaviour {
 
 	PlayerInventory playerInventory;
+	Animator anim;
 
 	public string itemName;
 	public Color itemColor;
@@ -20,6 +21,7 @@ public class InventoryItem : MonoBehaviour {
 		//impactSound = GetComponent<AudioSource> ();
 		transform.GetComponent<Renderer> ().material.color = itemColor;
 		playerInventory = GameObject.Find ("Inventory Manager").GetComponent<PlayerInventory> ();
+		anim = GetComponent<Animator> ();
 	}
 	
 	// Update is called once per frame
@@ -90,6 +92,27 @@ public class InventoryItem : MonoBehaviour {
 		GameObject echo = Instantiate (Resources.Load("FootfallFX"), drawLoc, Quaternion.Euler(90,0,0)) as GameObject;
 		echo.GetComponent<SpriteRenderer> ().color = Color.red;
 		//AudioSource.PlayClipAtPoint (impactSound.clip, transform.position);
+	}
+
+	public void pickupAnim(){
+		//anim.SetBool ("PickedUp", true);
+		StartCoroutine (pickupONCE ("PickedUp"));
+	}
+
+	public void dropAnim(){
+		StartCoroutine (dropONCE("Dropped"));
+	}
+
+	public IEnumerator pickupONCE (string paramname){
+		anim.SetBool (paramname, true);
+		yield return null;
+		anim.SetBool (paramname, false);
+	}
+
+	public IEnumerator dropONCE (string paramname){
+		anim.SetBool (paramname, true);
+		yield return null;
+		anim.SetBool (paramname, false);
 	}
 
 	public void addItemToInventory(){

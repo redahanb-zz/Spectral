@@ -88,9 +88,10 @@ public class PlayerInventory : MonoBehaviour {
 
 	public void dropItem(int index){
 		if(playerInventory[index]){
-			Vector3 dropLocation = GameObject.FindWithTag ("Player").transform.position + (GameObject.FindWithTag ("Player").transform.forward*0.3f);
+			Vector3 dropLocation = GameObject.FindWithTag ("Player").transform.position + (GameObject.FindWithTag ("Player").transform.forward*0.3f) + (Vector3.up * 0.25f);
 			playerInventory[index].transform.position = dropLocation;
 			playerInventory[index].gameObject.SetActive (true);
+			playerInventory[index].gameObject.GetComponent<InventoryItem>().dropAnim();
 			playerInventory [index] = null;
 			//inventoryUI.inventoryIcons [index].transform.GetChild(0).transform.GetComponent<Image> ().sprite = inventoryUI.defaultIcon;
 			//inventoryUI.inventoryIcons [highlightedSlot].transform.GetChild(1).transform.GetComponent<Text> ().text = "-";

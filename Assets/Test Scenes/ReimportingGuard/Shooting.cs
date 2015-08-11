@@ -8,7 +8,7 @@ public class Shooting : MonoBehaviour {
 
 	//LineRenderer laserLine;
 	EnemySight enemySight;
-	//Animator anim;
+	Animator anim;
 
 	GameObject player;
 	GameObject gunBarrel;
@@ -21,7 +21,7 @@ public class Shooting : MonoBehaviour {
 		//laserLine = GetComponent<LineRenderer> ();
 		enemySight = GetComponent<EnemySight> ();
 		player = GameObject.FindWithTag("Player");
-		//anim = GetComponent<Animator> ();
+		anim = GetComponent<Animator> ();
 		gunBarrel = GameObject.Find ("GunBarrel");
 	}
 	
@@ -45,11 +45,13 @@ public class Shooting : MonoBehaviour {
 		//Debug.Log (counter);
 	}
 
-//	void OnAnimatorIK(int layerIndex) {
-//		print ("IK function called");
-//		anim.SetIKPosition (AvatarIKGoal.RightHand, player.transform.position + Vector3.up * 1.5f);
-//		anim.SetIKPositionWeight (AvatarIKGoal.RightHand, 1.0f);
-//	}
+	void OnAnimatorIK(int layerIndex) {
+		//print ("IK function called");
+		float aimWeight = anim.GetFloat ("Right Arm Down-Up");
+		anim.SetIKPosition (AvatarIKGoal.RightHand, player.transform.position + Vector3.up * 1.0f);
+		anim.SetIKPositionWeight (AvatarIKGoal.RightHand, aimWeight*5.0f);
+		print ("Aim weight = " + aimWeight);
+	}
 
 
 	public void Shoot() {

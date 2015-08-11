@@ -194,7 +194,7 @@ public class EnemySight : MonoBehaviour {
 			
 			if (angle <= 50.0f) {
 				//print("player in field of view");
-				print ("In range...");
+				//print ("In range...");
 				RaycastHit hit;
 				if (Physics.Raycast (transform.position + Vector3.up, direction, out hit, coll.radius)) {
 					//print ("raycast hit: " + hit.collider.gameObject.name);
@@ -202,7 +202,7 @@ public class EnemySight : MonoBehaviour {
 					Debug.DrawRay(transform.position + Vector3.up, direction);
 					if (hit.collider.gameObject.tag == "Player") {
 						if(playerController.isVisible){
-							print ("Player in sight!");
+							//print ("Player in sight!");
 							playerInSight = true;
 							lastPlayerSighting = player.transform.position;
 						}

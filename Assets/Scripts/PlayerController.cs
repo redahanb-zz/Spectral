@@ -323,6 +323,12 @@ public class PlayerController : MonoBehaviour {
 			currentMoveState = MoveState.Blend_Stand;
 		}
 	}
+
+	public void blendButton(GameObject blendObject){
+		transform.forward = -blendObject.transform.forward;
+		isBlending = true;
+		currentMoveState = MoveState.Blend_Stand;
+	}
 	
 	void GetPath(){
 		currentPathIndex = 1;

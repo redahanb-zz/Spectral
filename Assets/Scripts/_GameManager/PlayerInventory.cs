@@ -21,7 +21,7 @@ public class PlayerInventory : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		// Cycle through inventory slots
-		///DIABLED FOR NEW PROJECT BUILD: NO CONTORLLER INPUT YET///
+		///DIABLED FOR NEW PROJECT BUILD: NO CONTROLLER INPUT YET///
 //		if(Input.GetKeyDown(KeyCode.Equals) || Input.GetButtonDown("RB")) {
 //			if(highlightedSlot < inventorySize - 1) {
 //				highlightedSlot++;

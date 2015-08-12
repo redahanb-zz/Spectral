@@ -48,6 +48,8 @@ public class HUD_Inv_Button : MonoBehaviour {
 
 		if (timePressed >= timeToDrag) {
 			draggable = true;
+			dragging = true;
+			spawnIcon();
 		} else {
 			draggable = false;
 			dragging = false; // this might be redundant
@@ -85,7 +87,7 @@ public class HUD_Inv_Button : MonoBehaviour {
 			
 		} else {
 			//print ("Copy Icon");
-			spawnIcon();
+			//spawnIcon();
 			//dragImage.SetActive(true);
 		}
 	}
@@ -94,7 +96,7 @@ public class HUD_Inv_Button : MonoBehaviour {
 
 	public void dragIcon(){
 		if (draggable) {
-			dragging = true;
+//			dragging = true;
 			findTouchbyID(fingerID);
 			dragImage.transform.position = dragPosition;
 			//print ("DRAGGING");	

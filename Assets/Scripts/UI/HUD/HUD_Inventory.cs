@@ -55,17 +55,24 @@ public class HUD_Inventory : MonoBehaviour {
 
 	public void updateIcon(){
 		for (int i = 0; i < inventorySize; i++) {
-			if(playerInventory.playerInventory[i]){
+			if(playerInventory.playerInventory[i] != null){
+				// set icon
 				Image itemIcon = inventoryIcons[i].transform.GetChild(0).transform.GetComponent<Image>();
 				itemIcon.sprite = playerInventory.playerInventory[i].GetComponent<InventoryItem>().itemIcon;
+				// set color
 				Color iconColor = playerInventory.playerInventory[i].GetComponent<InventoryItem>().itemColor;
 				iconColor.a = 1;
 				itemIcon.color = iconColor;
+				// set value
+				Text valueText = inventoryIcons[i].transform.GetComponentInChildren<Text>();
+				valueText.text = playerInventory.playerInventory[i].GetComponent<InventoryItem>().itemValue.ToString();
 			} else {
 				// icon is default
 				Image itemIcon = inventoryIcons[i].transform.GetChild(0).transform.GetComponent<Image>();
 				itemIcon.sprite = defaultIcon;
 				itemIcon.color = Color.white;
+				Text valueText = inventoryIcons[i].transform.GetComponentInChildren<Text>();
+				valueText.text = "-";
 			}
 		}
 	}

@@ -5,24 +5,22 @@ public class Shooting : MonoBehaviour {
 
 	public int shotDmg;
 	public float reloadTime;
-
-	//LineRenderer laserLine;
+	
 	EnemySight enemySight;
 	Animator anim;
 
 	GameObject player;
-	GameObject gunBarrel;
+	public GameObject gunBarrel;
 
 	float counter = 0.6f;
 
 
 	// Use this for initialization
 	void Start () {
-		//laserLine = GetComponent<LineRenderer> ();
 		enemySight = GetComponent<EnemySight> ();
 		player = GameObject.FindWithTag("Player");
 		anim = GetComponent<Animator> ();
-		gunBarrel = GameObject.Find ("GunBarrel");
+		//gunBarrel = transform.Find("GunBarrel").gameObject;
 	}
 	
 	// Update is called once per frame
@@ -34,23 +32,18 @@ public class Shooting : MonoBehaviour {
 		if(enemySight.alerted){
 			if(counter >= 0){
 				counter -= Time.deltaTime;
-				//laserLine.enabled = false;
-			}
-
-			//turn off the line renderer 0.2 seconds after shot
-			if (counter <= 2.8f) {
-				//laserLine.enabled = false;
 			}
 		}
-		//Debug.Log (counter);
 	}
 
-	void OnAnimatorIK(int layerIndex) {
-		//print ("IK function called");
-		float aimWeight = anim.GetFloat ("Right Arm Down-Up");
+	void OnAnimatorIK(int layerIndex) {;
+		float aimWeight = anim.GetFloat ("Aim Weight");
+		if(aimWeight > 1.0f){
+			aimWeight = 1.0f;
+		}
 		anim.SetIKPosition (AvatarIKGoal.RightHand, player.transform.position + Vector3.up * 1.0f);
-		anim.SetIKPositionWeight (AvatarIKGoal.RightHand, aimWeight*5.0f);
-		print ("Aim weight = " + aimWeight);
+		anim.SetIKPositionWeight (AvatarIKGoal.RightHand, aimWeight);
+		//print ("Aim weight = " + aimWeight);
 	}
 
 
@@ -58,11 +51,8 @@ public class Shooting : MonoBehaviour {
 		if(counter <= 0){
 			counter = reloadTime;
 
-			//GameObject player = GameObject.FindWithTag("Player");
-
-//			laserLine.SetPosition(0, gunBarrel.transform.position);
-//			laserLine.SetPosition(1, player.transform.position + Vector3.up);
-//			laserLine.enabled = true;
+			GameObject bullet = Instantiate(Resources.Load("Enemies/Bullet"), gunBarrel.transform.position, gunBarrel.transform.rotation) as GameObject;
+			bullet.GetComponent<Rigidbody>().AddForce(bullet.transform.up*1.5f, ForceMode.Impulse);
 
 			//player.gameObject.GetComponent<Health>().takeDamage(shotDmg);
 

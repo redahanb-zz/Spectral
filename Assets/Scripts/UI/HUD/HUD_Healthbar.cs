@@ -4,16 +4,23 @@ using System.Collections;
 public class HUD_Healthbar : MonoBehaviour {
 
 	GameObject[] healthbarIcons;
+	GameObject healthManager;
+	HealthManager playerHealth;
+
+	int healthBarSize;
 	public int panelSize;
 	
 	// Use this for initialization
 	void Start () {
-		buildHealthbarUI (5);
+		healthManager = GameObject.Find ("Health Manager");
+		playerHealth = healthManager.GetComponent<HealthManager> ();
+		healthBarSize = playerHealth.maxHealth;
+		buildHealthbarUI (healthBarSize);
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		
+		updateIcons ();
 	}
 	
 	public void buildHealthbarUI(int size) {
@@ -43,5 +50,14 @@ public class HUD_Healthbar : MonoBehaviour {
 			healthbarIcons[i].gameObject.name = "Cell " + i.ToString();
 		}
 		
+	}
+
+	void updateIcons(){
+		int currentHealth = playerHealth.playerHealth;
+		for (int i = 0; i < healthBarSize; i++) {
+			if(i >= currentHealth){
+				healthbarIcons[i].transform.GetChild(0).gameObject.SetActive(false);
+			}
+		}
 	}
 }

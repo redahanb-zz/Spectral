@@ -185,7 +185,7 @@ public class EnemySight : MonoBehaviour {
 	}
 
 	void checkSight() {
-		print ("Checkingsight");
+		//print ("Checkingsight");
 		if (Vector3.Distance (transform.position, player.transform.position) < 7.0f) {
 			//print ("player in range");
 			playerInSight = false;

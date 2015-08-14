@@ -61,7 +61,7 @@ public class RoomInformation : MonoBehaviour {
 
 	public void SetTarget(Transform t){
 		target = t;
-		roomNameText.text = target.parent.parent.parent.name;
+		roomNameText.text = t.parent.parent.parent.name;
 	}
 
 	public void SetDoor(Door d){
@@ -130,6 +130,11 @@ public class RoomInformation : MonoBehaviour {
 	void TeleportPlayer(){
 		print("Teleporting");
 		doorway.StartNewTeleport();
+		displayInfo = false;
+	}
+
+	void SelfDestruct(){
+
 	}
 
 	void Fade(){

@@ -19,7 +19,7 @@ public class PathIndicator : MonoBehaviour {
 
 	void Start(){
 		timeScale = GameObject.Find("Time Manager").GetComponent<TimeScaler>();
-		InvokeRepeating("CreatePathArrow", 0.01f, 0.007f);
+		InvokeRepeating("CreatePathArrow", 0.01f, 0.008f);
 	}
 
 	void CreatePathArrow(){

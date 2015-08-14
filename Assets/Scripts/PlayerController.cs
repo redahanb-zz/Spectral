@@ -307,7 +307,8 @@ public class PlayerController : MonoBehaviour {
 		
 		if(!destinationObject && timeScale.timeSlowed)
 			destinationObject = Instantiate(Resources.Load("DestinationMarker"), targetPosition, Quaternion.identity) as GameObject;
-		
+		//else ClearPath();
+
 		if(!pathObject && timeScale.timeSlowed && distance > 1){
 			pathObject = Instantiate(Resources.Load("PathIndicator"), transform.position + new Vector3(0,0.01f,0) + (transform.forward * 1), Quaternion.identity) as GameObject;
 			agent.SetDestination(targetPosition);
@@ -338,5 +339,6 @@ public class PlayerController : MonoBehaviour {
 	void ClearPath(){
 		Destroy(pathObject);
 		Destroy(destinationObject);
+		//if(GameObject.Find("Path Arrow");
 	}
 }

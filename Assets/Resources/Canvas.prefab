@@ -51,6 +51,36 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &111804
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 430298}
+  m_Layer: 0
+  m_Name: Game Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &116832
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 498548}
+  m_Layer: 0
+  m_Name: Room Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &120166
 GameObject:
   m_ObjectHideFlags: 1
@@ -79,6 +109,22 @@ GameObject:
   - 114: {fileID: 11460516}
   m_Layer: 0
   m_Name: Screen Fade
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &123522
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 404820}
+  - 114: {fileID: 11424106}
+  m_Layer: 0
+  m_Name: Inventory Manager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -223,6 +269,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &156762
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 403420}
+  - 114: {fileID: 11411158}
+  m_Layer: 0
+  m_Name: Time Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &168614
 GameObject:
   m_ObjectHideFlags: 0
@@ -285,6 +347,7 @@ GameObject:
   - 224: {fileID: 22458820}
   - 222: {fileID: 22200112}
   - 114: {fileID: 11415830}
+  - 114: {fileID: 11441590}
   m_Layer: 5
   m_Name: Fade
   m_TagString: Untagged
@@ -310,6 +373,30 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!4 &403420
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 156762}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 430298}
+  m_RootOrder: 1
+--- !u!4 &404820
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 123522}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 430298}
+  m_RootOrder: 2
 --- !u!4 &415628
 Transform:
   m_ObjectHideFlags: 1
@@ -328,6 +415,21 @@ Transform:
   - {fileID: 22418748}
   m_Father: {fileID: 22454268}
   m_RootOrder: 4
+--- !u!4 &430298
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 111804}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -447.30838, y: -310, z: 6.56199265}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 498548}
+  - {fileID: 403420}
+  - {fileID: 404820}
+  m_Father: {fileID: 22454268}
+  m_RootOrder: 8
 --- !u!4 &481152
 Transform:
   m_ObjectHideFlags: 1
@@ -354,6 +456,18 @@ Transform:
   - {fileID: 22458820}
   m_Father: {fileID: 22454268}
   m_RootOrder: 1
+--- !u!4 &498548
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 116832}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 430298}
+  m_RootOrder: 0
 --- !u!95 &9567692
 Animator:
   serializedVersion: 3
@@ -391,6 +505,25 @@ MonoBehaviour:
     y: 0
     width: 1
     height: 1
+--- !u!114 &11411158
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 156762}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8155f30d41e3ae74187643c5dc669f8a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timeSlowed: 1
+  myDeltaTime: 0
+  slowScale: .100000001
+  normalScale: 1
+  currentScale: .100000001
+  lastInterval: 0
+  timeNow: 0
+  myTime: 0
 --- !u!114 &11412522
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -492,6 +625,20 @@ MonoBehaviour:
     y: 0
     width: 6
     height: 6
+--- !u!114 &11424106
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 123522}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35bcee5353573428cafb1df3ce25b019, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerInventory: []
+  inventorySize: 0
+  highlightedSlot: 0
 --- !u!114 &11425508
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -584,6 +731,17 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
+--- !u!114 &11441590
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 180240}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d46f59438e800c4c86c10130cd29f26, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &11443696
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -611,7 +769,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
+        - m_Target: {fileID: 11411158}
           m_MethodName: ResumeTime
           m_Mode: 1
           m_Arguments:
@@ -628,7 +786,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
+        - m_Target: {fileID: 11411158}
           m_MethodName: SlowTime
           m_Mode: 1
           m_Arguments:
@@ -1194,6 +1352,7 @@ RectTransform:
   - {fileID: 22406148}
   - {fileID: 22449318}
   - {fileID: 22426752}
+  - {fileID: 430298}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_AnchorMin: {x: 0, y: 0}

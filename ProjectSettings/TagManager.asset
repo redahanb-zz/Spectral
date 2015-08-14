@@ -19,6 +19,7 @@ TagManager:
   - Blend Surface
   - Block
   - Load Door
+  - Guard
   layers:
   - Default
   - TransparentFX
@@ -29,7 +30,7 @@ TagManager:
   - 
   - 
   - Background Image
-  - 
+  - Room
   - 
   - 
   - 

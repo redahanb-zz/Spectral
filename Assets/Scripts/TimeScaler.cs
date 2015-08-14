@@ -24,7 +24,7 @@ public class TimeScaler : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		playerAnimator 	= GameObject.FindGameObjectWithTag("Player").GetComponent<Animator>();
-		timeText 		= GameObject.Find("Button").transform.Find("Text").GetComponent<Text>();
+		timeText 		= GameObject.Find("Time Button").transform.Find("Text").GetComponent<Text>();
 		myDeltaTime 	= Time.deltaTime;
 		lastInterval 	= Time.realtimeSinceStartup;
 	}

@@ -6,7 +6,8 @@ public class TimeScaler : MonoBehaviour {
 	
 	private Text 	timeText;
 	
-	public 	bool 	timeSlowed = true;
+	public 	bool 	timeSlowed  = true,
+					timeStopped = false;
 
 	public 	float 	myDeltaTime, 
 					slowScale 		= 0.1f, 
@@ -28,22 +29,33 @@ public class TimeScaler : MonoBehaviour {
 		myDeltaTime 	= Time.deltaTime;
 		lastInterval 	= Time.realtimeSinceStartup;
 	}
+
+	public void StopTime(){
+		timeStopped = false;
+		
+	}
 	
 	public void SlowTime(){
 		timeSlowed 		= true;
+		timeStopped = false;
+
 	}
 	
 	public void ResumeTime(){
 		timeSlowed 		= false;
+		timeStopped = false;
 	}
+
+
 	
 	// Update is called once per frame
 	void Update () {
 		timeNow 		= Time.realtimeSinceStartup;
 		timeText.text 	= ""+currentScale;
 		
-		if(timeSlowed)	currentScale = Mathf.MoveTowards(currentScale, slowScale,  0.02f);
-		else 			currentScale = Mathf.MoveTowards(currentScale, normalScale,  0.02f);
+		if(timeSlowed)			currentScale = Mathf.MoveTowards(currentScale, slowScale,   0.02f);
+		else if(timeStopped)	currentScale = Mathf.MoveTowards(currentScale, slowScale,   0.00f);
+		else 					currentScale = Mathf.MoveTowards(currentScale, normalScale, 0.02f);
 
 		if(playerAnimator) playerAnimator.SetFloat ("animationSpeed", currentScale);
 

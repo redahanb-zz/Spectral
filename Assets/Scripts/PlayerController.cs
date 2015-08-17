@@ -175,6 +175,7 @@ public class PlayerController : MonoBehaviour {
 	}
 	
 	void Idle(){
+		agent.destination = agent.transform.position;
 		distance = 1000f;
 	}
 

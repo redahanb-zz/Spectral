@@ -198,7 +198,7 @@ public class EnemySight : MonoBehaviour {
 				RaycastHit hit;
 				if (Physics.Raycast (transform.position + Vector3.up, direction, out hit, coll.radius)) {
 					//print ("raycast hit: " + hit.collider.gameObject.name);
-					print (hit.collider.gameObject);
+					//print (hit.collider.gameObject);
 					Debug.DrawRay(transform.position + Vector3.up, direction);
 					if (hit.collider.gameObject.tag == "Player") {
 						if(playerController.isVisible){

@@ -31,7 +31,7 @@ Material:
           m_Offset: {x: 0, y: 0}
       data:
         first:
-          name: _DetailTex
+          name: _ToonShade
         second:
           m_Texture: {fileID: 0}
           m_Scale: {x: 1, y: 1}
@@ -45,7 +45,7 @@ Material:
           m_Offset: {x: 0, y: 0}
       data:
         first:
-          name: _ToonShade
+          name: _DetailTex
         second:
           m_Texture: {fileID: 0}
           m_Scale: {x: 1, y: 1}
@@ -71,7 +71,7 @@ Material:
       data:
         first:
           name: _Color
-        second: {r: .235294119, g: .352941185, b: .349019617, a: 1}
+        second: {r: .720588207, g: .720588207, b: .720588207, a: 1}
       data:
         first:
           name: _SpecColor

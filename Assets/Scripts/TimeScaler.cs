@@ -22,7 +22,7 @@ public class TimeScaler : MonoBehaviour {
 					timeNow, 
 					myTime;
 
-	PauseManager pauseManager;
+	//PauseManager pauseManager;
 	
 	// Use this for initialization
 	void Start () {
@@ -30,7 +30,7 @@ public class TimeScaler : MonoBehaviour {
 		timeText 		= GameObject.Find("Time Button").transform.Find("Text").GetComponent<Text>();
 		myDeltaTime 	= Time.deltaTime;
 		lastInterval 	= Time.realtimeSinceStartup;
-		pauseManager = GameObject.Find ("Pause Manager").GetComponent<PauseManager> ();
+		//pauseManager = GameObject.Find ("Pause Manager").GetComponent<PauseManager> ();
 	}
 
 	public void StopTime(){
@@ -68,11 +68,11 @@ public class TimeScaler : MonoBehaviour {
 		lastInterval 		= timeNow;
 		myTime 				= lastInterval/timeNow;
 
-		print (pauseManager.gamePaused == true);
-		if(pauseManager.gamePaused){
-			Time.timeScale = 0.0f;
-			print ("TIME STOPPED");
-		}
+//		print (pauseManager.gamePaused == true);
+//		if(pauseManager.gamePaused){
+//			Time.timeScale = 0.0f;
+//			print ("TIME STOPPED");
+//		}
 	}
 	
 	void FixedUpdate(){

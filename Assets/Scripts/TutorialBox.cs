@@ -84,7 +84,7 @@ public class TutorialBox : MonoBehaviour {
 
 			tutorialText.color 		= Color.Lerp(tutorialText.color, 	new Color(0,0,0,0), colorSpeed);
 			continueText.color 		= Color.Lerp(continueText.color, 	new Color(0,0,0,0), colorSpeed);
-			print(backgroundImage.color.a);
+			//print(backgroundImage.color.a);
 			if(backgroundImage.color.a < 0.01f)Destroy(transform.parent.gameObject);
 
 		}

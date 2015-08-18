@@ -26,16 +26,16 @@ public class PathArrow : MonoBehaviour {
 
 
 		if (Physics.Raycast(Camera.main.transform.position, direction, out hit, 100.0F)){
-			print(hit.transform.name +" : " + transform.name);
-			print(hit.transform);
+			//print(hit.transform.name +" : " + transform.name);
+			//print(hit.transform);
 			if(hit.transform.name == transform.name){
 				//Arrow is visible
-				print("VISIBLE");
+				//print("VISIBLE");
 				arrowRenderer.material = Resources.Load("Chevron Visible") as Material;
 			}
 			else{
 				//Arrow is hidden
-				print("HIDDEN");
+				//print("HIDDEN");
 				arrowRenderer.material = Resources.Load("Chevron Hidden") as Material;
 			}
 		}

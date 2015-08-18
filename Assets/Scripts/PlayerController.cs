@@ -108,7 +108,7 @@ public class PlayerController : MonoBehaviour {
 			
 			if(!eventSystem.IsPointerOverGameObject())
 			if (Physics.Raycast(ray, out rayHit, 100f)){
-				print(rayHit.transform);
+				//print(rayHit.transform);
 				switch(rayHit.transform.tag){
 				case "Tile" : 
 					//print("Floor");

@@ -4,20 +4,16 @@ using UnityEngine.UI;
 
 public class PauseManager : MonoBehaviour {
 
-	bool gamePaused;
+	public bool gamePaused = false;
 	float pausedTimedScale;
 
 	GameObject mainCanvas;
 	GameObject pauseScreen;
-	GameObject timeManager;
-	TimeScaler timeScaler;
 
 	// Use this for initialization
 	void Start () {
 		mainCanvas = GameObject.Find ("Canvas");
-		pauseScreen = GameObject.Find ("Pause Screen").transform.GetChild (0).gameObject;
-		timeManager = GameObject.Find ("Time Manager");
-		timeScaler = timeManager.GetComponent<TimeScaler> ();
+		pauseScreen = GameObject.Find ("Pause Screen");
 	}
 	
 	// Update is called once per frame
@@ -27,12 +23,14 @@ public class PauseManager : MonoBehaviour {
 
 	public void PauseGame(){
 		// call timeScaler to stop time
+		gamePaused = true;
 		mainCanvas.SetActive (false);
 		pauseScreen.SetActive (true);
 	}
 
 	public void ResumeGame(){
 		// call timeScaler to resume time
+		gamePaused = false;
 		pauseScreen.SetActive (false);
 		mainCanvas.SetActive (true);
 	}

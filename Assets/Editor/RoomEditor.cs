@@ -369,7 +369,7 @@ public class RoomEditor : EditorWindow {
 	
 	
 	void CreateRoomMesh(){
-		AssetDatabase.CreateFolder("Assets/Meshes/Rooms", Application.loadedLevelName);
+		AssetDatabase.CreateFolder("Assets/Meshes/Rooms/", Application.loadedLevelName);
 
 		foreach(Transform selectedRoom in Selection.activeTransform.parent){
 
@@ -441,6 +441,7 @@ public class RoomEditor : EditorWindow {
 
 	void UpdateNavmesh(){
 		foreach(Transform room in GameObject.Find("Level").transform.Find("Rooms")){
+			Debug.Log("Updating NavMesh for " +room);
 			room.Find("Boundary").gameObject.SetActive(false);
 		}
 

@@ -47,11 +47,11 @@ public class PathArrow : MonoBehaviour {
 		if(ready){
 			Debug.DrawRay(Camera.main.transform.position, hit.point, Color.yellow);
 			if(visible){
-				arrowRenderer.material.color = Color.Lerp(arrowRenderer.material.color, new Color(1,1,1,0), 0.05f);
+				arrowRenderer.material.color = Color.Lerp(arrowRenderer.material.color, new Color(0,0,0,0), 0.05f);
 				if(arrowRenderer.material.color.a < 0.1f)Destroy(gameObject);
 			}
 			else{
-				arrowRenderer.material.color = Color.Lerp(arrowRenderer.material.color, new Color(1,1,1,1), 0.25f);
+				arrowRenderer.material.color = Color.Lerp(arrowRenderer.material.color, new Color(0,0,0,1), 0.25f);
 				if(arrowRenderer.material.color.a > 0.95f)visible = true;
 			}
 		}

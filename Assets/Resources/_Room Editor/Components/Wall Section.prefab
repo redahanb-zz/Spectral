@@ -230,7 +230,7 @@ GameObject:
   - 23: {fileID: 2343966}
   m_Layer: 0
   m_Name: Surface
-  m_TagString: Untagged
+  m_TagString: Blend Surface
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
@@ -1497,7 +1497,7 @@ GameObject:
   - 23: {fileID: 2384842}
   m_Layer: 0
   m_Name: Surface2
-  m_TagString: Untagged
+  m_TagString: Blend Surface
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
@@ -1897,7 +1897,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 178300}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.60400009, y: 11.0438843, z: 108.687225}
+  m_LocalPosition: {x: -62.287178, y: 11.9555311, z: -110.58522}
   m_LocalScale: {x: 1.79999995, y: 3, z: .200000003}
   m_Children:
   - {fileID: 466488}

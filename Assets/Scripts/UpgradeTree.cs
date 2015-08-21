@@ -7,6 +7,7 @@ public class UpgradeTree : MonoBehaviour {
 	RectTransform rTransform;
 	// Use this for initialization
 	void Start () {
+		Time.timeScale = 1;
 		rTransform = GetComponent<RectTransform>();
 	}
 	

@@ -12,7 +12,7 @@ public class TutorialBox : MonoBehaviour {
 	RectTransform backgroundTransform, boxTransform, gradientTransform, topBorder, bottomBorder;
 	Text tutorialText, continueText;
 
-	float scaleSpeed = 0.02f, colorSpeed = 0.03f;
+	float scaleSpeed = 0.2f, colorSpeed = 0.15f;
 
 	int i = 0;
 
@@ -51,12 +51,12 @@ public class TutorialBox : MonoBehaviour {
 
 		if(showBox){
 			tScaler.StopTime();
-			backgroundImage.color = Color.Lerp(backgroundImage.color, new Color(backgroundImage.color.r, backgroundImage.color.g, backgroundImage.color.b, 0.6f), 0.01f);
+			backgroundImage.color = Color.Lerp(backgroundImage.color, new Color(backgroundImage.color.r, backgroundImage.color.g, backgroundImage.color.b, 0.6f), colorSpeed);
 
 			topImage.color = Color.Lerp(topImage.color, new Color(topImage.color.r, topImage.color.g, topImage.color.b, 0.6f), colorSpeed);
 			bottomImage.color = Color.Lerp(bottomImage.color, new Color(bottomImage.color.r, bottomImage.color.g, bottomImage.color.b, 0.6f), colorSpeed);
 
-			if(topImage.color.a > 0.5f)bordersVisible = true;
+			if(topImage.color.a > 0.4f)bordersVisible = true;
 
 			if(bordersVisible){
 				topBorder.position 		= Vector3.Lerp(topBorder.position, boxTransform.position + new Vector3(0,100,0), scaleSpeed);
@@ -66,12 +66,12 @@ public class TutorialBox : MonoBehaviour {
 				if(boxTransform.sizeDelta.y > 120)boxVisible = true;
 			}
 			if(boxVisible){
-				tutorialText.color 	= Color.Lerp(tutorialText.color, new Color(tutorialText.color.r, tutorialText.color.g, tutorialText.color.b, 1), 0.01f);
-				iconImage.color 	= Color.Lerp(iconImage.color, new Color(iconImage.color.r, iconImage.color.g, iconImage.color.b, 0.5f), 0.01f);
+				tutorialText.color 	= Color.Lerp(tutorialText.color, new Color(tutorialText.color.r, tutorialText.color.g, tutorialText.color.b, 1), colorSpeed);
+				iconImage.color 	= Color.Lerp(iconImage.color, new Color(iconImage.color.r, iconImage.color.g, iconImage.color.b, 0.5f), colorSpeed);
 			}
 
 			i = i + 1;
-			if(i > 500)showContinue = true;
+			if(i > 350)showContinue = true;
 		}
 		else{
 			tScaler.SlowTime();

@@ -11,8 +11,7 @@ public class RoomEditor : EditorWindow {
 	roomGroupObject, navMeshPlaneObject;
 	
 	
-	private int roomX, roomZ,
-	roomTemplateIndex = 0;
+	private int roomX, roomZ, roomTemplateIndex = 0;
 	
 	//public string[] roomTemplateOptions = new string[] {"Normal", "Small", "Large", "Wide", "Long"};
 	public enum RoomTemplateOptions { 

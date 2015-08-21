@@ -41,7 +41,7 @@ public class BlendInfo : MonoBehaviour {
 	}
 
 	void callPlayertoBlend(){
-		player.GetComponent<PlayerController> ().blendButton (this.gameObject);
+		player.GetComponent<PlayerController> ().blendButton (this.gameObject, this.transform, transform.position);
 	}
 	
 	void OnTriggerExit(Collider col){

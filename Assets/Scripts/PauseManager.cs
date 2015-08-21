@@ -8,12 +8,12 @@ public class PauseManager : MonoBehaviour {
 	float pausedTimedScale;
 
 	GameObject mainCanvas;
-	GameObject pauseScreen;
+	public GameObject pauseScreen;
 
 	// Use this for initialization
 	void Start () {
 		mainCanvas = GameObject.Find ("Canvas");
-		pauseScreen = GameObject.Find ("Pause Screen");
+		//pauseScreen = GameObject.Find ("Pause Screen");
 	}
 	
 	// Update is called once per frame

@@ -181,8 +181,8 @@ public class PlayerController : MonoBehaviour {
 
 	void BlendWhileStanding(){
 		if(isBlending){
-			print ("Player color: " + playerRenderer.material.color);
-			print ("Wall color: " + rayHit.transform.GetComponent<Renderer>().material.color);
+			//print ("Player color: " + playerRenderer.material.color);
+			//print ("Wall color: " + rayHit.transform.GetComponent<Renderer>().material.color);
 			if(playerRenderer.material.color == rayHit.transform.GetComponent<Renderer>().material.color){
 				print("Player cannot be seen.");
 				isVisible = false;
@@ -326,7 +326,9 @@ public class PlayerController : MonoBehaviour {
 		}
 	}
 
-	public void blendButton(GameObject blendObject){
+	public void blendButton(GameObject blendObject, Transform t, Vector3 v){
+		SetMovement(t, t.position + (-t.forward * 0.35f));
+		performAction = true;
 		transform.forward = -blendObject.transform.forward;
 		isBlending = true;
 		currentMoveState = MoveState.Blend_Stand;

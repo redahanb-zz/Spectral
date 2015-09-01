@@ -21,7 +21,8 @@ public class Door : MonoBehaviour {
 					canvasObject,
 					playerObject,
 					destinationRoomObject,
-					destinationDoorObject;
+					destinationDoorObject,
+					currentRoomObject;
 
 	RectTransform 	rTransform;
 
@@ -33,7 +34,7 @@ public class Door : MonoBehaviour {
 
 	ScreenFade sFade;
 
-	float currentTime, targetTime, timer = 0, timedAmount = 2;
+	float currentTime, targetTime, timer = 0, timedAmount = 4;
 	
 	public float lastInterval, timeNow, myTime;
 
@@ -47,10 +48,17 @@ public class Door : MonoBehaviour {
 
 	float playerDistance = 1000;
 
+	Level level;
+
+	int nextX = 0, nextZ = 0;
+
 	// Use this for initialization
 	void Start () {
-		playerObject = GameObject.FindGameObjectWithTag("Player");
+		roomX = 0;
+		roomZ = 0;
 
+		playerObject = GameObject.FindGameObjectWithTag("Player");
+		level = GameObject.Find("Level").GetComponent<Level>();
 
 		currentRoom = transform.parent.parent.parent.GetComponent<Room>();
 		if(currentRoom){
@@ -167,21 +175,42 @@ public class Door : MonoBehaviour {
 
 	void GetAssociatedDoorway(){
 		string doorName = transform.parent.name;
-		
+		print(level.transform);
+
+		foreach(Transform t in level.transform.Find("Rooms"))
+		        print(t.transform.name);
 		switch (doorName) {
 		case "Door North":	
-			if(GameObject.Find("["+(roomX)+","+(roomZ + 1)+"]")){
-				destinationRoomObject = GameObject.Find("["+(roomX)+","+(roomZ + 1)+"]");
-				if(destinationRoomObject.transform.Find("Doors").Find("Door South"))destinationDoorObject =	destinationRoomObject.transform.Find("Doors").Find("Door South").Find("Teleport Destination").gameObject;
-				else Debug.Log("[Door Trigger] Cannot find the associated Door in the next room.");
-				Debug.Log("[Door Trigger] Teleported North"); 
+			foreach(Transform t in level.transform.Find("Rooms")){
+				if(t.name == "["+(roomX)+","+(roomZ + 1)+"]"){
+					destinationRoomObject = t.gameObject;
+					print("North " +destinationRoomObject);
+					nextX = destinationRoomObject.GetComponent<Room>().xIndex;
+					nextZ = destinationRoomObject.GetComponent<Room>().zIndex;
+
+					level.currentX = nextX;
+					level.currentZ = nextZ;
+					
+
+					if(destinationRoomObject.transform.Find("Doors").Find("Door South"))destinationDoorObject =	destinationRoomObject.transform.Find("Doors").Find("Door South").Find("Teleport Destination").gameObject;
+					else Debug.Log("[Door Trigger] Cannot find the associated Door in the next room.");
+					Debug.Log("[Door Trigger] Teleported North"); 
+				}
+				else Debug.Log("[Door Trigger] Cannot find the next room.");
 			}
-			else Debug.Log("[Door Trigger] Cannot find the next room.");
 			break;
 			
 		case "Door South":	
-			if(GameObject.Find("["+(roomX)+","+(roomZ - 1)+"]")){
-				destinationRoomObject = GameObject.Find("["+(roomX)+","+(roomZ - 1)+"]");
+			foreach(Transform t in level.transform.Find("Rooms"))if(t.name == "["+(roomX)+","+(roomZ - 1)+"]"){
+				print("South");
+				destinationRoomObject = t.gameObject;
+
+				nextX = destinationRoomObject.GetComponent<Room>().xIndex;
+				nextZ = destinationRoomObject.GetComponent<Room>().zIndex;
+
+				level.currentX = nextX;
+				level.currentZ = nextZ;
+
 				if(destinationRoomObject.transform.Find("Doors").Find("Door North"))destinationDoorObject =	destinationRoomObject.transform.Find("Doors").Find("Door North").Find("Teleport Destination").gameObject;
 				else Debug.Log("[Door Trigger] Cannot find the associated Door in the next room.");
 				Debug.Log("[Door Trigger] Teleported South"); 
@@ -190,8 +219,16 @@ public class Door : MonoBehaviour {
 			break;
 			
 		case "Door East" :	
-			if(GameObject.Find("["+(roomX + 1)+","+(roomZ)+"]")){
-				destinationRoomObject = GameObject.Find("["+(roomX + 1)+","+(roomZ)+"]");
+			foreach(Transform t in level.transform.Find("Rooms"))if(t.name == "["+(roomX + 1)+","+(roomZ)+"]"){
+				print("East");
+				destinationRoomObject = t.gameObject;
+
+				nextX = destinationRoomObject.GetComponent<Room>().xIndex;
+				nextZ = destinationRoomObject.GetComponent<Room>().zIndex;
+
+				level.currentX = nextX;
+				level.currentZ = nextZ;
+
 				if(destinationRoomObject.transform.Find("Doors").Find("Door West"))destinationDoorObject =	destinationRoomObject.transform.Find("Doors").Find("Door West").Find("Teleport Destination").gameObject;
 				else Debug.Log("[Door Trigger] Cannot find the associated Door in the next room.");
 				Debug.Log("[Door Trigger] Teleported East"); 
@@ -200,8 +237,16 @@ public class Door : MonoBehaviour {
 			break;
 			
 		case "Door West" :	
-			if(GameObject.Find("["+(roomX - 1)+","+(roomZ)+"]")){
-				destinationRoomObject = GameObject.Find("["+(roomX - 1)+","+(roomZ)+"]");
+			foreach(Transform t in level.transform.Find("Rooms"))if(t.name == "["+(roomX - 1)+","+(roomZ)+"]"){
+				print("West");
+				destinationRoomObject = t.gameObject;
+
+				nextX = destinationRoomObject.GetComponent<Room>().xIndex;
+				nextZ = destinationRoomObject.GetComponent<Room>().zIndex;
+
+				level.currentX = nextX;
+				level.currentZ = nextZ;
+
 				if(destinationRoomObject.transform.Find("Doors").Find("Door East"))destinationDoorObject =	destinationRoomObject.transform.Find("Doors").Find("Door East").Find("Teleport Destination").gameObject;
 				else Debug.Log("[Door Trigger] Cannot find the associated Door in the next room.");
 				Debug.Log("[Door Trigger] Teleported West"); 
@@ -209,9 +254,17 @@ public class Door : MonoBehaviour {
 			else Debug.Log("[Door Trigger] Cannot find the next room.");
 			break;
 			
-		default:	
-			if(GameObject.Find("["+(roomX)+","+(roomZ)+"]")){
-				destinationRoomObject = GameObject.Find("["+(roomX)+","+(roomZ + 1)+"]");
+		default:
+			foreach(Transform t in level.transform.Find("Rooms"))if(t.name == "["+(roomX)+","+(roomZ)+"]"){
+				print("Default");
+				destinationRoomObject = t.gameObject;
+
+				nextX = destinationRoomObject.GetComponent<Room>().xIndex;
+				nextZ = destinationRoomObject.GetComponent<Room>().zIndex;
+
+				level.currentX = nextX;
+				level.currentZ = nextZ;
+
 				if(destinationRoomObject.transform.Find("Doors").Find("Door South"))destinationDoorObject =	destinationRoomObject.transform.Find("Doors").Find("Door South").Find("Teleport Destination").gameObject;
 				else Debug.Log("[Door Trigger] Cannot find the associated Door in the next room.");
 				Debug.Log("[Door Trigger] Teleported North"); 
@@ -219,8 +272,9 @@ public class Door : MonoBehaviour {
 			else Debug.Log("[Door Trigger] Cannot find the next room.");
 			break;
 		}
-		
-		
+		destinationRoomObject.SetActive(true);
+
+
 		print("Teleporting to " +destinationDoorObject.transform.parent);
 	}
 	
@@ -233,9 +287,12 @@ public class Door : MonoBehaviour {
 		Camera.main.transform.position = playerObject.transform.position + new Vector3(-10,10,-10);
 		playerObject.SetActive(true);
 		sFade.fadeToColor = false;
+		currentRoom.gameObject.SetActive(false);
+		level.DisableAllOtherRooms();
 	}
 
 	public void StartNewTeleport(){
+		level.EnableCurrentRoom();
 		currentTime = timeNow;
 		targetTime = currentTime + timedAmount;
 		GetAssociatedDoorway();

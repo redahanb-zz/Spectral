@@ -10,10 +10,19 @@ public class ScreenFade : MonoBehaviour {
 	RectTransform rTrans;
 
 	public float lastInterval, timeNow, myTime;
+	//
+	float fadeRate = 0.02f;
+
+	Transform healthBarObject, inventoryObject, timeButtonObject;
 
 	// Use this for initialization
 	void Start () {
-
+		if(transform.parent.Find("HUD_Healthbar"))
+		healthBarObject = transform.parent.Find("HUD_Healthbar");
+		if(transform.parent.Find("HUD_Inventory"))
+		inventoryObject = transform.parent.Find("HUD_Inventory");
+		if(transform.parent.Find("Time Button"))
+		timeButtonObject = transform.parent.Find("Time Button");
 
 		fadeObject = transform.Find("Fade").gameObject;
 		fadeObject.SetActive(true);
@@ -35,12 +44,32 @@ public class ScreenFade : MonoBehaviour {
 		lastInterval = timeNow;
 
 		if(fadeToColor){
-			rImg.color = Color.Lerp(rImg.color, new Color(rImg.color.r, rImg.color.g, rImg.color.g, 1), 0.04f);
+			//if(rImg.color.a > 0.6f){
+			if(healthBarObject) healthBarObject.gameObject.SetActive(false);
+			if(inventoryObject)	inventoryObject.gameObject.SetActive(false);
+			if(timeButtonObject)	timeButtonObject.gameObject.SetActive(false);
+			//}
+			rImg.color = Color.Lerp(rImg.color, new Color(rImg.color.r, rImg.color.g, rImg.color.g, 1), fadeRate);
 		}
 		else{
-			rImg.color = Color.Lerp(rImg.color, new Color(rImg.color.r, rImg.color.g, rImg.color.g, 0), 0.04f);
+			if(rImg.color.a > 0.6f){
+				if(healthBarObject)healthBarObject.gameObject.SetActive(true);
+				if(inventoryObject)inventoryObject.gameObject.SetActive(true);
+				if(timeButtonObject)timeButtonObject.gameObject.SetActive(true);
+			}
+			rImg.color = Color.Lerp(rImg.color, new Color(rImg.color.r, rImg.color.g, rImg.color.g, 0), fadeRate);
 		}
 
 		lastInterval = timeNow;
+	}
+
+	public void FadeOut(){
+
+		fadeToColor = false;
+	}
+
+	public void FadeIn(){
+
+		fadeToColor = true;
 	}
 }

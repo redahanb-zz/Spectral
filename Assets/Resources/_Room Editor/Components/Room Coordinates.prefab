@@ -10,6 +10,7 @@ GameObject:
   - 4: {fileID: 467226}
   - 23: {fileID: 2346774}
   - 102: {fileID: 10296614}
+  - 114: {fileID: 11485414}
   m_Layer: 0
   m_Name: Room Coordinates
   m_TagString: Untagged
@@ -74,6 +75,17 @@ TextMesh:
   m_Color:
     serializedVersion: 2
     rgba: 4278190080
+--- !u!114 &11485414
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 177426}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9852b1d1624cb4c4d918391e654b8f6f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

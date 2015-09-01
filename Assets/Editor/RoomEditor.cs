@@ -94,18 +94,19 @@ public class RoomEditor : EditorWindow {
 			roomZ = 0;
 			
 			newLevelObject = new GameObject("Level");
+			newLevelObject.AddComponent<Level>();
+
 			roomGroupObject = new GameObject("Rooms");
 			roomGroupObject.transform.parent = newLevelObject.transform;
 			
 			CreateRoom(0,0);
 			
-			if(!GameObject.FindGameObjectWithTag("MainCamera"))Debug.Log("[LEVEL EDITOR] There is no Main Camera in the scene.");
-			else{
-				GameObject mainCamObject = Camera.main.gameObject;
-				if(!mainCamObject.GetComponent<CameraController>()) mainCamObject.AddComponent<CameraController>();
-				mainCamObject.transform.position = newRoomObject.transform.position + new Vector3(-10, 8, -10);
-				mainCamObject.transform.eulerAngles = new Vector3(30,45,0);
-			}
+			if(GameObject.FindGameObjectWithTag("MainCamera"))DestroyImmediate(GameObject.FindGameObjectWithTag("MainCamera"));
+			Debug.Log("[LEVEL EDITOR] There is no Main Camera in the scene.");
+			GameObject camObj = Instantiate(Resources.Load("Player Camera"), newRoomObject.transform.position + new Vector3(-10, 8, -10), Quaternion.identity) as GameObject; 
+			camObj.name = "Player Camera";
+			camObj.transform.eulerAngles = new Vector3(30,45,0);
+	
 			
 			
 			GameObject canvasObject = Instantiate(Resources.Load("Canvas"), Vector3.zero + new Vector3(0,0,0), Quaternion.identity) as GameObject;
@@ -368,7 +369,7 @@ public class RoomEditor : EditorWindow {
 	
 	
 	void CreateRoomMesh(){
-		AssetDatabase.CreateFolder("Assets/Meshes/Rooms/", Application.loadedLevelName);
+		AssetDatabase.CreateFolder("Assets/Meshes/Rooms", Application.loadedLevelName);
 
 		foreach(Transform selectedRoom in Selection.activeTransform.parent){
 
@@ -428,6 +429,7 @@ public class RoomEditor : EditorWindow {
 		
 		//Save Mesh
 		Mesh newMesh = Selection.activeGameObject.GetComponent<MeshFilter>().sharedMesh;
+		//AssetDatabase.CreateFolder("Assets/Meshes/Rooms", Application.loadedLevelName);
 		AssetDatabase.CreateAsset( newMesh, "Assets/Meshes/Rooms/"+Application.loadedLevelName+"/" +name+" .asset");
 		Debug.Log(AssetDatabase.GetAssetPath(newMesh));
 		

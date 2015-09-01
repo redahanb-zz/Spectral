@@ -22,7 +22,8 @@ public class RoomInformation : MonoBehaviour {
 	targetScreenPosition;
 
 	bool 				runOnce = false, 
-						isVisible = false;
+						isVisible = false,
+						removeInfo = false;
 
 	Door doorway;
 
@@ -35,8 +36,15 @@ public class RoomInformation : MonoBehaviour {
 	Color inactiveColor;
 
 
+	NextRoomInfo nextRoom;
+
 	// Use this for initialization
 	private void Start () {
+
+
+
+		nextRoom = GameObject.Find("NextRoomInfo").GetComponent<NextRoomInfo>();
+
 		touchObject = transform.Find("Touch Icon");
 		textObject	= transform.Find("Room Name");
 
@@ -61,7 +69,7 @@ public class RoomInformation : MonoBehaviour {
 
 	public void SetTarget(Transform t){
 		target = t;
-		roomNameText.text = t.parent.parent.parent.name;
+		//roomNameText.text = t.name;
 	}
 
 	public void SetDoor(Door d){
@@ -88,40 +96,44 @@ public class RoomInformation : MonoBehaviour {
 
 
 		if(displayInfo){
-			touchImage.color = Color.Lerp(touchImage.color, Color.white, 0.05f);
-			touchIconTransform.sizeDelta = Vector2.Lerp(touchIconTransform.sizeDelta, new Vector2(120,120), 0.05f);
-			if(touchIconTransform.sizeDelta.x >= 100)
-			foreach(Transform t in touchObject.transform){
-				//t.gameObject.SetActive(true);
+			if(!removeInfo){
+				touchImage.color = Color.Lerp(touchImage.color, Color.white, 0.05f);
+				touchIconTransform.sizeDelta = Vector2.Lerp(touchIconTransform.sizeDelta, new Vector2(120,120), 0.05f);
+				if(touchIconTransform.sizeDelta.x >= 100)
+				foreach(Transform t in touchObject.transform){
+					//t.gameObject.SetActive(true);
 
-				if(t.GetComponent<Text>()){
-					t.GetComponent<Text>().color = Color.Lerp(t.GetComponent<Text>().color, Color.white,0.05f);
+					if(t.GetComponent<Text>()){
+						t.GetComponent<Text>().color = Color.Lerp(t.GetComponent<Text>().color, Color.white,0.05f);
+					}
+					if(t.GetComponent<RawImage>()){
+						Color c = t.GetComponent<RawImage>().color;
+						c = Color.Lerp(c, new Color(c.r,c.g,c.b,1),0.05f);
+						t.GetComponent<RawImage>().color = c;
+					}
 				}
-				if(t.GetComponent<RawImage>()){
-					Color c = t.GetComponent<RawImage>().color;
-					c = Color.Lerp(c, new Color(c.r,c.g,c.b,1),0.05f);
-					t.GetComponent<RawImage>().color = c;
-				}
+				touchButton.interactable = true;
 			}
-			touchButton.interactable = true;
 		}
 		else{
-			touchImage.color = Color.Lerp(touchImage.color, inactiveColor, 0.05f);
-			touchIconTransform.sizeDelta = Vector2.Lerp(touchIconTransform.sizeDelta, new Vector2(40,40), 0.05f);
-			foreach(Transform t in touchObject.transform){
-				//t.gameObject.SetActive(false);
+			if(!removeInfo){
+				touchImage.color = Color.Lerp(touchImage.color, inactiveColor, 0.05f);
+				touchIconTransform.sizeDelta = Vector2.Lerp(touchIconTransform.sizeDelta, new Vector2(40,40), 0.05f);
+				foreach(Transform t in touchObject.transform){
+					//t.gameObject.SetActive(false);
 
-				if(t.GetComponent<Text>()){
-					t.GetComponent<Text>().color = Color.Lerp(t.GetComponent<Text>().color, new Color(0,0,0,0),0.05f);
-				}
+					if(t.GetComponent<Text>()){
+						t.GetComponent<Text>().color = Color.Lerp(t.GetComponent<Text>().color, new Color(0,0,0,0),0.05f);
+					}
 
-				if(t.GetComponent<RawImage>()){
-					Color c = t.GetComponent<RawImage>().color;
-					c = Color.Lerp(c, new Color(c.r,c.g,c.b,0),0.05f);
-					t.GetComponent<RawImage>().color = c;
+					if(t.GetComponent<RawImage>()){
+						Color c = t.GetComponent<RawImage>().color;
+						c = Color.Lerp(c, new Color(c.r,c.g,c.b,0),0.05f);
+						t.GetComponent<RawImage>().color = c;
+					}
 				}
+				touchButton.interactable = false;
 			}
-			touchButton.interactable = false;
 		}
 
 			
@@ -129,12 +141,27 @@ public class RoomInformation : MonoBehaviour {
 
 	void TeleportPlayer(){
 		print("Teleporting");
+		removeInfo = true;
 		doorway.StartNewTeleport();
 		displayInfo = false;
+		nextRoom.ShowRoomInfo();
+		touchImage.color = new Color(0,0,0,0);
+		transform.Find("Room Name").GetComponent<Text>().color = new Color(0,0,0,0);
+		transform.Find("Touch Icon").GetComponent<Image>().color = new Color(0,0,0,0);
+		transform.Find("Touch Icon").Find("Rotating Image 1").GetComponent<RawImage>().color = new Color(0,0,0,0);
+		transform.Find("Touch Icon").Find("Rotating Image 2").GetComponent<RawImage>().color = new Color(0,0,0,0);
+		transform.Find("Touch Icon").Find("Colour 1").GetComponent<RawImage>().color = new Color(0,0,0,0);
+		transform.Find("Touch Icon").Find("Colour 2").GetComponent<RawImage>().color = new Color(0,0,0,0);
+		transform.Find("Touch Icon").Find("Colour 3").GetComponent<RawImage>().color = new Color(0,0,0,0);
+
+
+		//Destroy(transform.Find("Touch Icon").gameObject);
+		//Destroy(transform.Find("Rotating Button").gameObject);
+		Invoke("SelfDestruct", 3);
 	}
 
 	void SelfDestruct(){
-
+		Destroy(gameObject);
 	}
 
 	void Fade(){

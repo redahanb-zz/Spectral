@@ -10,7 +10,9 @@ public class UpgradeHealth : MonoBehaviour {
 	private int 	currentIndex = 0, 
 					nextIndex = 0;
 
-	private bool 	displayPanel = true, fadeIn = true;
+	private bool 	fadeIn = true;
+
+	public bool		displayPanel = false;
 
 	private Color 	activeColor, 
 					inactiveColor, 
@@ -23,10 +25,16 @@ public class UpgradeHealth : MonoBehaviour {
 	private 		RawImage[] heartImages;
 	private 		RectTransform healthInfoTransform;
 
+
+	Image			healthButtonImage;
+
+	Color		buttonTargetColor = Color.white;
 	// Use this for initialization
 	void Start () {
 
-		healthInfoTransform = transform.parent.parent.GetComponent<RectTransform>();
+		healthButtonImage = GameObject.Find("Health Button").GetComponent<Image>();
+		buttonTargetColor = Color.white;
+		healthInfoTransform = transform.GetComponent<RectTransform>();
 
 		hiddenPos = healthInfoTransform.position;
 		visiblePos = healthInfoTransform.position + new Vector3(340,0,0);
@@ -39,15 +47,15 @@ public class UpgradeHealth : MonoBehaviour {
 		nextUpgradeColorTransparent = new Color(0,1,0,0.05f);
 
 		heartImages = new RawImage[9];
-		heartImages[0] = transform.Find("Heart 1").GetComponent<RawImage>();
-		heartImages[1] = transform.Find("Heart 2").GetComponent<RawImage>();
-		heartImages[2] = transform.Find("Heart 3").GetComponent<RawImage>();
-		heartImages[3] = transform.Find("Heart 4").GetComponent<RawImage>();
-		heartImages[4] = transform.Find("Heart 5").GetComponent<RawImage>();
-		heartImages[5] = transform.Find("Heart 6").GetComponent<RawImage>();
-		heartImages[6] = transform.Find("Heart 7").GetComponent<RawImage>();
-		heartImages[7] = transform.Find("Heart 8").GetComponent<RawImage>();
-		heartImages[8] = transform.Find("Heart 9").GetComponent<RawImage>();
+		heartImages[0] = transform.Find("Current Health").Find("Health Bar").Find("Heart 1").GetComponent<RawImage>();
+		heartImages[1] = transform.Find("Current Health").Find("Health Bar").Find("Heart 2").GetComponent<RawImage>();
+		heartImages[2] = transform.Find("Current Health").Find("Health Bar").Find("Heart 3").GetComponent<RawImage>();
+		heartImages[3] = transform.Find("Current Health").Find("Health Bar").Find("Heart 4").GetComponent<RawImage>();
+		heartImages[4] = transform.Find("Current Health").Find("Health Bar").Find("Heart 5").GetComponent<RawImage>();
+		heartImages[5] = transform.Find("Current Health").Find("Health Bar").Find("Heart 6").GetComponent<RawImage>();
+		heartImages[6] = transform.Find("Current Health").Find("Health Bar").Find("Heart 7").GetComponent<RawImage>();
+		heartImages[7] = transform.Find("Current Health").Find("Health Bar").Find("Heart 8").GetComponent<RawImage>();
+		heartImages[8] = transform.Find("Current Health").Find("Health Bar").Find("Heart 9").GetComponent<RawImage>();
 
 		ClearHearts();
 	}
@@ -77,11 +85,13 @@ public class UpgradeHealth : MonoBehaviour {
 	void MovePanel(){
 		if(displayPanel){
 			healthInfoTransform.position = Vector3.Lerp(healthInfoTransform.position, visiblePos, 0.1f);
-
+			buttonTargetColor = Color.green;
 		}
 		else{
 			healthInfoTransform.position = Vector3.Lerp(healthInfoTransform.position, hiddenPos, 0.1f);
+			buttonTargetColor = Color.white;
 		}
+		healthButtonImage.color = Color.Lerp(healthButtonImage.color,buttonTargetColor, Time.deltaTime * 5);
 	}
 
 	void FillHearts(){

@@ -20,6 +20,7 @@ TagManager:
   - Block
   - Load Door
   - Guard
+  - Bodypart
   layers:
   - Default
   - TransparentFX

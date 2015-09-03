@@ -5,7 +5,7 @@ public class CameraController : MonoBehaviour {
 
 	public Transform targetCamera, target;
 	Vector3 targetCameraPosition, targetCameraRotation;
-	float moveSpeed = 0.1f, damping = 3.0f, rotateSpeed = 0.1f, speed;
+	float moveSpeed = 2.0f, damping = 3.0f, rotateSpeed = 0.6f, speed;
 	float distance = 1000;
 	public bool lookAtTarget = false;
 	bool cameraShake = false;
@@ -15,7 +15,7 @@ public class CameraController : MonoBehaviour {
 	float shakeAmount = 0.1f;
 	public float lastInterval, timeNow, myTime;
 
-	bool intro = true;
+	bool intro = false;
 
 	Transform introObject;
 	Vector3   introStartPos, introEndPos;
@@ -24,16 +24,16 @@ public class CameraController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-		introObject = GameObject.Find("Intro Camera").transform;
+		//introObject = GameObject.Find("Intro Camera").transform;
 
-		introStartPos = introObject.Find("IntroCameraStart").position;
-		introEndPos = introObject.Find("IntroCameraEnd").position;
-
-		introStartRot = introObject.Find("IntroCameraStart").rotation;
-		introEndRot = introObject.Find("IntroCameraEnd").rotation;
-
-		transform.position = introStartPos;
-		transform.rotation = introStartRot;
+//		introStartPos = introObject.Find("IntroCameraStart").position;
+//		introEndPos = introObject.Find("IntroCameraEnd").position;
+//
+//		introStartRot = introObject.Find("IntroCameraStart").rotation;
+//		introEndRot = introObject.Find("IntroCameraEnd").rotation;
+//
+//		transform.position = introStartPos;
+//		transform.rotation = introStartRot;
 
 		lookAtTarget = true;
 		distance = 1000;

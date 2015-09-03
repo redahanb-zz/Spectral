@@ -14,6 +14,8 @@ public class EnemySight : MonoBehaviour {
 	private SphereCollider coll;
 	private GameObject player;
 	private PlayerController playerController;
+	private AudioSource guardCry;
+	private bool canCry = true;
 	//private Light visionlight;
 	//private SpriteRenderer visionConeSprite;
 	//PlayerColorChanger pcc;
@@ -100,6 +102,7 @@ public class EnemySight : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		coll = GetComponent<SphereCollider> ();
+		guardCry = GetComponent<AudioSource> ();
 		//playerController = player.GetComponent<PlayerController> ();
 		patrolling = true;
 		alerted = false;
@@ -184,6 +187,10 @@ public class EnemySight : MonoBehaviour {
 		}
 	}
 
+	void resetCanCry(){
+		canCry = true;
+	}
+
 	void checkSight() {
 		//print ("Checkingsight");
 		if (Vector3.Distance (transform.position, player.transform.position) < 7.0f) {
@@ -205,6 +212,13 @@ public class EnemySight : MonoBehaviour {
 							//print ("Player in sight!");
 							playerInSight = true;
 							lastPlayerSighting = player.transform.position;
+
+							// play guard cry sound
+							if(canCry){
+								AudioSource.PlayClipAtPoint(guardCry.clip, transform.position);
+								canCry = false;
+								Invoke("resetCanCry", 5);
+							}
 						}
 
 

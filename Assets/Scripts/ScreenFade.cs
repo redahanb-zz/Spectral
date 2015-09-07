@@ -11,7 +11,7 @@ public class ScreenFade : MonoBehaviour {
 
 	public float lastInterval, timeNow, myTime;
 	//
-	float fadeRate = 0.02f;
+	float fadeRate = 0.01f;
 
 	Transform healthBarObject, inventoryObject, timeButtonObject;
 

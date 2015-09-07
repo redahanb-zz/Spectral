@@ -28,7 +28,6 @@ public class Level : MonoBehaviour {
 			}
 			else{
 				roomTransform.gameObject.SetActive(false);
-
 			}
 		}
 	}

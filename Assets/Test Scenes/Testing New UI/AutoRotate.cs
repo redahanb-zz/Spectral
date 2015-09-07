@@ -6,7 +6,7 @@ public class AutoRotate : MonoBehaviour {
 	//public float rotateSpeed;
 
 	public Vector3 rotateDir;
-
+	public float speed = 10;
 	// Use this for initialization
 	void Start () {
 	
@@ -15,6 +15,6 @@ public class AutoRotate : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		//transform.Rotate (0,0,rotateSpeed*Time.deltaTime);
-		transform.eulerAngles += rotateDir;
+		transform.eulerAngles += rotateDir * Time.deltaTime * speed;
 	}
 }

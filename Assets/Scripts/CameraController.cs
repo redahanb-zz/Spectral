@@ -21,9 +21,13 @@ public class CameraController : MonoBehaviour {
 	Vector3   introStartPos, introEndPos;
 	Quaternion introStartRot, introEndRot;
 
+	Vector3 zoomedOutPos;
+	Quaternion zoomedOutRot;
 	// Use this for initialization
 	void Start () {
 
+		zoomedOutPos = transform.position;
+		zoomedOutRot = transform.rotation;
 		//introObject = GameObject.Find("Intro Camera").transform;
 
 //		introStartPos = introObject.Find("IntroCameraStart").position;
@@ -53,15 +57,18 @@ public class CameraController : MonoBehaviour {
 		myTime = timeNow - lastInterval;
 		lastInterval = timeNow;
 
-		print(intro + " : " +distance);
+		//print(intro + " : " +distance);
 
-		if(intro){
-			distance = Vector3.Distance(transform.position, introEndPos);
-			if(distance < 1)intro = false;
-			else{
-				transform.position = Vector3.Lerp(transform.position, introEndPos, myTime * moveSpeed * 1.5f);
-				transform.rotation = Quaternion.Lerp(transform.rotation, introEndRot, myTime * rotateSpeed);
-			}
+		if(Input.GetKey(KeyCode.C)){
+//			distance = Vector3.Distance(transform.position, introEndPos);
+//			if(distance < 1)intro = false;
+//			else{
+//				transform.position = Vector3.Lerp(transform.position, introEndPos, myTime * moveSpeed * 1.5f);
+//				transform.rotation = Quaternion.Lerp(transform.rotation, introEndRot, myTime * rotateSpeed);
+//			}
+			transform.position = Vector3.Lerp(transform.position, zoomedOutPos, myTime * moveSpeed);
+			transform.rotation = Quaternion.Lerp(transform.rotation, zoomedOutRot, myTime * rotateSpeed);
+
 		}
 		else{
 			if(targetCamera){

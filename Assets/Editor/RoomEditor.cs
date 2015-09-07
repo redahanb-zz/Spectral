@@ -168,6 +168,21 @@ public class RoomEditor : EditorWindow {
 	
 	//CREATE ROOM MENU_____________________________________________________________________________________________________
 	void CreateNewRoomMenu(){
+
+		GUI.Label (new Rect(0, 0, 300, 20), "Create Grid Tiles for Room", EditorStyles.whiteBoldLabel);
+		if (GUI.Button(new Rect(0, 15, 200, 25), "Create Grid")){
+
+			GameObject gridObject = new GameObject("Grid");
+			gridObject.transform.parent = Selection.activeTransform;
+
+			foreach(Transform t in Selection.activeTransform.Find("Tiles")){
+				GameObject gridTile = Instantiate(Resources.Load("_Room Editor/Components/Grid"), t.position + new Vector3(0,0.3f,0), Quaternion.identity) as GameObject;
+				gridTile.transform.parent = gridObject.transform;
+				gridTile.transform.eulerAngles = new Vector3(90,0,0);
+			}
+		}
+
+
 		//		GUI.Label (new Rect(0, 0, 300, 30), "", EditorStyles.helpBox);
 		//		selectedRoomTemplate = (RoomTemplateOptions) EditorGUILayout.EnumPopup("Replace room:", selectedRoomTemplate);
 		//		GUI.Label (new Rect(0, 0, 300, 20), "Replace Room:", EditorStyles.whiteBoldLabel);

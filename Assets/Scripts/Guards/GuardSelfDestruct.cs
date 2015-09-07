@@ -26,6 +26,14 @@ public class GuardSelfDestruct : MonoBehaviour {
 			part.AddComponent<CapsuleCollider>();
 			Destroy (part, Random.Range(0.5f,1.5f));
 		}
+
+		GameObject[] otherGuards = GameObject.FindGameObjectsWithTag ("Guard"); 
+		foreach (GameObject guard in otherGuards) {
+			if(Vector3.Distance(transform.position, guard.transform.position) < 10.0f){
+				guard.GetComponent<NavMeshPatrolv2>().Investigate(transform.position);
+			}
+		}
+
 		Destroy (this.gameObject);
 		Destroy (this.transform.parent.gameObject);
 	}

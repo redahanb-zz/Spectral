@@ -19,9 +19,14 @@ public class InventoryItem : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		//impactSound = GetComponent<AudioSource> ();
-		transform.GetComponent<Renderer> ().material.color = itemColor;
+		//transform.GetComponent<Renderer> ().material.color = itemColor;
 		playerInventory = GameObject.Find ("Inventory Manager").GetComponent<PlayerInventory> ();
 		anim = GetComponent<Animator> ();
+
+		Renderer[] childMeshes = GetComponentsInChildren<Renderer> ();
+		foreach(Renderer rend in childMeshes){
+			rend.material.color = itemColor;
+		}
 	}
 	
 	// Update is called once per frame

@@ -13,8 +13,8 @@ GameObject:
   - 124: {fileID: 12473154}
   - 81: {fileID: 8150734}
   - 114: {fileID: 11459902}
-  - 114: {fileID: 11448658}
   - 114: {fileID: 11493066}
+  - 114: {fileID: 11402952}
   m_Layer: 0
   m_Name: Player Camera
   m_TagString: MainCamera
@@ -81,7 +81,7 @@ Behaviour:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 115220}
   m_Enabled: 1
---- !u!114 &11448658
+--- !u!114 &11402952
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -89,27 +89,35 @@ MonoBehaviour:
   m_GameObject: {fileID: 115220}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bd70d448b18cfbc46af26466f752332c, type: 3}
+  m_Script: {fileID: 11500000, guid: 83d8db0ec466c14429f58c68c16398a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  visualizeFocus: 0
-  focalLength: 10
-  focalSize: .5
-  aperture: 13.1000004
-  focalTransform: {fileID: 0}
-  maxBlurSize: 2
-  highResolution: 0
-  blurType: 0
-  blurSampleCount: 2
-  nearBlur: 0
-  foregroundOverlap: 1
-  dofHdrShader: {fileID: 4800000, guid: acd613035ff3e455e8abf23fdc8c8c24, type: 3}
-  dx11BokehShader: {fileID: 4800000, guid: d8e82664aa8686642a424c88ab10164a, type: 3}
-  dx11BokehThreshold: .5
-  dx11SpawnHeuristic: .0874999985
-  dx11BokehTexture: {fileID: 2800000, guid: a4cdca73d61814d33ac1587f6c163bca, type: 3}
-  dx11BokehScale: 1.20000005
-  dx11BokehIntensity: 2.5
+  quality: 1
+  resolution: 4
+  simpleTweakMode: 1
+  focalPoint: 1
+  smoothness: .5
+  focalZDistance: 0
+  focalZStartCurve: 1
+  focalZEndCurve: 1
+  objectFocus: {fileID: 0}
+  focalSize: 0
+  bluriness: 2
+  maxBlurSpread: 1.75
+  foregroundBlurExtrude: 1.14999998
+  dofBlurShader: {fileID: 4800000, guid: bb4af680337344a4abad65a4e8873c50, type: 3}
+  dofShader: {fileID: 4800000, guid: 987fb0677d01f43ce8a9dbf12271e668, type: 3}
+  visualize: 0
+  bokehDestination: 1
+  bokeh: 0
+  bokehSupport: 1
+  bokehShader: {fileID: 4800000, guid: 57cdacf9b217546aaa18edf39a6151c0, type: 3}
+  bokehTexture: {fileID: 2800000, guid: fc00ec05a89da4ff695a4273715cd5ce, type: 3}
+  bokehScale: 2.4000001
+  bokehIntensity: .150000006
+  bokehThresholdContrast: .100000001
+  bokehThresholdLuminance: .550000012
+  bokehDownsample: 1
 --- !u!114 &11459902
 MonoBehaviour:
   m_ObjectHideFlags: 1

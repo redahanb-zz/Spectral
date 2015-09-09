@@ -7,7 +7,7 @@ public class PlayerBodyparts : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		Invoke ("selfDestruct", 0.55f);
+		//Invoke ("selfDestruct", 0.55f);
 	}
 	
 	// Update is called once per frame
@@ -19,11 +19,15 @@ public class PlayerBodyparts : MonoBehaviour {
 		foreach(GameObject part in bodyparts){
 			part.transform.parent = null;
 			part.AddComponent<Rigidbody>();
-			Vector3 impulse = new Vector3(Random.Range(-1.0f,1.0f),Random.Range(1.0f,1.0f),Random.Range(-1.0f,1.0f));
+			Vector3 impulse = new Vector3(Random.Range(-3.0f,3.0f),Random.Range(1.0f,2.0f),Random.Range(-3.0f,3.0f));
 			part.GetComponent<Rigidbody>().AddForce(impulse, ForceMode.Impulse);
 			part.AddComponent<CapsuleCollider>();
 			Destroy (part, Random.Range(0.5f,1.5f));
 		}
+		Invoke ("delayDestruct", 1);
+	}
+
+	void delayDestruct(){
 		Destroy (this.gameObject);
 	}
 }

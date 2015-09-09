@@ -9,21 +9,22 @@ public class GuardAI : MonoBehaviour {
 
 	private EnemySight vision;
 	//private NavMeshPatrol patrolScript;
-	private AlertManager alertSystem;
+	//private AlertManager alertSystem;
+	public GameObject alertSystem;
 
 	// Use this for initialization
 	void Start () {
 		vision = gameObject.GetComponent<EnemySight>();
 		alerted = false;
-		alertSystem = GameObject.Find ("Game Manager").GetComponent<AlertManager> ();
+		//alertSystem = GameObject.Find ("Game Manager").GetComponent<AlertManager> ();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-//		vision = gameObject.GetComponent<EnemySight>();
+		vision = gameObject.GetComponent<EnemySight>();
 		if (vision.alerted) {
 
-			alertSystem.alarmOn = true;
+			alertSystem.GetComponent<AlertManager>().alertActive = true;
 
 //			// take last player location form vision
 //			lastSighting = vision.lastPlayerSighting;
@@ -35,7 +36,7 @@ public class GuardAI : MonoBehaviour {
 //				guard.GetComponent<EnemySight>().lastPlayerSighting = lastSighting;
 //			}
 		} else {
-			alertSystem.alarmOn = false;
+			//alertSystem.GetComponent<AlertManager>().alertActive = false;
 		}
 	}
 	

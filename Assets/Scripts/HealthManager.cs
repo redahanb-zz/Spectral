@@ -7,10 +7,14 @@ public class HealthManager : MonoBehaviour {
 	public int playerHealth;
 	public bool playerDead = false;
 
+	PlayerBodyparts bodyParts;
+
 	// Use this for initialization
 	void Start () {
-		maxHealth = 5;
-		playerHealth = 5;
+//		maxHealth = 5;
+//		playerHealth = 5;
+
+		bodyParts = GameObject.FindWithTag ("Player").GetComponent<PlayerBodyparts> ();
 	}
 	
 	// Update is called once per frame
@@ -23,6 +27,10 @@ public class HealthManager : MonoBehaviour {
 	public void takeDamage(int damage){
 		if(playerHealth > 0){
 			playerHealth -= damage;
+		}
+
+		if(playerHealth <= 0){
+			bodyParts.selfDestruct();
 		}
 	}
 }

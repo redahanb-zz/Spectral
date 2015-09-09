@@ -9,7 +9,7 @@ public class GuardSelfDestruct : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		Invoke ("selfDestruct", 0.2f);
+		//Invoke ("selfDestruct", 0.2f);
 	}
 	
 	// Update is called once per frame

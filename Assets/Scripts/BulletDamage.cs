@@ -14,7 +14,7 @@ public class BulletDamage : MonoBehaviour {
 	}
 
 	void OnCollisionEnter(Collision other){
-		if (other.collider.name == "Player") {
+		if (other.collider.tag == "Player") {
 			// Access player health and call takeDamage function
 			GameObject.Find("Health Manager").GetComponent<HealthManager>().takeDamage(1);
 		}

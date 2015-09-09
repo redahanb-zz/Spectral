@@ -8,9 +8,12 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 472068}
+  - 65: {fileID: 6561558}
+  - 135: {fileID: 13561302}
   - 114: {fileID: 11479272}
   - 114: {fileID: 11460330}
-  - 65: {fileID: 6561558}
+  - 114: {fileID: 11446260}
+  - 208: {fileID: 20822906}
   m_Layer: 0
   m_Name: DataCube
   m_TagString: Untagged
@@ -530,6 +533,17 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 2.5999999, y: 2.5999999, z: 2.5999999}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &11446260
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 102120}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 844c689f540c74094b406aa364daf5a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &11460330
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -557,6 +571,34 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotateDir: {x: 0, y: 2, z: 0}
+  speed: 10
+--- !u!135 &13561302
+SphereCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 102120}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 6
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!208 &20822906
+NavMeshObstacle:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 102120}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 1.39999998, y: 4.1500001, z: 1.39999998}
+  m_MoveThreshold: .100000001
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: .5
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

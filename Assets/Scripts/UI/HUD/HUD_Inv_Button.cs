@@ -121,7 +121,7 @@ public class HUD_Inv_Button : MonoBehaviour {
 
 	public void changeColour(){
 		if (playerInventory.playerInventory [slotIndex] != null) {
-			GameObject.Find ("Player").GetComponent<PlayerController> ().targetcolor = playerInventory.playerInventory [slotIndex].GetComponent<InventoryItem> ().itemColor;
+			GameObject.FindWithTag ("Player").GetComponent<PlayerController> ().targetcolor = playerInventory.playerInventory [slotIndex].GetComponent<InventoryItem> ().itemColor;
 		}
 	}
 

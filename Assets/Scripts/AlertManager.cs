@@ -5,7 +5,7 @@ using System.Collections;
 
 public class AlertManager : MonoBehaviour {
 
-	bool alertActive = false;
+	public bool alertActive = false;
 
 	Light mainLight;
 
@@ -14,7 +14,7 @@ public class AlertManager : MonoBehaviour {
 	float lightChangeRate = 10;
 
 	public AudioMixer mixer;
-	float alertVolume = -80.0f;
+	float alertVolume = -80.0f, normalVolume = 0;
 
 	bool alerted = false;
 
@@ -32,27 +32,25 @@ public class AlertManager : MonoBehaviour {
 		alertLightColor = Color.red;
 
 		mixer.SetFloat("AlertMusicVolume", alertVolume);
-		//mixer.SetFloat("NormalMusicVolume", -80.0f);
+		mixer.SetFloat("NormalMusicVolume", normalVolume);
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		print(alertActive + " : " +alertVolume);
 		mixer.SetFloat("AlertMusicVolume", alertVolume);
-		//mixer.SetFloat("NormalMusicVolume", -80.0f);
+		mixer.SetFloat("NormalMusicVolume", normalVolume);
 		if(Input.GetKeyDown(KeyCode.B))alertActive = !alertActive;
 
 		if(alertActive){
-			if(alertVolume < -20f)alertVolume = alertVolume + 0.5f;
-
-			//mainLight.color = alertColor;
+			if(alertVolume < -10f)alertVolume = alertVolume + 1.0f;
+			if(normalVolume > -80f)normalVolume = normalVolume - 0.5f;
 			mainLight.color = Color.Lerp(mainLight.color, alertLightColor, Time.deltaTime * lightChangeRate);
 			gradientImage.color  = Color.Lerp(gradientImage.color, alertGradientColor, Time.deltaTime * lightChangeRate);
 		}
 		else{
 			if(alertVolume > -80f)alertVolume = alertVolume - 0.5f;
-
-			//mainLight.color = normalColor;
+			if(normalVolume < 0f)normalVolume = normalVolume + 1.0f;
 			mainLight.color = Color.Lerp(mainLight.color, normalLightColor, Time.deltaTime * lightChangeRate);
 			gradientImage.color  = Color.Lerp(gradientImage.color, normalGradientColor, Time.deltaTime * lightChangeRate);
 

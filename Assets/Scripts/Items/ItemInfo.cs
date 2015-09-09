@@ -35,7 +35,7 @@ public class ItemInfo : MonoBehaviour {
 		}
 
 		// reactivate in case the object has been put back onto the ground (button deactivates then)
-		button.SetActive (true);
+		if(button)button.SetActive (true);
 	}
 
 	void OnTriggerExit(Collider col){

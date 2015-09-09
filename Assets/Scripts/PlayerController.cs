@@ -46,6 +46,7 @@ public class PlayerController : MonoBehaviour {
 	timeSinceLastClick = 0;
 
 	Renderer		playerRenderer;
+	GameObject[] 	bodyParts;
 
 	public Color targetcolor = Color.grey;
 
@@ -55,8 +56,14 @@ public class PlayerController : MonoBehaviour {
 		eventSystem = GameObject.Find ("EventSystem").GetComponent<EventSystem> ();
 		customDeltaTime = Time.deltaTime;
 		playerAnimator 	= GetComponent<Animator>();
-		playerRenderer 	= transform.Find("Model").GetComponent<Renderer>();
-		playerRenderer.material.color = Color.green;
+		bodyParts = GetComponent<PlayerBodyparts> ().bodyparts;
+
+		foreach (GameObject part in bodyParts) {
+			part.GetComponent<Renderer>().material.color = Color.green;
+		}
+//		playerRenderer 	= transform.Find("Model").GetComponent<Renderer>();
+//		playerRenderer.material.color = Color.grey;
+
 		agent 			= GetComponent<NavMeshAgent>();
 		agent.SetDestination(transform.position);
 		timeScale 		= GameObject.Find("Time Manager").GetComponent<TimeScaler>();
@@ -77,7 +84,10 @@ public class PlayerController : MonoBehaviour {
 		}
 		else StopMoving();
 
-		playerRenderer.material.color = Color.Lerp(playerRenderer.material.color, targetcolor, 2*Time.deltaTime);
+		//playerRenderer.material.color = Color.Lerp(playerRenderer.material.color, targetcolor, 2*Time.deltaTime);
+		foreach (GameObject part in bodyParts) {
+			part.GetComponent<Renderer>().material.color = Color.Lerp(part.GetComponent<Renderer>().material.color, targetcolor, 10*Time.deltaTime);
+		}
 	}
 
 	//Assigns action per state and sets the animator move state
@@ -181,9 +191,10 @@ public class PlayerController : MonoBehaviour {
 
 	void BlendWhileStanding(){
 		if(isBlending){
-			//print ("Player color: " + playerRenderer.material.color);
-			//print ("Wall color: " + rayHit.transform.GetComponent<Renderer>().material.color);
-			if(playerRenderer.material.color == rayHit.transform.GetComponent<Renderer>().material.color){
+			print ("Player color: " + bodyParts[0].GetComponent<Renderer>().material.color);
+			print ("Wall color: " + rayHit.transform.GetComponent<Renderer>().material.color);
+			print ((bodyParts[0].GetComponent<Renderer>().material.color == rayHit.transform.GetComponent<Renderer>().material.color) );
+			if(bodyParts[0].GetComponent<Renderer>().material.color == rayHit.transform.GetComponent<Renderer>().material.color){
 				print("Player cannot be seen.");
 				isVisible = false;
 			}

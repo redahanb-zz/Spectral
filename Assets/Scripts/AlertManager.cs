@@ -37,7 +37,7 @@ public class AlertManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		print(alertActive + " : " +alertVolume);
+		//print(alertActive + " : " +alertVolume);
 		mixer.SetFloat("AlertMusicVolume", alertVolume);
 		mixer.SetFloat("NormalMusicVolume", normalVolume);
 		if(Input.GetKeyDown(KeyCode.B))alertActive = !alertActive;

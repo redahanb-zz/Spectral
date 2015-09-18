@@ -33,6 +33,10 @@ public class TimeScaler : MonoBehaviour {
 		//pauseManager = GameObject.Find ("Pause Manager").GetComponent<PauseManager> ();
 	}
 
+	public void ToggleTime(){
+		timeSlowed = !timeSlowed;
+	}
+
 	public void StopTime(){
 		timeStopped = false;
 		

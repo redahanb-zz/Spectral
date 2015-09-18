@@ -121,6 +121,9 @@ public class RoomEditor : EditorWindow {
 			
 			GameObject eventSystemObject = Instantiate(Resources.Load("EventSystem"), Vector3.zero + new Vector3(0,0,0), Quaternion.identity) as GameObject;
 			eventSystemObject.name = "EventSystem";
+
+			GameObject alarmSystemObject = new GameObject("Alarm System");
+			alarmSystemObject.AddComponent<AlertManager>();
 			
 			roomScript = newRoomObject.GetComponent<Room>();
 			roomScript.xIndex = 0;
@@ -561,7 +564,7 @@ public class RoomEditor : EditorWindow {
 			foreach(Transform tile in Selection.transforms)tile.parent.parent.parent.eulerAngles += new Vector3(0,45,0);
 		}
 		if (GUI.Button(new Rect(0, 260, 150, 40), "Anti-Clockwise")){
-			foreach(Transform tile in Selection.transforms)tile.parent.parent.parent.eulerAngles += new Vector3(0,45,0);
+			foreach(Transform tile in Selection.transforms)tile.parent.parent.parent.eulerAngles += new Vector3(0,-45,0);
 		}
 		
 		

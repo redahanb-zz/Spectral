@@ -39,8 +39,8 @@ public class PlayerController : MonoBehaviour {
 	public bool 	isVisible = true,
 					isBlending = false;
 	
-	enum 			MoveState{ Idle, Sneak, Run, Blend_Stand, Blend_Prone};
-	MoveState 		currentMoveState = MoveState.Idle;
+	public enum 			MoveState{ Idle, Sneak, Run, Blend_Stand, Blend_Prone};
+	public MoveState 		currentMoveState = MoveState.Idle;
 	
 	float 			customDeltaTime,
 	timeSinceLastClick = 0;
@@ -191,10 +191,14 @@ public class PlayerController : MonoBehaviour {
 
 	void BlendWhileStanding(){
 		if(isBlending){
-			print ("Player color: " + bodyParts[0].GetComponent<Renderer>().material.color);
-			print ("Wall color: " + rayHit.transform.GetComponent<Renderer>().material.color);
-			print ((bodyParts[0].GetComponent<Renderer>().material.color == rayHit.transform.GetComponent<Renderer>().material.color) );
-			if(bodyParts[0].GetComponent<Renderer>().material.color == rayHit.transform.GetComponent<Renderer>().material.color){
+//			print ("Player color: " + bodyParts[0].GetComponent<Renderer>().material.color.b);
+//			print ("Wall color: " + rayHit.transform.GetComponent<Renderer>().material.color.b);
+			Color newColor = bodyParts[0].GetComponent<Renderer>().material.color;
+			Color wallColor = rayHit.transform.GetComponent<Renderer>().material.color;
+			float colorDistance = Vector3.Distance(new Vector3(newColor.r, newColor.g, newColor.b), new Vector3(wallColor.r, wallColor.g, wallColor.b));
+			print ("ColourComp: " + colorDistance );
+
+			if(colorDistance < 0.1f){
 				print("Player cannot be seen.");
 				isVisible = false;
 			}

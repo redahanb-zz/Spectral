@@ -34,7 +34,7 @@ public class NavMeshPatrolv3 : MonoBehaviour {
 		alertAI = GetComponent<GuardAI> ();
 
 		nextIndex = 0;
-		alertIndex = 3;
+		alertIndex = 0;
 
 		// Compile array of waypoints for guard to patrol
 		patrolRoute = new Vector3[4]
@@ -77,18 +77,19 @@ public class NavMeshPatrolv3 : MonoBehaviour {
 
 		// Movement Decision tree
 		// if not alerted, patrol
-		if (vision.alerted == false){
-			if(alertAI.alertSystem.GetComponent<AlertManager>().alertActive == true){
+		if (vision.alerted == false){ // when guard cannot see the player, either patrol the standard route or the alerted route
+			if(alertAI.alertSystem.GetComponent<AlertManager>().alertActive == true){ // patrol extended route if the system is alerted
 				print ("Alert patrolling");
 				AlertPatrol();
 				navMesh.SetDestination (alertRoute [alertIndex]);
-				anim.SetFloat ("Speed", 1.0f);
+				anim.SetFloat ("Speed", 1.5f);
 			}
 			else{
 				print ("Standard patrol");
 				Patrol();
+				navMesh.SetDestination(patrolRoute[nextIndex]);
+				anim.SetFloat("Speed", 1.0f);
 			}
-			//speechbubble.SetActive(false);
 		} 
 		else {
 			// if alerted and player is visibile, attack
@@ -139,7 +140,7 @@ public class NavMeshPatrolv3 : MonoBehaviour {
 				curTime = Time.time;
 				anim.SetFloat ("Speed", 0.0f);
 			}
-			if((Time.time - curTime) >= pauseTime/2){
+			if((Time.time - curTime) >= pauseTime*0.75f){
 				nextAlertPoint();
 				curTime = 0;
 			}
@@ -160,9 +161,8 @@ public class NavMeshPatrolv3 : MonoBehaviour {
 	}
 
 	public void nextAlertPoint() {
-		// function to set the guard back on patrol, at walking speed
+		// function to set the guard on alert patrol, at faster walking speed
 		navMesh.Resume ();
-		print ("Running to next alert point");
 		if (alertIndex == 5) {
 			alertIndex = 0;
 		} 
@@ -170,7 +170,7 @@ public class NavMeshPatrolv3 : MonoBehaviour {
 			alertIndex += 1;
 		}
 		navMesh.SetDestination (alertRoute [alertIndex]);
-		anim.SetFloat ("Speed", 2.0f);
+		anim.SetFloat ("Speed", 1.5f);
 	}
 
 	void Search() {

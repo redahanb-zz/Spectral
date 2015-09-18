@@ -8,13 +8,17 @@ public class Laser : MonoBehaviour {
 
 	LineRenderer lRenderer;
 
+	AlertManager alertSystem;
+
 	float rotateSpeed = 0.8f;
 	int rotateDistance = 100;
-	public bool canRotate = true, rotateRight = false, changingDirection = false;
+	public bool canRotate = false, rotateRight = false, changingDirection = false;
 
 	bool alerted = false;
 	// Use this for initialization
 	void Start () {
+
+		alertSystem = GameObject.Find("Alert System").GetComponent<AlertManager>();
 
 		hitPosition = transform.position + new Vector3(0,0,20);
 
@@ -70,10 +74,11 @@ public class Laser : MonoBehaviour {
 				hitPosition = hit.point;
 				if(hit.transform.tag == "Player"){
 					alerted = true;
+					alertSystem.alertActive = true;
 				}
 			}
 			else
-				hitPosition = transform.position + (transform.right * 40f);
+				hitPosition = transform.position + (transform.right * 6f);
 			
 			lRenderer.SetPosition(1, hitPosition);
 		}

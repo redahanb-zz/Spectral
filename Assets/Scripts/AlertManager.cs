@@ -18,14 +18,16 @@ public class AlertManager : MonoBehaviour {
 
 	bool alerted = false;
 
-	RawImage gradientImage;
+	RawImage gradientTopImage, gradientBottomImage;
+
+
 
 	// Use this for initialization
 	void Start () {
 		mainLight = GameObject.Find("Directional light").GetComponent<Light>();
-		gradientImage = GameObject.Find("Background Gradient").GetComponent<RawImage>();
+		gradientBottomImage = GameObject.Find("Gradient Bottom Color").GetComponent<RawImage>();
 
-		normalGradientColor = gradientImage.color;
+		normalGradientColor = gradientBottomImage.color;
 		alertGradientColor = new Color(0,0,0,1);
 
 		normalLightColor = mainLight.color;
@@ -37,7 +39,7 @@ public class AlertManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		print(alertActive + " : " +alertVolume);
+		//print(alertActive + " : " +alertVolume);
 		mixer.SetFloat("AlertMusicVolume", alertVolume);
 		mixer.SetFloat("NormalMusicVolume", normalVolume);
 		if(Input.GetKeyDown(KeyCode.B))alertActive = !alertActive;
@@ -46,15 +48,19 @@ public class AlertManager : MonoBehaviour {
 			if(alertVolume < -10f)alertVolume = alertVolume + 1.0f;
 			if(normalVolume > -80f)normalVolume = normalVolume - 0.5f;
 			mainLight.color = Color.Lerp(mainLight.color, alertLightColor, Time.deltaTime * lightChangeRate);
-			gradientImage.color  = Color.Lerp(gradientImage.color, alertGradientColor, Time.deltaTime * lightChangeRate);
+			gradientBottomImage.color  = Color.Lerp(gradientBottomImage.color, alertGradientColor, Time.deltaTime * lightChangeRate);
 		}
 		else{
 			if(alertVolume > -80f)alertVolume = alertVolume - 0.5f;
 			if(normalVolume < 0f)normalVolume = normalVolume + 1.0f;
 			mainLight.color = Color.Lerp(mainLight.color, normalLightColor, Time.deltaTime * lightChangeRate);
-			gradientImage.color  = Color.Lerp(gradientImage.color, normalGradientColor, Time.deltaTime * lightChangeRate);
+			gradientBottomImage.color  = Color.Lerp(gradientBottomImage.color, normalGradientColor, Time.deltaTime * lightChangeRate);
 
 		}
 	}
-	
+
+	public void TriggerAlert(){
+		alertActive = true;
+	}
+
 }

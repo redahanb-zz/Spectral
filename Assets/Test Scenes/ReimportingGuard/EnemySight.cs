@@ -180,8 +180,9 @@ public class EnemySight : MonoBehaviour {
 					guardAI.alerted = false;
 					returnPatrol();
 
-					NavMeshPatrolv2 patrol = GetComponent<NavMeshPatrolv2>();
-					patrol.nextPatrolPoint();
+					//NavMeshPatrolv2 patrol = GetComponent<NavMeshPatrolv2>();
+					NavMeshPatrolv3 patrol = GetComponent<NavMeshPatrolv3>();
+					patrol.nextAlertPoint();
 				}
 			}
 		}

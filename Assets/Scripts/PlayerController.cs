@@ -196,7 +196,7 @@ public class PlayerController : MonoBehaviour {
 			Color newColor = bodyParts[0].GetComponent<Renderer>().material.color;
 			Color wallColor = rayHit.transform.GetComponent<Renderer>().material.color;
 			float colorDistance = Vector3.Distance(new Vector3(newColor.r, newColor.g, newColor.b), new Vector3(wallColor.r, wallColor.g, wallColor.b));
-			print ("ColourComp: " + colorDistance );
+			//print ("ColourComp: " + colorDistance );
 
 			if(colorDistance < 0.1f){
 				print("Player cannot be seen.");

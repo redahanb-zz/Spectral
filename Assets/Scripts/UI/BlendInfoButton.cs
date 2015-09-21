@@ -6,7 +6,9 @@ public class BlendInfoButton : MonoBehaviour {
 
 	public GameObject target;
 	GameObject canvasObject;
-	
+	GameObject player;
+	PlayerController playerController;
+	Image icon;
 	RectTransform canvasTransform;
 	RectTransform iconTransform;
 	
@@ -15,6 +17,9 @@ public class BlendInfoButton : MonoBehaviour {
 		canvasObject = GameObject.Find ("Canvas");
 		canvasTransform = canvasObject.GetComponent<RectTransform> ();
 		iconTransform = GetComponent<RectTransform> ();
+		player = GameObject.FindWithTag ("Player");
+		playerController = player.GetComponent<PlayerController> ();
+		icon = transform.GetChild(0).gameObject.GetComponent<Image> ();
 	}
 	
 	public void setTarget(GameObject t){
@@ -34,6 +39,13 @@ public class BlendInfoButton : MonoBehaviour {
 			iconTransform.anchoredPosition = WorldObject_ScreenPosition + new Vector2(0, 0);
 			
 		}
+
+		//print ("Icon color: " + icon.color + ", Player color: " + playerController.targetcolor);
+		Color playerColor = playerController.targetcolor;
+		//playerColor.a = 1;
+		icon.color = Color.Lerp (icon.color, playerColor, 10*Time.deltaTime);
+		//icon.color = playerColor;
+
 	}
 	
 	public void deactivateButton(){

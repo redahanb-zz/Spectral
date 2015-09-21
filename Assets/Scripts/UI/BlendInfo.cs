@@ -12,7 +12,7 @@ public class BlendInfo : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
-		player = GameObject.Find ("Player");
+		player = GameObject.FindWithTag ("Player");
 		canvasObject = GameObject.Find ("Canvas");
 		//inventoryItem = GetComponent<InventoryItem> ();
 	}

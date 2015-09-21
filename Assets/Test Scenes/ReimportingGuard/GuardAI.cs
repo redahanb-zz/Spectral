@@ -16,7 +16,7 @@ public class GuardAI : MonoBehaviour {
 	void Start () {
 		vision = gameObject.GetComponent<EnemySight>();
 		alerted = false;
-		//alertSystem = GameObject.Find ("Game Manager").GetComponent<AlertManager> ();
+		alertSystem = GameObject.Find ("Game Manager");
 	}
 	
 	// Update is called once per frame

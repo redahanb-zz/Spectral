@@ -79,13 +79,13 @@ public class NavMeshPatrolv3 : MonoBehaviour {
 		// if not alerted, patrol
 		if (vision.alerted == false){ // when guard cannot see the player, either patrol the standard route or the alerted route
 			if(alertAI.alertSystem.GetComponent<AlertManager>().alertActive == true){ // patrol extended route if the system is alerted
-				print ("Alert patrolling");
+				//print ("Alert patrolling");
 				AlertPatrol();
 				navMesh.SetDestination (alertRoute [alertIndex]);
 				anim.SetFloat ("Speed", 1.5f);
 			}
 			else{
-				print ("Standard patrol");
+				//print ("Standard patrol");
 				Patrol();
 				navMesh.SetDestination(patrolRoute[nextIndex]);
 				anim.SetFloat("Speed", 1.0f);

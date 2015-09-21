@@ -36,7 +36,7 @@ public class BlendInfoButton : MonoBehaviour {
 				((ViewportPosition.x * canvasTransform.sizeDelta.x) - (canvasTransform.sizeDelta.x * 0.5f)),
 				((ViewportPosition.y * canvasTransform.sizeDelta.y) - (canvasTransform.sizeDelta.y * 0.5f)));
 			
-			iconTransform.anchoredPosition = WorldObject_ScreenPosition + new Vector2(0, 0);
+			iconTransform.anchoredPosition = WorldObject_ScreenPosition + new Vector2(0, 60);
 			
 		}
 

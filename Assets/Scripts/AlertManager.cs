@@ -24,7 +24,7 @@ public class AlertManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		mainLight = GameObject.Find("Directional light").GetComponent<Light>();
+		mainLight = GameObject.Find("Directional Light").GetComponent<Light>();
 		gradientBottomImage = GameObject.Find("Gradient Bottom Color").GetComponent<RawImage>();
 
 		normalGradientColor = gradientBottomImage.color;

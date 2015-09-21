@@ -29,12 +29,14 @@ public class PlayerController : MonoBehaviour {
 	Vector3 		targetPosition;
 	
 	GameObject 		pathObject, 
-	destinationObject;
+					destinationObject,
+					buttonOrderSurface; // used by blend button
 	
 	bool 			canMove = false,
 					hasPath = false,
 					doubleTap = false,
-					performAction = false;
+					performAction = false,
+					buttonOrder = false; //used by blend button
 
 	public bool 	isVisible = true,
 					isBlending = false;
@@ -108,7 +110,7 @@ public class PlayerController : MonoBehaviour {
 		ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 		//print( eventSystem.IsPointerOverGameObject());
 		if(Input.GetMouseButtonDown(0) && timeScale.timeSlowed ){
-			
+			buttonOrder = false;
 			//Check for DOuble Tap
 			if(timeSinceLastClick < 1)
 				doubleTap = true;
@@ -195,7 +197,12 @@ public class PlayerController : MonoBehaviour {
 //			print ("Wall color: " + rayHit.transform.GetComponent<Renderer>().material.color.b);
 			Color newColor = bodyParts[0].GetComponent<Renderer>().material.color;
 			Color wallColor = rayHit.transform.GetComponent<Renderer>().material.color;
+			if(buttonOrder){
+				// if the order to blend was given by the button, use the button's surface color instead
+				wallColor = buttonOrderSurface.GetComponent<Renderer>().material.color; 
+			}
 			float colorDistance = Vector3.Distance(new Vector3(newColor.r, newColor.g, newColor.b), new Vector3(wallColor.r, wallColor.g, wallColor.b));
+
 			//print ("ColourComp: " + colorDistance );
 
 			if(colorDistance < 0.1f){
@@ -339,14 +346,22 @@ public class PlayerController : MonoBehaviour {
 			isBlending = true;
 			currentMoveState = MoveState.Blend_Stand;
 		}
+		else if(buttonOrder){
+			transform.forward = -buttonOrderSurface.transform.forward;
+			isBlending = true;
+			currentMoveState = MoveState.Blend_Stand;
+			//buttonOrder = false;
+		}
 	}
 
 	public void blendButton(GameObject blendObject, Transform t, Vector3 v){
 		SetMovement(t, t.position + (-t.forward * 0.35f));
 		performAction = true;
-		transform.forward = -blendObject.transform.forward;
-		isBlending = true;
-		currentMoveState = MoveState.Blend_Stand;
+		buttonOrder = true;
+		buttonOrderSurface = blendObject;
+//		transform.forward = -blendObject.transform.forward;
+//		isBlending = true;
+//		currentMoveState = MoveState.Blend_Stand;
 	}
 	
 	void GetPath(){

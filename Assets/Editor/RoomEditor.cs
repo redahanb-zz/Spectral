@@ -40,6 +40,8 @@ public class RoomEditor : EditorWindow {
 	}
 	
 	void OnGUI(){
+		//Debug.Log(Application.loadedLevelName);
+
 		SetEditorColor();
 		if(Selection.activeGameObject){
 			if(Selection.activeGameObject.GetComponent<Room>())CreateNewRoomMenu();
@@ -124,7 +126,11 @@ public class RoomEditor : EditorWindow {
 
 			GameObject alarmSystemObject = new GameObject("Alarm System");
 			alarmSystemObject.AddComponent<AlertManager>();
-			
+
+			GameObject musicObject = Instantiate(Resources.Load("Music Manager"), Vector3.zero + new Vector3(0,0,0), Quaternion.identity) as GameObject;
+			canvasObject.name = "Music Manager";
+
+
 			roomScript = newRoomObject.GetComponent<Room>();
 			roomScript.xIndex = 0;
 			roomScript.zIndex = 0;
@@ -279,7 +285,7 @@ public class RoomEditor : EditorWindow {
 		if(!Selection.activeTransform.Find("Room Mesh")){
 		GUI.Label (new Rect(0, 260, 300, 20), "Click when you are finished editing the room:", EditorStyles.whiteBoldLabel);
 		if (GUI.Button(new Rect(50, 275, 200, 25), "Remove unused Components")){
-			CleanRoom(); CleanRoom(); CleanRoom(); CleanRoom(); CleanRoom(); CleanRoom(); CleanRoom(); CreateRoomMesh();
+				CleanRoom(); CleanRoom(); CleanRoom(); CleanRoom(); CleanRoom(); CleanRoom(); CleanRoom(); CleanRoom(); CleanRoom(); CleanRoom(); CleanRoom(); CreateRoomMesh();
 		}
 		}
 	}
@@ -387,56 +393,58 @@ public class RoomEditor : EditorWindow {
 	
 	
 	void CreateRoomMesh(){
+		Debug.Log(Application.loadedLevelName);
 		AssetDatabase.CreateFolder("Assets/Meshes/Rooms", Application.loadedLevelName);
 
 		foreach(Transform selectedRoom in Selection.activeTransform.parent){
+			GameObject meshObject = new GameObject();
+			meshObject.name = selectedRoom.name;
+			meshObject.AddComponent<MeshFilter>();
+			meshObject.AddComponent<MeshRenderer>();
 
-		GameObject meshObject = new GameObject();
-		meshObject.name = selectedRoom.name;
-		meshObject.AddComponent<MeshFilter>();
-		meshObject.AddComponent<MeshRenderer>();
-
-		GameObject parentObject = selectedRoom.gameObject;
-
-
-		MeshFilter[] meshFilters = selectedRoom.GetComponentsInChildren<MeshFilter>();
+			GameObject parentObject = selectedRoom.gameObject;
+			MeshFilter[] meshFilters = selectedRoom.GetComponentsInChildren<MeshFilter>();
 		
-		CombineInstance[] combine = new CombineInstance[meshFilters.Length-1];
-		int index = 0;
-		for (var i = 0; i < meshFilters.Length; i++){
-			if(meshFilters[i].tag == "Wall Section" || meshFilters[i].tag == "Wall Pillar" || meshFilters[i].tag == "Tile" || meshFilters[i].tag == "Base" ){
-				if (meshFilters[i].sharedMesh == null) continue;
-				combine[index].mesh = meshFilters[i].sharedMesh;
-				combine[index++].transform = meshFilters[i].transform.localToWorldMatrix;
-				meshFilters[i].transform.GetComponent<Renderer>().enabled = false;
+			CombineInstance[] combine = new CombineInstance[meshFilters.Length-1];
+			int index = 0;
+			for (var i = 0; i < meshFilters.Length; i++){
+				if(meshFilters[i].tag == "Wall Section" || meshFilters[i].tag == "Wall Pillar" || meshFilters[i].tag == "Tile" || meshFilters[i].tag == "Base" ){
+					if(meshFilters[i].gameObject.name == "1 Wall Base"){
+						meshFilters[i].transform.Find("Cube (1)").transform.parent = meshFilters[i].transform.parent;
+						DestroyImmediate(meshFilters[i].gameObject);
+						break;
+					}
+
+					if(!meshFilters[i].GetComponent<MeshRenderer>())meshFilters[i].gameObject.AddComponent<MeshRenderer>();
+
+					if (meshFilters[i].sharedMesh == null) continue;
+					combine[index].mesh = meshFilters[i].sharedMesh;
+					combine[index++].transform = meshFilters[i].transform.localToWorldMatrix;
+					meshFilters[i].transform.GetComponent<MeshRenderer>().enabled = false;
+				}
 			}
-		}
 		
-		meshObject.GetComponent<MeshFilter>().sharedMesh = new Mesh();
-		meshObject.GetComponent<MeshFilter>().sharedMesh.CombineMeshes (combine);
-		meshObject.GetComponent<Renderer>().material = meshFilters[1].GetComponent<Renderer>().sharedMaterial;
+			meshObject.GetComponent<MeshFilter>().sharedMesh = new Mesh();
+			meshObject.GetComponent<MeshFilter>().sharedMesh.CombineMeshes (combine);
+			meshObject.GetComponent<MeshRenderer>().material = Resources.Load("Default White Mat") as Material;
+				//meshFilters[1].GetComponent<MeshRenderer>().sharedMaterial;
 		
-		while(meshObject.transform.childCount != 0){
-			DestroyImmediate(meshObject.transform.GetChild(0).gameObject);
-		}
-		
-		string meshName = Application.loadedLevelName + "-" +meshObject.name;
-		
-		meshObject.name = meshName;
-		Selection.activeGameObject = meshObject;
-		meshObject.name = "Room Mesh";
-		meshObject.transform.parent = parentObject.transform;
-		meshObject.tag = "Tile";
-		meshObject.AddComponent<MeshCollider>();
-		//DestroyImmediate(meshObject);
-		
-
-
-		meshObject.isStatic = true;
-		
+			while(meshObject.transform.childCount != 0){
+				DestroyImmediate(meshObject.transform.GetChild(0).gameObject);
+			}
+			
+			string meshName = Application.loadedLevelName + "-" +meshObject.name;
+			
+			meshObject.name = meshName;
+			Selection.activeGameObject = meshObject;
+			meshObject.name = "Room Mesh";
+			meshObject.transform.parent = parentObject.transform;
+			meshObject.tag = "Tile";
+			meshObject.AddComponent<MeshCollider>();
+			//DestroyImmediate(meshObject);
+			meshObject.isStatic = true;
 			meshObject = null;
-		SaveMeshToAssets(meshName);
-
+			SaveMeshToAssets(meshName);
 		}
 		UpdateNavmesh();
 	}
@@ -450,11 +458,8 @@ public class RoomEditor : EditorWindow {
 		//AssetDatabase.CreateFolder("Assets/Meshes/Rooms", Application.loadedLevelName);
 		AssetDatabase.CreateAsset( newMesh, "Assets/Meshes/Rooms/"+Application.loadedLevelName+"/" +name+" .asset");
 		Debug.Log(AssetDatabase.GetAssetPath(newMesh));
-		
 		//Save All Assets
 		AssetDatabase.SaveAssets();
-
-
 	}
 
 
@@ -467,7 +472,7 @@ public class RoomEditor : EditorWindow {
 		NavMeshBuilder.BuildNavMesh();
 
 		foreach(Transform room in GameObject.Find("Level").transform.Find("Rooms")){
-			room.Find("Boundary").gameObject.SetActive(true);
+			//room.Find("Boundary").gameObject.SetActive(true);
 		}
 	}
 	

@@ -5,7 +5,7 @@ public class CameraController : MonoBehaviour {
 
 	public Transform targetCamera, target;
 	Vector3 targetCameraPosition, targetCameraRotation;
-	float moveSpeed = 2.0f, damping = 3.0f, rotateSpeed = 0.6f, speed;
+	float moveSpeed = 2.0f, damping = 9.0f, rotateSpeed = 0.9f, speed;
 	float distance = 1000;
 	public bool lookAtTarget = false;
 	bool cameraShake = false;

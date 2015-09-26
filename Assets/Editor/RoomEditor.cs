@@ -27,7 +27,7 @@ public class RoomEditor : EditorWindow {
 	
 	public RoomTemplateOptions selectedRoomTemplate;
 	
-	
+	bool moveCam = false;
 	
 	
 	[MenuItem ("Window/Level Editor/Room Editor")]
@@ -38,9 +38,31 @@ public class RoomEditor : EditorWindow {
 		window.maximized = true;
 		window.Show();
 	}
-	
+
+
+	private void OnSceneGUI() {
+		Event e = Event.current;
+		Debug.Log(e.type);
+		if(e.control)
+		{
+			Debug.Log(e.keyCode);
+		}
+
+	}
+
 	void OnGUI(){
+
+
+//			Debug.Log("[EDITOR] Moving Selected Camera to Editor Viewpoint");
+//			Selection.activeTransform.rotation = SceneView.lastActiveSceneView.rotation;
+//			Selection.activeTransform.position = SceneView.lastActiveSceneView.pivot;
+//		}
+
 		//Debug.Log(Application.loadedLevelName);
+
+		//if(Selection.activeTransform.name == "CameraPosRot"){
+			//if(Input.GetKeyDown(KeyCode.KeypadEnter)){
+
 
 		SetEditorColor();
 		if(Selection.activeGameObject){
@@ -128,7 +150,7 @@ public class RoomEditor : EditorWindow {
 			alarmSystemObject.AddComponent<AlertManager>();
 
 			GameObject musicObject = Instantiate(Resources.Load("Music Manager"), Vector3.zero + new Vector3(0,0,0), Quaternion.identity) as GameObject;
-			canvasObject.name = "Music Manager";
+			musicObject.name = "Music Manager";
 
 
 			roomScript = newRoomObject.GetComponent<Room>();

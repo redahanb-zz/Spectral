@@ -283,12 +283,14 @@ public class Door : MonoBehaviour {
 		pControl.StopMoving ();
 		
 		playerObject.SetActive(false);
-		playerObject.transform.position = new Vector3(destinationDoorObject.transform.position.x,transform.position.y,destinationDoorObject.transform.position.z); 
-		Camera.main.transform.position = playerObject.transform.position + new Vector3(-10,10,-10);
+		playerObject.transform.position = new Vector3(destinationDoorObject.transform.position.x,destinationDoorObject.transform.position.y + 0.5f,destinationDoorObject.transform.position.z); 
+		Camera.main.transform.position = playerObject.transform.position + new Vector3(0,30,0);
 		playerObject.SetActive(true);
 		sFade.fadeToColor = false;
 		currentRoom.gameObject.SetActive(false);
 		level.DisableAllOtherRooms();
+		Camera.main.transform.position = playerObject.transform.position + new Vector3(0,30,0);
+
 	}
 
 	public void StartNewTeleport(){

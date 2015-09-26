@@ -19,15 +19,15 @@ public class PathIndicator : MonoBehaviour {
 
 	void Start(){
 		timeScale = GameObject.Find("Time Manager").GetComponent<TimeScaler>();
-		InvokeRepeating("CreatePathArrow", 0.01f, 0.008f);
+		InvokeRepeating("CreatePathArrow", 0.01f, 0.1f);
 	}
 
 	void CreatePathArrow(){
-		if(timeScale.currentScale < 0.11f){
+		//if(timeScale.currentScale < 0.11f){
 
 		GameObject arrowObject = Instantiate(Resources.Load("Path Arrow"), transform.position + new Vector3(0,0.1f,0), Quaternion.identity) as GameObject;
 		arrowObject.transform.eulerAngles = transform.eulerAngles;
-		}
+		//}
 	}
 	
 	// Use this for initialization

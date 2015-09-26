@@ -11,7 +11,6 @@ GameObject:
   - 33: {fileID: 3397394}
   - 23: {fileID: 2337798}
   - 114: {fileID: 11427322}
-  - 65: {fileID: 6550950}
   m_Layer: 0
   m_Name: Path Arrow
   m_TagString: Untagged
@@ -27,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 181630}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -2.93238354, y: .86817193, z: 148.173599}
-  m_LocalScale: {x: .0399999991, y: 1, z: .0399999991}
+  m_LocalScale: {x: .0299999993, y: 1, z: .0299999993}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -62,18 +61,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 181630}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
---- !u!65 &6550950
-BoxCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 181630}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 10, y: 2.22044605e-16, z: 10}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &11427322
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -107,6 +94,14 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: m_ReceiveShadows
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_LocalScale.x
+      value: .0299999993
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_LocalScale.z
+      value: .0299999993
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

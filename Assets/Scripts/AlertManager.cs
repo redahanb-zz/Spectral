@@ -46,7 +46,7 @@ public class AlertManager : MonoBehaviour {
 
 		if(alertActive){
 			if(alertVolume < -10f)alertVolume = alertVolume + 1.0f;
-			if(normalVolume > -80f)normalVolume = normalVolume - 0.5f;
+			if(normalVolume > -60f)normalVolume = normalVolume - 0.5f;
 			mainLight.color = Color.Lerp(mainLight.color, alertLightColor, Time.deltaTime * lightChangeRate);
 			gradientBottomImage.color  = Color.Lerp(gradientBottomImage.color, alertGradientColor, Time.deltaTime * lightChangeRate);
 		}

@@ -23,6 +23,10 @@ public class CameraController : MonoBehaviour {
 
 	Vector3 zoomedOutPos;
 	Quaternion zoomedOutRot;
+
+	bool mapCamera = false;
+	GameObject mapCamObject;
+
 	// Use this for initialization
 	void Start () {
 
@@ -53,6 +57,17 @@ public class CameraController : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+		print(mapCamera);
+		if(targetCamera.parent.parent.parent.Find("Map Camera Position"))mapCamera = true;
+		else mapCamera = false;
+
+		if(mapCamera){
+			mapCamObject = targetCamera.parent.parent.parent.Find("Map Camera Position").gameObject;
+			zoomedOutPos = mapCamObject.transform.position;
+			zoomedOutRot = mapCamObject.transform.rotation;
+
+		}
+
 		timeNow = Time.realtimeSinceStartup;
 		myTime = timeNow - lastInterval;
 		lastInterval = timeNow;
@@ -66,8 +81,10 @@ public class CameraController : MonoBehaviour {
 //				transform.position = Vector3.Lerp(transform.position, introEndPos, myTime * moveSpeed * 1.5f);
 //				transform.rotation = Quaternion.Lerp(transform.rotation, introEndRot, myTime * rotateSpeed);
 //			}
-			transform.position = Vector3.Lerp(transform.position, zoomedOutPos, myTime * moveSpeed);
-			transform.rotation = Quaternion.Lerp(transform.rotation, zoomedOutRot, myTime * rotateSpeed);
+			if(mapCamera){
+				transform.position = Vector3.Lerp(transform.position, zoomedOutPos, myTime * moveSpeed);
+				transform.rotation = Quaternion.Lerp(transform.rotation, zoomedOutRot, myTime * rotateSpeed);
+			}
 
 		}
 		else{

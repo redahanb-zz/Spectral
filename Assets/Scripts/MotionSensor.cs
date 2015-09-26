@@ -32,7 +32,7 @@ public class MotionSensor : MonoBehaviour {
 				alertSystem.TriggerAlert();
 			}
 		}
-		Move();
+		if(!alertSystem.alertActive)Move();
 	}
 
 	void Move(){

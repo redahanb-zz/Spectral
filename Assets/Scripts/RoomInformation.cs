@@ -120,8 +120,6 @@ public class RoomInformation : MonoBehaviour {
 				touchImage.color = Color.Lerp(touchImage.color, inactiveColor, 0.05f);
 				touchIconTransform.sizeDelta = Vector2.Lerp(touchIconTransform.sizeDelta, new Vector2(40,40), 0.05f);
 				foreach(Transform t in touchObject.transform){
-					//t.gameObject.SetActive(false);
-
 					if(t.GetComponent<Text>()){
 						t.GetComponent<Text>().color = Color.Lerp(t.GetComponent<Text>().color, new Color(0,0,0,0),0.05f);
 					}

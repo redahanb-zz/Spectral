@@ -52,6 +52,7 @@ public class PlayerController : MonoBehaviour {
 
 	public Color targetcolor = Color.grey;
 
+	float verticalDistance = 100;
 	
 	// Use this for initialization
 	void Start () {
@@ -121,10 +122,18 @@ public class PlayerController : MonoBehaviour {
 			
 			if(!eventSystem.IsPointerOverGameObject())
 			if (Physics.Raycast(ray, out rayHit, 100f)){
-				print(rayHit.transform);
+				//print(rayHit.transform);
 				switch(rayHit.transform.tag){
 				case "Tile" : 
 					//print("Floor");
+					verticalDistance = Vector3.Distance(new Vector3(0,transform.position.y,0), new Vector3(0,rayHit.point.y,0));
+					print(verticalDistance);
+					if(verticalDistance > 2){
+						print("Clicked on separate floor");
+						currentMoveState = MoveState.Idle;
+						break;
+					}
+
 					SetMovement(rayHit.transform, rayHit.point);
 					performAction = false;
 					break;
@@ -153,6 +162,11 @@ public class PlayerController : MonoBehaviour {
 				if (Physics.Raycast(ray, out rayHit)){
 					if(rayHit.transform.tag == "Tile"){
 						if(Vector3.Distance(transform.position, new Vector3(rayHit.point.x, transform.position.y, rayHit.point.z)) > 1){
+							verticalDistance = Vector3.Distance(new Vector3(0,transform.position.y,0), new Vector3(0,rayHit.point.y,0));
+							if(verticalDistance > 2){
+								currentMoveState = MoveState.Idle;
+								break;
+							}
 							ClearPath();
 							targetPosition 		= new Vector3(rayHit.point.x, transform.position.y, rayHit.point.z);
 							if(doubleTap) 
@@ -331,7 +345,7 @@ public class PlayerController : MonoBehaviour {
 			destinationObject = Instantiate(Resources.Load("DestinationMarker"), targetPosition, Quaternion.identity) as GameObject;
 		//else ClearPath();
 
-		if(!pathObject /*&& timeScale.timeSlowed*/ && distance > 1){
+		if(!pathObject /*&& timeScale.timeSlowed*/ && distance > 2f){
 			pathObject = Instantiate(Resources.Load("PathIndicator"), transform.position + new Vector3(0,0.01f,0) + (transform.forward * 1), Quaternion.identity) as GameObject;
 			agent.SetDestination(targetPosition);
 			pathObject.transform.eulerAngles = transform.eulerAngles;

@@ -20,7 +20,7 @@ public class ScreenOverlayPattern : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(tScale.timeSlowed){
+		if(!tScale.timeSlowed){
 			rImg.color = Color.Lerp(rImg.color, new Color(1,1,1,0.15f), 0.04f);
 		}
 		else{

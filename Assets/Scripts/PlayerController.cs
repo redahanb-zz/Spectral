@@ -112,7 +112,6 @@ public class PlayerController : MonoBehaviour {
 		//print( eventSystem.IsPointerOverGameObject());
 		if(Input.GetMouseButtonDown(0) /*&& timeScale.timeSlowed */){
 			buttonBlendOrder = false;
-			print("test");
 			//Check for DOuble Tap
 			if(timeSinceLastClick < 1)
 				doubleTap = true;

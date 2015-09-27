@@ -21,6 +21,7 @@ public class PlayerBodyparts : MonoBehaviour {
 			part.AddComponent<Rigidbody>();
 			Vector3 impulse = new Vector3(Random.Range(-3.0f,3.0f),Random.Range(1.0f,2.0f),Random.Range(-3.0f,3.0f));
 			part.GetComponent<Rigidbody>().AddForce(impulse, ForceMode.Impulse);
+			//part.GetComponent<Rigidbody>().useGravity = false;
 			part.AddComponent<CapsuleCollider>();
 			Destroy (part, Random.Range(0.5f,1.5f));
 		}

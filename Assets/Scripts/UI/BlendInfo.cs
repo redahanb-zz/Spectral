@@ -19,21 +19,28 @@ public class BlendInfo : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(Vector3.Distance(transform.position, player.transform.position) < 3.0f){
-			if(!button){
-				button = Instantiate(Resources.Load("UI/Worldspace Buttons/Blend Info"), canvasObject.transform.position, Quaternion.identity) as GameObject;
-				button.transform.SetParent(canvasObject.transform);
-				button.GetComponent<BlendInfoButton>().setTarget(gameObject);
-				button.GetComponent<Button>().onClick.AddListener( GetComponent<BlendInfo>().callPlayertoBlend );
-				//button.GetComponent<Button>().onClick.AddListener( button.GetComponent<ItemInfoButton>().target.GetComponent<InventoryItem>().pickupAnim );
-				//inventoryItem.identifyButton(button);
-			} else {
-				button.SetActive(true);
-				if(button.GetComponent<Button>().interactable == false){
-					button.GetComponent<Button>().interactable = true;
+		if(Vector3.Distance(transform.position, player.transform.position) < 3.0f)
+		{
+			// check angle to player to stop the button appearing through walls
+			Vector3 direction = player.transform.position - transform.position;
+			float angle = Vector3.Angle(direction, -transform.forward); 
+			if(angle <= 90.0f){
+				if(!button){
+					button = Instantiate(Resources.Load("UI/Worldspace Buttons/Blend Info"), canvasObject.transform.position, Quaternion.identity) as GameObject;
+					button.transform.SetParent(canvasObject.transform);
+					button.GetComponent<BlendInfoButton>().setTarget(gameObject);
+					button.GetComponent<Button>().onClick.AddListener( GetComponent<BlendInfo>().callPlayertoBlend );
+					//button.GetComponent<Button>().onClick.AddListener( button.GetComponent<ItemInfoButton>().target.GetComponent<InventoryItem>().pickupAnim );
+					//inventoryItem.identifyButton(button);
+				} else {
+					button.SetActive(true);
+					if(button.GetComponent<Button>().interactable == false){
+						button.GetComponent<Button>().interactable = true;
+					}
 				}
-			}
-		}
+			} // end check player angle
+		
+		} // end check player in range
 
 		if (Vector3.Distance (transform.position, player.transform.position) > 10.0f) {
 			if(button){

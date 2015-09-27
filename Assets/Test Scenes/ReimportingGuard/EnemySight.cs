@@ -127,7 +127,7 @@ public class EnemySight : MonoBehaviour {
 			playerController = player.GetComponent<PlayerController> ();
 		}
 
-		Debug.DrawRay (transform.position, transform.forward);
+		//Debug.DrawRay (transform.position, transform.forward);
 
 		/// TESTING ALTERNATE IMPLEMENTATION ///
 		if (player) {

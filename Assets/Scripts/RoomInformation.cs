@@ -58,9 +58,9 @@ public class RoomInformation : MonoBehaviour {
 		transform.parent = GameObject.Find("Canvas").transform;
 
 		touchButton.onClick.RemoveAllListeners();
-		print("ADDING LISTENER");
+		//print("ADDING LISTENER");
 		touchButton.onClick.AddListener(TeleportPlayer);
-		print("ADDED");
+		//print("ADDED");
 
 		inactiveColor = new Color(0.3f, 0.3f, 0.3f, 0.6f);
 	}

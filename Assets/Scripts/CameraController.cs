@@ -27,6 +27,8 @@ public class CameraController : MonoBehaviour {
 	bool mapCamera = false;
 	GameObject mapCamObject;
 
+	bool mapButtonDown = false;
+
 	// Use this for initialization
 	void Start () {
 
@@ -47,6 +49,14 @@ public class CameraController : MonoBehaviour {
 		distance = 1000;
 	}
 
+	public void MapButtonDown(){
+		mapButtonDown = true;
+	}
+
+	public void MapButtonUp(){
+		mapButtonDown = false;
+	}
+
 	void SetShakePosition(){
 		nextPos = originalPos + Random.insideUnitSphere * shakeAmount;
 	}
@@ -55,9 +65,14 @@ public class CameraController : MonoBehaviour {
 		lookAtTarget = !lookAtTarget;
 	}
 
+	public void MapView(){
+		transform.position = Vector3.Lerp(transform.position, zoomedOutPos, myTime * moveSpeed);
+		transform.rotation = Quaternion.Lerp(transform.rotation, zoomedOutRot, myTime * rotateSpeed);
+	}
+
 	// Update is called once per frame
 	void Update () {
-		print(mapCamera);
+		//print(mapCamera);
 		if(targetCamera.parent.parent.parent.Find("Map Camera Position"))mapCamera = true;
 		else mapCamera = false;
 
@@ -75,18 +90,18 @@ public class CameraController : MonoBehaviour {
 		//print(intro + " : " +distance);
 
 		if(Input.GetKey(KeyCode.C)){
-//			distance = Vector3.Distance(transform.position, introEndPos);
-//			if(distance < 1)intro = false;
-//			else{
-//				transform.position = Vector3.Lerp(transform.position, introEndPos, myTime * moveSpeed * 1.5f);
-//				transform.rotation = Quaternion.Lerp(transform.rotation, introEndRot, myTime * rotateSpeed);
-//			}
-			if(mapCamera){
-				transform.position = Vector3.Lerp(transform.position, zoomedOutPos, myTime * moveSpeed);
-				transform.rotation = Quaternion.Lerp(transform.rotation, zoomedOutRot, myTime * rotateSpeed);
-			}
-
+			mapButtonDown = true;
 		}
+		else if(Input.GetKeyUp(KeyCode.C)){
+			mapButtonDown = false;
+		}
+
+		if(mapButtonDown){
+			if(mapCamera){
+				MapView();
+			}
+		}
+
 		else{
 			if(targetCamera){
 				

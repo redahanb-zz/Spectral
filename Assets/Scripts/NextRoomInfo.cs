@@ -63,6 +63,8 @@ public class NextRoomInfo : MonoBehaviour {
 			colorIcons[i].color = new Color(colorIcons[i].color.r, colorIcons[i].color.g, colorIcons[i].color.b, 0);
 		}
 
+		DisplayNewRoomInfo(GameObject.Find("[0,0]").GetComponent<Room>().roomName, Application.loadedLevelName);
+
 	}
 
 	void RefreshCurrentRoomColors(){

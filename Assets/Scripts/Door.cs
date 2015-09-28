@@ -175,16 +175,16 @@ public class Door : MonoBehaviour {
 
 	void GetAssociatedDoorway(){
 		string doorName = transform.parent.name;
-		print(level.transform);
+		//print(level.transform);
 
 		foreach(Transform t in level.transform.Find("Rooms"))
-		        print(t.transform.name);
+		       print(t.transform.name);
 		switch (doorName) {
 		case "Door North":	
 			foreach(Transform t in level.transform.Find("Rooms")){
 				if(t.name == "["+(roomX)+","+(roomZ + 1)+"]"){
 					destinationRoomObject = t.gameObject;
-					print("North " +destinationRoomObject);
+					//print("North " +destinationRoomObject);
 					nextX = destinationRoomObject.GetComponent<Room>().xIndex;
 					nextZ = destinationRoomObject.GetComponent<Room>().zIndex;
 
@@ -194,9 +194,9 @@ public class Door : MonoBehaviour {
 
 					if(destinationRoomObject.transform.Find("Doors").Find("Door South"))destinationDoorObject =	destinationRoomObject.transform.Find("Doors").Find("Door South").Find("Teleport Destination").gameObject;
 					else Debug.Log("[Door Trigger] Cannot find the associated Door in the next room.");
-					Debug.Log("[Door Trigger] Teleported North"); 
+					//Debug.Log("[Door Trigger] Teleported North"); 
 				}
-				else Debug.Log("[Door Trigger] Cannot find the next room.");
+				//else Debug.Log("[Door Trigger] Cannot find the next room.");
 			}
 			break;
 			
@@ -275,7 +275,7 @@ public class Door : MonoBehaviour {
 		destinationRoomObject.SetActive(true);
 
 
-		print("Teleporting to " +destinationDoorObject.transform.parent);
+		//print("Teleporting to " +destinationDoorObject.transform.parent);
 	}
 	
 	void Teleport(){

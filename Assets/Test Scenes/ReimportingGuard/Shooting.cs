@@ -3,16 +3,16 @@ using System.Collections;
 
 public class Shooting : MonoBehaviour {
 
-	public int shotDmg;
-	public float reloadTime;
+	public int 			shotDmg;
+	public float 		reloadTime;
 	
-	EnemySight enemySight;
-	Animator anim;
+	EnemySight 			enemySight;
+	Animator 			anim;
+	GameObject 			player;
+	HealthManager		pHealth;
+	public GameObject 	gunBarrel;
 
-	GameObject player;
-	public GameObject gunBarrel;
-
-	float counter = 0.6f;
+	float 				counter = 0.6f;
 
 
 	// Use this for initialization
@@ -20,6 +20,7 @@ public class Shooting : MonoBehaviour {
 		enemySight = GetComponent<EnemySight> ();
 		player = GameObject.FindWithTag("Player");
 		anim = GetComponent<Animator> ();
+		pHealth = GameObject.Find ("Health Manager").GetComponent<HealthManager> ();
 		//gunBarrel = transform.Find("GunBarrel").gameObject;
 	}
 	
@@ -41,14 +42,17 @@ public class Shooting : MonoBehaviour {
 		if(aimWeight > 1.0f){
 			aimWeight = 1.0f;
 		}
-		anim.SetIKPosition (AvatarIKGoal.RightHand, player.transform.position + Vector3.up * 1.0f);
-		anim.SetIKPositionWeight (AvatarIKGoal.RightHand, aimWeight);
+		if (player) {
+			anim.SetIKPosition (AvatarIKGoal.RightHand, player.transform.position + Vector3.up * 1.0f);
+			anim.SetIKPositionWeight (AvatarIKGoal.RightHand, aimWeight);
+		}
+
 		//print ("Aim weight = " + aimWeight);
 	}
 
 
 	public void Shoot() {
-		if(counter <= 0){
+		if(counter <= 0 && !pHealth.playerDead){
 			counter = reloadTime;
 
 			GameObject bullet = Instantiate(Resources.Load("Enemies/Bullet"), gunBarrel.transform.position, gunBarrel.transform.rotation) as GameObject;

@@ -45,7 +45,6 @@ GameObject:
   - 114: {fileID: 11482288}
   - 135: {fileID: 13575996}
   - 114: {fileID: 11485760}
-  - 208: {fileID: 20823276}
   - 95: {fileID: 9506508}
   m_Layer: 0
   m_Name: DataSphere
@@ -213,7 +212,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 116032}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.97844768, y: .730000019, z: 3.4750452}
+  m_LocalPosition: {x: -.504166722, y: .790000021, z: 7.22236061}
   m_LocalScale: {x: .400000006, y: .400000006, z: .400000006}
   m_Children:
   - {fileID: 465228}
@@ -485,11 +484,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 180176}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cdea4612236be4ab5910883acabf7d10, type: 3}
+  m_Script: {fileID: 11500000, guid: b9e0330411b624a0781d738fac046ece, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotateDir: {x: 0, y: 0, z: 1}
-  speed: 10
+  speed: 60
 --- !u!114 &11482288
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -524,11 +522,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 149394}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cdea4612236be4ab5910883acabf7d10, type: 3}
+  m_Script: {fileID: 11500000, guid: b9e0330411b624a0781d738fac046ece, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotateDir: {x: 0, y: 1, z: 0}
-  speed: 10
+  speed: 60
 --- !u!135 &13575996
 SphereCollider:
   m_ObjectHideFlags: 1
@@ -541,21 +538,6 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 3
   m_Center: {x: 0, y: 0, z: 0}
---- !u!208 &20823276
-NavMeshObstacle:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 116032}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: .075000003, y: .5, z: .075000003}
-  m_MoveThreshold: .100000001
-  m_Carve: 1
-  m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: 0, z: 0}
-  m_TimeToStationary: .5
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

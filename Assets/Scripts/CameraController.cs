@@ -57,7 +57,7 @@ public class CameraController : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		print(mapCamera);
+		//print(mapCamera);
 		if(targetCamera.parent.parent.parent.Find("Map Camera Position"))mapCamera = true;
 		else mapCamera = false;
 

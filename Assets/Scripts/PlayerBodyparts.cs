@@ -25,7 +25,7 @@ public class PlayerBodyparts : MonoBehaviour {
 			part.AddComponent<CapsuleCollider>();
 			Destroy (part, Random.Range(0.5f,1.5f));
 		}
-		Invoke ("delayDestruct", 1);
+		//Invoke ("delayDestruct", 1);
 	}
 
 	void delayDestruct(){

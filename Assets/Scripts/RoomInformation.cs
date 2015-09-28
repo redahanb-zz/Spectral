@@ -138,7 +138,7 @@ public class RoomInformation : MonoBehaviour {
 	}
 
 	void TeleportPlayer(){
-		print("Teleporting");
+		//print("Teleporting");
 		removeInfo = true;
 		doorway.StartNewTeleport();
 		displayInfo = false;

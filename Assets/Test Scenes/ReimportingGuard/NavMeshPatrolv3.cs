@@ -13,7 +13,7 @@ public class NavMeshPatrolv3 : MonoBehaviour {
 
 	//public GameObject speechbubble;
 
-	public float pauseTime = 1;
+	public float pauseTime = 2;
 	
 	private Vector3[] patrolRoute;
 	private Vector3[] alertRoute;
@@ -21,6 +21,7 @@ public class NavMeshPatrolv3 : MonoBehaviour {
 	private int alertIndex;
 	private float curTime = 0;
 	private bool walking = false;
+	private bool paused = false;
 
 	private NavMeshAgent navMesh;
 	private EnemySight vision;
@@ -45,6 +46,7 @@ public class NavMeshPatrolv3 : MonoBehaviour {
 			point2.transform.position
 		};
 
+		// Ditto, for the extra points to patrols when alerted
 		alertRoute = new Vector3[6]{
 			point1.transform.position,
 			point2.transform.position,
@@ -56,6 +58,8 @@ public class NavMeshPatrolv3 : MonoBehaviour {
 
 		navMesh = gameObject.GetComponent<NavMeshAgent>();
 
+		//Patrol ();
+		//nextPatrolPoint ();
 		navMesh.SetDestination (patrolRoute[nextIndex]);
 
 		// start at walking speed
@@ -82,13 +86,17 @@ public class NavMeshPatrolv3 : MonoBehaviour {
 				//print ("Alert patrolling");
 				AlertPatrol();
 				navMesh.SetDestination (alertRoute [alertIndex]);
-				anim.SetFloat ("Speed", 1.5f);
+				if(!paused){
+					anim.SetFloat ("Speed", 1.5f);
+				}
 			}
 			else{
 				//print ("Standard patrol");
 				Patrol();
 				navMesh.SetDestination(patrolRoute[nextIndex]);
-				anim.SetFloat("Speed", 1.0f);
+				if(!paused){
+					anim.SetFloat("Speed", 1.0f);
+				}
 			}
 		} 
 		else {
@@ -121,26 +129,35 @@ public class NavMeshPatrolv3 : MonoBehaviour {
 	}
 
 	void Patrol() {
-		if(Vector3.Distance(transform.position, patrolRoute[nextIndex]) <= 1 ){
+		if(Vector3.Distance(transform.position, patrolRoute[nextIndex]) <= 0.5f ){
 			if (curTime == 0){
 				curTime = Time.time;
 				anim.SetFloat ("Speed", 0.0f);
+				paused = true;
 			}
 			if((Time.time - curTime) >= pauseTime){
+				paused = false;
 				nextPatrolPoint();
 				curTime = 0;
 			}
+
+			// testing alternate implementation using Invoke
+//			anim.SetFloat("Speed", 0.0f);
+//			walking = false;
+//			Invoke("nextPatrolPoint", 1.5f);
 		}
 	}
 
 	void AlertPatrol() {
-		if(Vector3.Distance(transform.position, alertRoute[alertIndex]) <= 1 ){
+		if(Vector3.Distance(transform.position, alertRoute[alertIndex]) <= 0.5f ){
 
 			if (curTime == 0){
 				curTime = Time.time;
 				anim.SetFloat ("Speed", 0.0f);
+				paused = true;
 			}
-			if((Time.time - curTime) >= pauseTime*0.75f){
+			if((Time.time - curTime) >= pauseTime*0.75f){ // shorter pause time when on alert
+				paused = false;
 				nextAlertPoint();
 				curTime = 0;
 			}

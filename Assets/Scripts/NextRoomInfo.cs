@@ -136,7 +136,7 @@ public class NextRoomInfo : MonoBehaviour {
 	}
 
 	public void HideRoomInfo(){
-		print("HideRoomInfo");
+		//print("HideRoomInfo");
 		showInfo = false;
 		frameTimer = 0;
 	}

@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour {
 	Animator 		playerAnimator;
 	NavMeshAgent 	agent;
 	NavMeshPath		path;
+	HealthManager	pHealth;
 	
 	Ray 			ray;
 	RaycastHit 		rayHit;
@@ -18,13 +19,13 @@ public class PlayerController : MonoBehaviour {
 	int 			currentPathIndex = 1;
 	
 	float 			distance = 0f,
-	currentSpeed = 0f,
-	turnDistance = 100, 
-	targetSpeed = 0,
-	runSpeed = 20.0f, 
-	walkSpeed = 0.5f,
-	sneakSpeed = 0.5f,
-	stopSpeed = 0.1f;
+					currentSpeed = 0f,
+					turnDistance = 100, 
+					targetSpeed = 0,
+					runSpeed = 20.0f, 
+					walkSpeed = 0.5f,
+					sneakSpeed = 0.5f,
+					stopSpeed = 0.1f;
 	
 	Vector3 		targetPosition;
 	
@@ -60,6 +61,7 @@ public class PlayerController : MonoBehaviour {
 		customDeltaTime = Time.deltaTime;
 		playerAnimator 	= GetComponent<Animator>();
 		bodyParts = GetComponent<PlayerBodyparts> ().bodyparts;
+		pHealth = GameObject.Find ("Health Manager").GetComponent<HealthManager>();
 
 		foreach (GameObject part in bodyParts) {
 			part.GetComponent<Renderer>().material.color = Color.green;
@@ -87,11 +89,13 @@ public class PlayerController : MonoBehaviour {
 		}
 		else StopMoving();
 
-		//playerRenderer.material.color = Color.Lerp(playerRenderer.material.color, targetcolor, 2*Time.deltaTime);
-		foreach (GameObject part in bodyParts) {
-			part.GetComponent<Renderer>().material.color = Color.Lerp(part.GetComponent<Renderer>().material.color, targetcolor, 10*Time.deltaTime);
+		if(!pHealth.playerDead){
+			// change colour of each bodypart in the array
+			foreach (GameObject part in bodyParts) {
+				part.GetComponent<Renderer>().material.color = Color.Lerp(part.GetComponent<Renderer>().material.color, targetcolor, 10*Time.deltaTime);
+			}
 		}
-	}
+	} // end update
 
 	//Assigns action per state and sets the animator move state
 	void MoveStateManager(){
@@ -126,9 +130,9 @@ public class PlayerController : MonoBehaviour {
 				case "Tile" : 
 					//print("Floor");
 					verticalDistance = Vector3.Distance(new Vector3(0,transform.position.y,0), new Vector3(0,rayHit.point.y,0));
-					print(verticalDistance);
+					//print(verticalDistance);
 					if(verticalDistance > 2){
-						print("Clicked on separate floor");
+						//print("Clicked on separate floor");
 						currentMoveState = MoveState.Idle;
 						break;
 					}
@@ -218,12 +222,12 @@ public class PlayerController : MonoBehaviour {
 			//print ("ColourComp: " + colorDistance );
 
 			if(colorDistance < 0.1f){
-				print("Player cannot be seen.");
+				//print("Player cannot be seen.");
 				isVisible = false;
 			}
 			else{
 				isVisible = true;
-				print("Player is visible to enemies.");
+				//print("Player is visible to enemies.");
 			}
 		}
 	}

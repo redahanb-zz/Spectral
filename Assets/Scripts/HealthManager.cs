@@ -30,6 +30,7 @@ public class HealthManager : MonoBehaviour {
 		}
 
 		if(playerHealth <= 0){
+			print ("Player was killed...");
 			bodyParts.selfDestruct();
 		}
 	}

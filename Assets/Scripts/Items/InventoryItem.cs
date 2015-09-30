@@ -12,78 +12,44 @@ public class InventoryItem : MonoBehaviour {
 	public int itemValue;
 
 	GameObject pickupButton;
-
-	//AudioSource impactSound;
-	//ButtonManager buttonManager;
-
+	
 	// Use this for initialization
 	void Start () {
-		//impactSound = GetComponent<AudioSource> ();
-		//transform.GetComponent<Renderer> ().material.color = itemColor;
 		playerInventory = GameObject.Find ("Inventory Manager").GetComponent<PlayerInventory> ();
 		anim = GetComponent<Animator> ();
 
 		Renderer[] childMeshes = GetComponentsInChildren<Renderer> ();
-		foreach(Renderer rend in childMeshes){
+		foreach(Renderer rend in childMeshes)
+		{
 			rend.material.color = itemColor;
 		}
 	}
 	
 	// Update is called once per frame
-	void Update () {
-//		if(impactSound.mute && Time.time > 3.0f){
-//			impactSound.mute = false;
-//		}
-
-//		if (!buttonManager) {
-//			if(GameObject.FindWithTag("Player")) {
-//				buttonManager = GameObject.FindWithTag("Player").GetComponent<ButtonManager> ();
-//			}
-//		}
-
+	void Update () 
+	{
 
 	}
 
-	void OnTriggerStay(Collider other) {
-//		if (other.gameObject.tag == "Player") {
-//			// switch A button icon on
-//			buttonManager.pickupEnabled (true);
-//
-//			if (Input.GetKeyDown(KeyCode.K) || Input.GetButton("A_Button")) {
-//				// Pick up item and add to inventory
-//				other.GetComponent<PlayerInventory>().addItem(gameObject);
-//				buttonManager.pickupEnabled(false);
-//			}
-//		}
-	}
-
-	void OnTriggerExit(Collider other) {
-//		if (other.gameObject.tag == "Player") {
-//			buttonManager.pickupEnabled(false);
-//		}
-	}
-
-	public void pickUpItem() {
+	public void pickUpItem() 
+	{
 		transform.position = GameObject.FindWithTag ("Player").transform.position;
 		gameObject.SetActive (false);
 	}
 
-	public void destroyItem() {
+	public void destroyItem() 
+	{
 		Destroy (gameObject);
 	}
 
-	void OnCollisionEnter(Collision coll){
-		if(GameObject.FindWithTag("Player") && coll.gameObject.tag != "Player"){
-			soundOnImpact ();
-		}
-	}
-
-	void soundOnImpact() {
+	void soundOnImpact() 
+	{
 		//print ("FLASHBANG");
 		playEcho ();
 		GameObject[] guards = GameObject.FindGameObjectsWithTag ("Guard");
 		int x = 0;
-		foreach(GameObject guard in guards){
+		foreach(GameObject guard in guards)
+		{
 			if(Vector3.Distance(transform.position, guard.transform.position) < 10.0f) {
 				guard.GetComponent<NavMeshPatrolv2>().Investigate(transform.position);
 				x++;
@@ -91,7 +57,9 @@ public class InventoryItem : MonoBehaviour {
 		}
 	}
 
-	void playEcho() {
+
+	void playEcho() 
+	{
 		Vector3 drawLoc = transform.position;
 		drawLoc.y += 0.01f;
 		GameObject echo = Instantiate (Resources.Load("FootfallFX"), drawLoc, Quaternion.Euler(90,0,0)) as GameObject;
@@ -99,33 +67,44 @@ public class InventoryItem : MonoBehaviour {
 		//AudioSource.PlayClipAtPoint (impactSound.clip, transform.position);
 	}
 
-	public void pickupAnim(){
-		//anim.SetBool ("PickedUp", true);
+
+	public void pickupAnim()
+	{
 		StartCoroutine (pickupONCE ("PickedUp"));
 	}
 
-	public void dropAnim(){
+
+	public void dropAnim()
+	{
 		StartCoroutine (dropONCE("Dropped"));
 	}
 
-	public IEnumerator pickupONCE (string paramname){
+
+	public IEnumerator pickupONCE (string paramname)
+	{
 		anim.SetBool (paramname, true);
 		yield return null;
 		anim.SetBool (paramname, false);
 	}
 
-	public IEnumerator dropONCE (string paramname){
+
+	public IEnumerator dropONCE (string paramname)
+	{
 		anim.SetBool (paramname, true);
 		yield return null;
 		anim.SetBool (paramname, false);
 	}
 
-	public void addItemToInventory(){
+
+	public void addItemToInventory()
+	{
 		playerInventory.addItem (gameObject);
 		pickupButton.GetComponent<ItemInfoButton>().deactivateButton();
 	}
 
-	public void identifyButton(GameObject button){
+
+	public void identifyButton(GameObject button)
+	{
 		pickupButton = button;
 	}
 	

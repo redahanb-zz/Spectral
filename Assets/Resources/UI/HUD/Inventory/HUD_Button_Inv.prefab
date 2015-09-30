@@ -316,7 +316,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 200
+  m_Text: '-
+
+'
 --- !u!114 &11498328
 MonoBehaviour:
   m_ObjectHideFlags: 1

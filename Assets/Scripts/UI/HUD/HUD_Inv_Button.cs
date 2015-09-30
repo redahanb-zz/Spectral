@@ -40,7 +40,7 @@ public class HUD_Inv_Button : MonoBehaviour {
 		//findTouch ();
 
 		if (countUp) {
-			timePressed += 7*Time.deltaTime;
+			timePressed += 3*Time.deltaTime;
 			//print ("Timer: " + timePressed);
 		} else {
 			timePressed = 0.0f;

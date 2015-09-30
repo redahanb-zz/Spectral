@@ -10,6 +10,12 @@ public class HUD_Inventory : MonoBehaviour {
 	PlayerInventory playerInventory;
 	public Sprite defaultIcon;
 
+	// optimizing script
+	Image itemIcon;
+	Color iconColor;
+	Text valueText;
+
+
 	// Use this for initialization
 	void Start () {
 		playerInventory = GameObject.Find ("Inventory Manager").GetComponent<PlayerInventory> ();
@@ -20,7 +26,7 @@ public class HUD_Inventory : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		updateIcon ();
+		//updateIcon ();
 	}
 
 	public void buildInventoryUI(int size) {
@@ -53,27 +59,49 @@ public class HUD_Inventory : MonoBehaviour {
 		}	
 	}	
 
-	public void updateIcon(){
-		for (int i = 0; i < inventorySize; i++) {
-			if(playerInventory.playerInventory[i] != null){
-				// set icon
-				Image itemIcon = inventoryIcons[i].transform.GetChild(1).transform.GetComponent<Image>();
-				itemIcon.sprite = playerInventory.playerInventory[i].GetComponent<InventoryItem>().itemIcon;
-				// set color
-				Color iconColor = playerInventory.playerInventory[i].GetComponent<InventoryItem>().itemColor;
-				iconColor.a = 1;
-				itemIcon.color = iconColor;
-				// set value
-				Text valueText = inventoryIcons[i].transform.GetComponentInChildren<Text>();
-				valueText.text = playerInventory.playerInventory[i].GetComponent<InventoryItem>().itemValue.ToString();
-			} else {
-				// icon is default
-				Image itemIcon = inventoryIcons[i].transform.GetChild(1).transform.GetComponent<Image>();
-				itemIcon.sprite = defaultIcon;
-				itemIcon.color = Color.white;
-				Text valueText = inventoryIcons[i].transform.GetComponentInChildren<Text>();
-				valueText.text = "-";
-			}
+//	public void updateIcon(){
+//		for (int i = 0; i < inventorySize; i++) {
+//			if(playerInventory.playerInventory[i] != null){
+//				// set icon
+//				itemIcon = inventoryIcons[i].transform.GetChild(1).transform.GetComponent<Image>();
+//				itemIcon.sprite = playerInventory.playerInventory[i].GetComponent<InventoryItem>().itemIcon;
+//				// set color
+//				iconColor = playerInventory.playerInventory[i].GetComponent<InventoryItem>().itemColor;
+//				iconColor.a = 1;
+//				itemIcon.color = iconColor;
+//				// set value
+//				valueText = inventoryIcons[i].transform.GetComponentInChildren<Text>();
+//				valueText.text = playerInventory.playerInventory[i].GetComponent<InventoryItem>().itemValue.ToString();
+//			} else {
+//				// icon is default
+//				itemIcon = inventoryIcons[i].transform.GetChild(1).transform.GetComponent<Image>();
+//				itemIcon.sprite = defaultIcon;
+//				itemIcon.color = Color.white;
+//				valueText = inventoryIcons[i].transform.GetComponentInChildren<Text>();
+//				valueText.text = "-";
+//			}
+//		}
+//	}
+
+	public void updateIcon(int i){
+		if(playerInventory.playerInventory[i] != null){
+			// set icon
+			itemIcon = inventoryIcons[i].transform.GetChild(1).transform.GetComponent<Image>();
+			itemIcon.sprite = playerInventory.playerInventory[i].GetComponent<InventoryItem>().itemIcon;
+			// set color
+			iconColor = playerInventory.playerInventory[i].GetComponent<InventoryItem>().itemColor;
+			iconColor.a = 1;
+			itemIcon.color = iconColor;
+			// set value
+			valueText = inventoryIcons[i].transform.GetComponentInChildren<Text>();
+			valueText.text = playerInventory.playerInventory[i].GetComponent<InventoryItem>().itemValue.ToString();
+		} else {
+			// icon is default
+			itemIcon = inventoryIcons[i].transform.GetChild(1).transform.GetComponent<Image>();
+			itemIcon.sprite = defaultIcon;
+			itemIcon.color = Color.white;
+			valueText = inventoryIcons[i].transform.GetComponentInChildren<Text>();
+			valueText.text = "-";
 		}
 	}
 }

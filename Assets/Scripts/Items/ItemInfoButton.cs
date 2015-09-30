@@ -5,8 +5,8 @@ using UnityEngine.UI;
 public class ItemInfoButton : MonoBehaviour {
 
 	public GameObject target;
-	GameObject canvasObject;
 
+	GameObject canvasObject;
 	RectTransform canvasTransform;
 	RectTransform iconTransform;
 	
@@ -19,7 +19,6 @@ public class ItemInfoButton : MonoBehaviour {
 
 	public void setTarget(GameObject t){
 		target = t;
-		//setFunction ();
 	}
 		
 	// Update is called once per frame

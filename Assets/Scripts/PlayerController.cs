@@ -164,7 +164,7 @@ public class PlayerController : MonoBehaviour {
 				
 				if (Physics.Raycast(ray, out rayHit)){
 					if(rayHit.transform.tag == "Tile"){
-						if(Vector3.Distance(transform.position, new Vector3(rayHit.point.x, transform.position.y, rayHit.point.z)) > 1){
+						if(Vector3.Distance(transform.position, new Vector3(rayHit.point.x, transform.position.y, rayHit.point.z)) > 0.15f){
 							verticalDistance = Vector3.Distance(new Vector3(0,transform.position.y,0), new Vector3(0,rayHit.point.y,0));
 							if(verticalDistance > 2){
 								currentMoveState = MoveState.Idle;

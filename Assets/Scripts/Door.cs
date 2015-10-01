@@ -52,13 +52,19 @@ public class Door : MonoBehaviour {
 
 	int nextX = 0, nextZ = 0;
 
+	DoorButton dButton;
+
 	// Use this for initialization
 	void Start () {
 		roomX = 0;
 		roomZ = 0;
 
+		dButton = GameObject.Find("Door Button").GetComponent<DoorButton>();
+
 		playerObject = GameObject.FindGameObjectWithTag("Player");
 		level = GameObject.Find("Level").GetComponent<Level>();
+
+
 
 		currentRoom = transform.parent.parent.parent.GetComponent<Room>();
 		if(currentRoom){
@@ -106,11 +112,14 @@ public class Door : MonoBehaviour {
 		if(playerDistance < 2.25f){
 			doorOpen = true;
 			//playerObject = c.gameObject;
-			if(!roomTextObject) roomTextObject = Instantiate( Resources.Load("Room Info"), canvasObject.transform.position, Quaternion.identity) as GameObject;
-			roomInfo = roomTextObject.GetComponent<RoomInformation>();
-			roomInfo.displayInfo = true;
-			roomInfo.SetDoor(this);
-			roomInfo.SetTarget(transform);
+
+			dButton.SetCurrentDoor(gameObject);
+
+//			if(!roomTextObject) roomTextObject = Instantiate( Resources.Load("Room Info"), canvasObject.transform.position, Quaternion.identity) as GameObject;
+//			roomInfo = roomTextObject.GetComponent<RoomInformation>();
+//			roomInfo.displayInfo = true;
+//			roomInfo.SetDoor(this);
+//			roomInfo.SetTarget(transform);
 		}
 		else{
 			doorOpen = false;
@@ -136,6 +145,11 @@ public class Door : MonoBehaviour {
 		targetLeftDoorPosition		= leftDoorOpenPosition;
 		targetRightDoorPosition		= rightDoorOpenPosition;
 		targetScale = openScale;
+
+
+
+
+
 	}
 
 	void CloseDoor(){

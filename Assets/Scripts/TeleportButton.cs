@@ -57,12 +57,10 @@ public class TeleportButton : MonoBehaviour {
 	void FadeText(){
 		//if(textVisible) actionText.color = Color.Lerp(new Color(1,1,1,0), new Color(1,1,1,1), Time.deltaTime);
 		//else 			actionText.color = Color.Lerp(new Color(1,1,1,1), new Color(1,1,1,0), Time.deltaTime);
-
 	}
 
 	void PositionButton(){
 		if(buttonActive){
-
 			Vector2 ViewportPosition=Camera.main.WorldToViewportPoint(currentTeleporter.transform.position);
 			Vector2 WorldObject_ScreenPosition =new Vector2(
 				((ViewportPosition.x*canvasTransform.sizeDelta.x)-(canvasTransform.sizeDelta.x*0.5f)),

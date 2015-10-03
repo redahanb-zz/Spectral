@@ -142,7 +142,7 @@ public class PlayerController : MonoBehaviour {
 					break;
 				case "Blend Surface" :
 					//print("Blend Surface");
-					SetMovement(rayHit.transform, rayHit.transform.position + (-rayHit.transform.forward * 0.35f));
+					SetMovement(rayHit.transform, rayHit.transform.position + (-rayHit.transform.forward * 0.5f));
 					performAction = true;
 					break;
 				}
@@ -372,7 +372,7 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	public void blendButton(GameObject blendObject, Transform t, Vector3 v){
-		SetMovement(t, t.position + (-t.forward * 0.35f));
+		SetMovement(t, t.position + (-t.forward * 0.5f));
 		performAction = true;
 		buttonBlendOrder = true;
 		buttonBlendObject = blendObject;

@@ -128,7 +128,7 @@ public class PlayerController : MonoBehaviour {
 				//print(rayHit.transform);
 				switch(rayHit.transform.tag){
 				case "Tile" : 
-					//print("Floor");
+					print("Floor");
 					verticalDistance = Vector3.Distance(new Vector3(0,transform.position.y,0), new Vector3(0,rayHit.point.y,0));
 					//print(verticalDistance);
 					if(verticalDistance > 2){

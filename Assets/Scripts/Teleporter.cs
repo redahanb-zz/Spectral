@@ -51,7 +51,7 @@ public class Teleporter : MonoBehaviour {
 	}
 
 	public void Teleport(){
-		print("Teleporting to " +pairedTeleporter);
+		//print("Teleporting to " +pairedTeleporter);
 		canTeleport = false;
 		//teleportButtonObject.GetComponent<TeleportButton>().SetCurrentTeleporter(null);
 		Invoke("ToggleScaleUp", 	0.2f);

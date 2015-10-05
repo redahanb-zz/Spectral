@@ -25,6 +25,11 @@ public class DoorButton : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+//<<<<<<< Updated upstream:Assets/Scripts/DoorButton.cs
+//=======
+//		//print(playerDistance + " : " +currentDoor);
+//
+//>>>>>>> Stashed changes:Assets/DoorButton.cs
 		if(currentDoor){ 
 			displayDoorButton = true;
 			playerDistance = Vector3.Distance(currentDoor.transform.position, playerObject.transform.position);

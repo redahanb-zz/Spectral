@@ -24,6 +24,8 @@ public class NextRoomInfo : MonoBehaviour {
 
 	Level lvl;
 	Color newColor;
+
+
 	// Use this for initialization
 	void Start () {
 		lvl = GameObject.Find("Level").GetComponent<Level>();;

@@ -28,7 +28,7 @@ public class TimeScaler : MonoBehaviour {
 
 	//PauseManager pauseManager;
 
-	float currentStoredTime = 0, maxStoredTime = 8, hourglassYscale;
+	float currentStoredTime = 0, maxStoredTime = 12, hourglassYscale;
 
 	GameObject buttonObject;
 
@@ -42,13 +42,15 @@ public class TimeScaler : MonoBehaviour {
 
 
 		buttonObject = GameObject.Find("Time Button");
+		if(buttonObject.transform.Find("Text"))	timeText = GameObject.Find("Time Button").transform.Find("Text").GetComponent<Text>();
+
+
 		if(buttonObject.transform.Find("Hourglass"))hasHourglass = true;
 		if(hasHourglass){
 			rotateComponent = buttonObject.transform.Find("Hourglass").GetComponent<UIRotateOverTime>();
 			fillTransform = GameObject.Find("Hourglass").transform.Find("Fill").GetComponent<RectTransform>();
 		}
 		playerAnimator 	= GameObject.FindGameObjectWithTag("Player").GetComponent<Animator>();
-		//timeText 		= GameObject.Find("Time Button").transform.Find("Text").GetComponent<Text>();
 		myDeltaTime 	= Time.deltaTime;
 		lastInterval 	= Time.realtimeSinceStartup;
 		//pauseManager = GameObject.Find ("Pause Manager").GetComponent<PauseManager> ();
@@ -85,12 +87,15 @@ public class TimeScaler : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		//print("Scale: " +Time.timeScale + "  Remaining: " +currentStoredTime);
+
+		
 		if(hasHourglass)Hourglass();
 
 		timeNow 		= Time.realtimeSinceStartup;
-		//timeText.text 	= ""+currentScale;
+		timeText.text 	= ""+(int)currentStoredTime;
 		
-		if(timeSlowed)			currentScale = Mathf.MoveTowards(currentScale, slowScale,   0.02f);
+		if(timeSlowed || Input.GetKey(KeyCode.T))	currentScale = Mathf.MoveTowards(currentScale, slowScale,   0.02f);
 		else if(timeStopped)	currentScale = Mathf.MoveTowards(currentScale, slowScale,   0.00f);
 		else 					currentScale = Mathf.MoveTowards(currentScale, normalScale, 0.02f);
 
@@ -121,7 +126,7 @@ public class TimeScaler : MonoBehaviour {
 		}
 
 		if(timeSlowed){
-			currentStoredTime = currentStoredTime - 0.03f;
+			currentStoredTime = currentStoredTime - ((Time.deltaTime/maxStoredTime) * 100);
 			canFill = false;
 
 
@@ -135,7 +140,7 @@ public class TimeScaler : MonoBehaviour {
 
 		}
 		else{
-			if(canFill)currentStoredTime = currentStoredTime + 0.02f;
+			if(canFill)currentStoredTime = currentStoredTime + ((Time.deltaTime/maxStoredTime) * 10);
 			if(currentStoredTime > maxStoredTime)currentStoredTime = maxStoredTime;
 
 		}

@@ -14,7 +14,7 @@ public class NextRoomInfo : MonoBehaviour {
 
 	RawImage[] colorIcons;
 
-	int frameTimer;
+	float frameTimer;
 
 	Text levelText, roomText;
 
@@ -76,9 +76,9 @@ public class NextRoomInfo : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void FixedUpdate () {
 		//RefreshCurrentRoomColors();
-		//print(frameTimer);
+		print(showInfo);
 		if(showInfo){
 			sizeDifference = Vector3.Distance(backgroundTransform.sizeDelta, visibleSize);
 
@@ -100,8 +100,8 @@ public class NextRoomInfo : MonoBehaviour {
 					frameTimer = 0;
 				}
 				else{
-					frameTimer += 1;
-					if(frameTimer > 250){
+					frameTimer += Time.deltaTime;
+					if(frameTimer > 3){
 						HideRoomInfo();
 					}
 				}
@@ -123,7 +123,10 @@ public class NextRoomInfo : MonoBehaviour {
 	}
 
 	public void DisplayNewRoomInfo(string roomName, string levelName){
-
+		print("DISPLAY INFO");
+		print("DISPLAY INFO");
+		print("DISPLAY INFO");
+		print("DISPLAY INFO");
 		roomText.text = roomName;
 		levelText.text = levelName;
 		showInfo = true;

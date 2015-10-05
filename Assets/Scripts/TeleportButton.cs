@@ -29,6 +29,7 @@ public class TeleportButton : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+
 		if(currentTeleporter){ 
 			playerDistance = Vector3.Distance(currentTeleporter.transform.position, playerObject.transform.position);
 			if(playerDistance > 2){buttonActive = false; currentTeleporter = null;}

@@ -29,7 +29,7 @@ public class Teleporter : MonoBehaviour {
 		}
 
 		tick = Time.deltaTime/scaleDuration;
-		if(Input.GetKeyDown(KeyCode.T))if(canTeleport)Teleport();
+		//if(Input.GetKeyDown(KeyCode.T))if(canTeleport)Teleport();
 		if(scaleUp)ScalePlayerUp();
 		if(scaleDown)ScalePlayerDown();
 	}

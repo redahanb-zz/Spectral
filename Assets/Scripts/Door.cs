@@ -54,6 +54,8 @@ public class Door : MonoBehaviour {
 
 	DoorButton dButton;
 
+	NextRoomInfo nextRoomInformation;
+
 	// Use this for initialization
 	void Start () {
 		roomX = 0;
@@ -64,7 +66,7 @@ public class Door : MonoBehaviour {
 		playerObject = GameObject.FindGameObjectWithTag("Player");
 		level = GameObject.Find("Level").GetComponent<Level>();
 
-
+		nextRoomInformation = GameObject.Find("NextRoomInfo").GetComponent<NextRoomInfo>();
 
 		currentRoom = transform.parent.parent.parent.GetComponent<Room>();
 		if(currentRoom){
@@ -94,6 +96,8 @@ public class Door : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		//print(targetTime + " : " +currentTime + " : " +timedAmount);
+
 		CheckPlayerDistance();
 
 
@@ -167,6 +171,7 @@ public class Door : MonoBehaviour {
 
 	void OnTriggerEnter(Collider c){
 		if(c.tag == "Player"){
+			//roomInfo.displayInfo = true;
 
 		}
 	}
@@ -175,7 +180,7 @@ public class Door : MonoBehaviour {
 		if(c.tag == "Player"){
 //			doorOpen = true;
 //			roomInfo = roomTextObject.GetComponent<RoomInformation>();
-//			roomInfo.displayInfo = true;
+			//roomInfo.displayInfo = true;
 //			roomInfo.SetDoor(this);
 //			roomInfo.SetTarget(transform);
 		}
@@ -286,13 +291,18 @@ public class Door : MonoBehaviour {
 			else Debug.Log("[Door Trigger] Cannot find the next room.");
 			break;
 		}
-		destinationRoomObject.SetActive(true);
-
+		nextRoomInformation.DisplayNewRoomInfo(destinationRoomObject.GetComponent<Room>().roomName, Application.loadedLevelName);
 
 		//print("Teleporting to " +destinationDoorObject.transform.parent);
 	}
+
+	void EnableGameObject(GameObject g){
+		g.SetActive(true);
+	}
 	
 	void Teleport(){
+		destinationRoomObject.SetActive(true);
+
 		PlayerController pControl = playerObject.GetComponent<PlayerController> ();
 		pControl.StopMoving ();
 		

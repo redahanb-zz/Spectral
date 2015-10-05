@@ -12,7 +12,7 @@ public class TutorialBox : MonoBehaviour {
 	RectTransform backgroundTransform, boxTransform, gradientTransform, topBorder, bottomBorder;
 	Text tutorialText, continueText;
 
-	float scaleSpeed = 0.2f, colorSpeed = 0.15f;
+	float scaleSpeed = 0.1f, colorSpeed = 0.05f;
 
 	int i = 0;
 
@@ -74,7 +74,7 @@ public class TutorialBox : MonoBehaviour {
 			if(i > 350)showContinue = true;
 		}
 		else{
-			tScaler.SlowTime();
+			tScaler.ResumeTime();
 			backgroundImage.color 	= Color.Lerp(backgroundImage.color, new Color(0,0,0,0), colorSpeed);
 			gradientImage.color 	= Color.Lerp(gradientImage.color, 	new Color(0,0,0,0), colorSpeed);
 			boxImage.color			= Color.Lerp(boxImage.color, 		new Color(0,0,0,0), colorSpeed);
@@ -116,7 +116,7 @@ public class TutorialBox : MonoBehaviour {
 
 	public void CloseTutorial(){
 		//Destroy(transform.parent.gameObject);
-
+		tScaler.ResumeTime();
 		showBox = false;
 	}
 }

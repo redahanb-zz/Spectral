@@ -17,9 +17,10 @@ public class PathIndicator : MonoBehaviour {
 
 	TimeScaler timeScale;
 
+	float pathDistance = 1.0f;
+
 	void Start(){
 		timeScale = GameObject.Find("Time Manager").GetComponent<TimeScaler>();
-		InvokeRepeating("CreatePathArrow", 0.01f, 0.1f);
 	}
 
 	void CreatePathArrow(){
@@ -34,10 +35,15 @@ public class PathIndicator : MonoBehaviour {
 	public void SetPath (NavMeshPath newPath) {
 		path = newPath;
 		pathSet = true;
+		pathDistance = Vector3.Distance(transform.position, path.corners[path.corners.Length - 1]);
+		//print(pathDistance);
+		InvokeRepeating("CreatePathArrow", 0.01f, pathDistance/200);
+
 	}
 	
 	// Update is called once per frame
 	void Update () {
+
 
 		if(path.corners.Length < 2) Destroy(gameObject);
 
@@ -49,7 +55,7 @@ public class PathIndicator : MonoBehaviour {
 
 			if(currentPathIndex != path.corners.Length){ 
 					distanceToNextCorner = Vector3.Distance(transform.position, path.corners[currentPathIndex]);
-					transform.position = Vector3.MoveTowards(transform.position, path.corners[currentPathIndex], 0.08f);
+					transform.position = Vector3.MoveTowards(transform.position, path.corners[currentPathIndex], 0.04f);
 					transform.LookAt(path.corners[currentPathIndex]);
 			}
 			else{ 

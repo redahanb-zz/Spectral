@@ -159,8 +159,4 @@ Material:
       data:
         first:
           name: _Color
-<<<<<<< Updated upstream
-        second: {r: 3.01198924e-07, g: 3.01198924e-07, b: 3.01198924e-07, a: .0200000349}
-=======
         second: {r: 1, g: 1, b: 1, a: .0500000007}
->>>>>>> Stashed changes

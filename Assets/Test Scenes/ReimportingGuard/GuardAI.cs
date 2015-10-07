@@ -21,10 +21,11 @@ public class GuardAI : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		vision = gameObject.GetComponent<EnemySight>();
+		//vision = gameObject.GetComponent<EnemySight>();
 		if (vision.alerted) {
 
-			alertSystem.GetComponent<AlertManager>().alertActive = true;
+			//alertSystem.GetComponent<AlertManager>().alertActive = true;
+			alertSystem.GetComponent<AlertManager>().TriggerAlert();
 
 //			// take last player location form vision
 //			lastSighting = vision.lastPlayerSighting;

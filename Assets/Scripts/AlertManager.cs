@@ -6,6 +6,7 @@ using System.Collections;
 public class AlertManager : MonoBehaviour {
 
 	public bool alertActive = false;
+	public float alertCountDown;
 
 	Light mainLight;
 
@@ -64,10 +65,21 @@ public class AlertManager : MonoBehaviour {
 			cloudMaterial.color = Color.Lerp(cloudMaterial.color, new Color(1,1,1,0.05f), Time.deltaTime * lightChangeRate);
 
 		}
+
+		if (alertCountDown > 0) {
+			alertCountDown -= Time.deltaTime;
+		}
+		if(alertCountDown <= 0){
+			alertActive = false;
+			alertCountDown = 0;
+		}
 	}
 
 	public void TriggerAlert(){
 		alertActive = true;
+		alertCountDown = 20.0f;
 	}
+
+
 
 }

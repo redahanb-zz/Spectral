@@ -7,46 +7,61 @@ public class BlendInfo : MonoBehaviour {
 	GameObject button;
 	GameObject canvasObject;
 	GameObject player;
+	PlayerController pController;
+	Renderer rend;
+
+	Color playerColor;
+	Color wallColor;
 	
 	//InventoryItem inventoryItem;
 	
 	// Use this for initialization
 	void Start () {
 		player = GameObject.FindWithTag ("Player");
+		pController = player.GetComponent<PlayerController> ();
 		canvasObject = GameObject.Find ("Canvas");
 		//inventoryItem = GetComponent<InventoryItem> ();
+		rend = GetComponent<Renderer> ();
 	}
 	
 	// Update is called once per frame
 	void Update () {
+		//print ("Wall: " + rend.material.color);
+		wallColor = rend.material.color;
+		//print ("Player: " + pController.targetcolor);
+		playerColor = pController.targetcolor;
+		float colorDistance = Vector3.Distance( new Vector3(wallColor.r, wallColor.b, wallColor.g), new Vector3(playerColor.r,playerColor.b,playerColor.g));
 		if(Vector3.Distance(transform.position, player.transform.position) < 3.0f)
 		{
+			if(colorDistance < 0.1f)
+			{
 			// check angle to player to stop the button appearing through walls
-			Vector3 direction = player.transform.position - transform.position;
-			float angle = Vector3.Angle(direction, -transform.forward); 
-			if(angle <= 90.0f){
-				if(!button){
-					button = Instantiate(Resources.Load("UI/Worldspace Buttons/Blend Info"), canvasObject.transform.position, Quaternion.identity) as GameObject;
-					button.transform.SetParent(canvasObject.transform);
-					button.GetComponent<BlendInfoButton>().setTarget(gameObject);
-					button.GetComponent<Button>().onClick.AddListener( GetComponent<BlendInfo>().callPlayertoBlend );
-					//button.GetComponent<Button>().onClick.AddListener( button.GetComponent<ItemInfoButton>().target.GetComponent<InventoryItem>().pickupAnim );
-					//inventoryItem.identifyButton(button);
-				} else {
-					button.SetActive(true);
-					if(button.GetComponent<Button>().interactable == false){
-						button.GetComponent<Button>().interactable = true;
+				Vector3 direction = player.transform.position - transform.position;
+				float angle = Vector3.Angle(direction, -transform.forward); 
+				if(angle <= 90.0f){
+					if(!button){
+						button = Instantiate(Resources.Load("UI/Worldspace Buttons/Blend Info"), canvasObject.transform.position, Quaternion.identity) as GameObject;
+						button.transform.SetParent(canvasObject.transform);
+						button.GetComponent<BlendInfoButton>().setTarget(gameObject);
+						button.GetComponent<Button>().onClick.AddListener( GetComponent<BlendInfo>().callPlayertoBlend );
+						//button.GetComponent<Button>().onClick.AddListener( button.GetComponent<ItemInfoButton>().target.GetComponent<InventoryItem>().pickupAnim );
+						//inventoryItem.identifyButton(button);
+					} else {
+						button.SetActive(true);
+						if(button.GetComponent<Button>().interactable == false){
+							button.GetComponent<Button>().interactable = true;
+						}
 					}
-				}
-			} // end check player angle
+				} // end check player angle
+			}
 		
 		} // end check player in range
 
-		if (Vector3.Distance (transform.position, player.transform.position) > 10.0f) {
+		if (Vector3.Distance (transform.position, player.transform.position) > 10.0f || colorDistance > 0.1f) {
 			if(button){
 				button.SetActive(false);
 			}
-		} else if (Vector3.Distance (transform.position, player.transform.position) > 4.0f){
+		} else if (Vector3.Distance (transform.position, player.transform.position) > 4.0f || colorDistance > 0.1f){
 			if(button){
 				button.GetComponent<BlendInfoButton>().deactivateButton();
 			}

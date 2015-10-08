@@ -27,6 +27,8 @@ public class AlertCountdownIcon : MonoBehaviour {
 			//countDownIcon.eventAlphaThreshold = (1.0f - alertManager.alertCountDown / 20.0f);
 			//countDownIcon.eventAlphaThreshold = threshold;
 			countDownIcon.fillAmount = alertManager.alertCountDown / 20.0f;
+			countDownIcon.color = Color.Lerp(Color.red, Color.white, (1.0f - alertManager.alertCountDown / 20.0f));
+			backgroundRing.color = Color.Lerp(Color.red, Color.white, (1.0f - alertManager.alertCountDown / 20.0f));
 		} else {
 			countDownIcon.enabled = false;
 			backgroundRing.enabled = false;

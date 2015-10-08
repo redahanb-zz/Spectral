@@ -28,7 +28,7 @@ public class MotionSensor : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if(playerInsideSensor){
-			if(pController.currentMoveState != PlayerController.MoveState.Idle){
+			if(pController.isVisible){
 				alertSystem.TriggerAlert();
 			}
 		}

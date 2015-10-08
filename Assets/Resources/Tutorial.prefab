@@ -252,6 +252,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14ffa7f320cd7914a969ee49f3868253, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lastInterval: 0
+  timeNow: 0
+  myTime: 0
 --- !u!114 &11424674
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -353,7 +356,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Touch Screen to Continue
+  m_Text: Click anywhere to continue
 --- !u!114 &11486318
 MonoBehaviour:
   m_ObjectHideFlags: 1

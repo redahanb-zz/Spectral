@@ -54,7 +54,9 @@ public class PlayerController : MonoBehaviour {
 	public Color targetcolor = Color.grey;
 
 	float verticalDistance = 100;
-	
+
+	bool leftClick = true;
+
 	// Use this for initialization
 	void Start () {
 		eventSystem = GameObject.Find ("EventSystem").GetComponent<EventSystem> ();
@@ -114,7 +116,12 @@ public class PlayerController : MonoBehaviour {
 		timeSinceLastClick = timeSinceLastClick + customDeltaTime;
 		ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 		//print( eventSystem.IsPointerOverGameObject());
-		if(Input.GetMouseButtonDown(0) /*&& timeScale.timeSlowed */){
+		if(Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1)){
+
+			if(Input.GetMouseButtonDown(0))leftClick = true;
+			if(Input.GetMouseButtonDown(1))leftClick = false;
+
+
 			buttonBlendOrder = false;
 			//Check for DOuble Tap
 			if(timeSinceLastClick < 1)
@@ -128,7 +135,7 @@ public class PlayerController : MonoBehaviour {
 				//print(rayHit.transform);
 				switch(rayHit.transform.tag){
 				case "Tile" : 
-					print("Floor");
+					//print("Floor");
 					verticalDistance = Vector3.Distance(new Vector3(0,transform.position.y,0), new Vector3(0,rayHit.point.y,0));
 					//print(verticalDistance);
 					if(verticalDistance > 2){
@@ -139,6 +146,11 @@ public class PlayerController : MonoBehaviour {
 
 					SetMovement(rayHit.transform, rayHit.point);
 					performAction = false;
+
+
+
+
+
 					break;
 				case "Blend Surface" :
 					//print("Blend Surface");
@@ -151,40 +163,40 @@ public class PlayerController : MonoBehaviour {
 			}
 		}
 		
-		//Touch Input
-		for (var i = 0; i < Input.touchCount; i++) {
-			
-			if ((Input.GetTouch(i).phase == TouchPhase.Began) && (Input.touchCount < 2) && (timeSinceLastClick > 0.3f) && !eventSystem.IsPointerOverGameObject() ){
-				ray = Camera.main.ScreenPointToRay (Input.GetTouch(0).position);
-				if(timeSinceLastClick < 1)
-					doubleTap = true;
-				else 
-					doubleTap = false;
-				timeSinceLastClick = 0;
-				
-				if (Physics.Raycast(ray, out rayHit)){
-					if(rayHit.transform.tag == "Tile"){
-						if(Vector3.Distance(transform.position, new Vector3(rayHit.point.x, transform.position.y, rayHit.point.z)) > 0.15f){
-							verticalDistance = Vector3.Distance(new Vector3(0,transform.position.y,0), new Vector3(0,rayHit.point.y,0));
-							if(verticalDistance > 2){
-								currentMoveState = MoveState.Idle;
-								break;
-							}
-							ClearPath();
-							targetPosition 		= new Vector3(rayHit.point.x, transform.position.y, rayHit.point.z);
-							if(doubleTap) 
-								currentMoveState 	= MoveState.Run;
-							else 
-								currentMoveState 	= MoveState.Sneak;
-						}
-						else{
-							currentMoveState = MoveState.Idle;
-						}
-					}
-				}
-				
-			}
-		}
+//		//Touch Input
+//		for (var i = 0; i < Input.touchCount; i++) {
+//			
+//			if ((Input.GetTouch(i).phase == TouchPhase.Began) && (Input.touchCount < 2) && (timeSinceLastClick > 0.3f) && !eventSystem.IsPointerOverGameObject() ){
+//				ray = Camera.main.ScreenPointToRay (Input.GetTouch(0).position);
+//				if(timeSinceLastClick < 1)
+//					doubleTap = true;
+//				else 
+//					doubleTap = false;
+//				timeSinceLastClick = 0;
+//				
+//				if (Physics.Raycast(ray, out rayHit)){
+//					if(rayHit.transform.tag == "Tile"){
+//						if(Vector3.Distance(transform.position, new Vector3(rayHit.point.x, transform.position.y, rayHit.point.z)) > 0.15f){
+//							verticalDistance = Vector3.Distance(new Vector3(0,transform.position.y,0), new Vector3(0,rayHit.point.y,0));
+//							if(verticalDistance > 2){
+//								currentMoveState = MoveState.Idle;
+//								break;
+//							}
+//							ClearPath();
+//							targetPosition 		= new Vector3(rayHit.point.x, transform.position.y, rayHit.point.z);
+//							if(doubleTap) 
+//								currentMoveState 	= MoveState.Sneak;
+//							else 
+//								currentMoveState 	= MoveState.Run;
+//						}
+//						else{
+//							currentMoveState = MoveState.Idle;
+//						}
+//					}
+//				}
+//				
+//			}
+//		}
 		
 	}
 	
@@ -193,10 +205,10 @@ public class PlayerController : MonoBehaviour {
 			if(Vector3.Distance(transform.position, new Vector3(v.x, transform.position.y, v.z)) > 1){
 				ClearPath();
 				targetPosition 		= new Vector3(v.x, transform.position.y, v.z);
-				if(doubleTap) 
-					currentMoveState 	= MoveState.Run;
-				else 
+				if(!leftClick) 
 					currentMoveState 	= MoveState.Sneak;
+				else 
+					currentMoveState 	= MoveState.Run;
 			}
 			else{
 				currentMoveState = MoveState.Idle;
@@ -244,7 +256,8 @@ public class PlayerController : MonoBehaviour {
 			if(performAction)
 				PerformAnAction();
 			else currentMoveState = MoveState.Idle;
-			Destroy(destinationObject);
+			destinationObject.transform.Find("Quad").GetComponent<DestinationMarker>().RemoveMarker();
+			destinationObject = null;
 		}
 	}
 	
@@ -259,7 +272,8 @@ public class PlayerController : MonoBehaviour {
 			if(performAction)
 				PerformAnAction();
 			else currentMoveState = MoveState.Idle;
-			Destroy(destinationObject);
+			destinationObject.transform.Find("Quad").GetComponent<DestinationMarker>().RemoveMarker();
+			destinationObject = null;
 		}
 	}
 	
@@ -270,10 +284,9 @@ public class PlayerController : MonoBehaviour {
 		float		dist = head.magnitude;
 		Vector3 	dir  = head/dist;
 		
-		
 		if(path.corners.Length > 2)turnDistance = Vector3.Distance(transform.position, path.corners[currentPathIndex]);
 		else turnDistance = Vector3.Distance(transform.position, targetPosition);
-		if(turnDistance > 4.5f){targetSpeed = runSpeed;   agent.speed = 4;}
+		if(turnDistance > 1.2f){targetSpeed = runSpeed;   agent.speed = 4;}
 		
 		else{ targetSpeed = walkSpeed;   agent.speed = 2;}
 		
@@ -290,7 +303,7 @@ public class PlayerController : MonoBehaviour {
 		//print(transform.eulerAngles + " : " + v3Euler);
 		
 		
-		currentSpeed = Mathf.Lerp(currentSpeed, targetSpeed, Time.deltaTime * 3);
+		currentSpeed = Mathf.Lerp(currentSpeed, targetSpeed, Time.deltaTime * 5);
 		playerAnimator.SetFloat("movementSpeed" , currentSpeed);
 		
 		if(path.corners.Length > 2)SmoothLookAt(new Vector3(path.corners[currentPathIndex].x, transform.position.y, path.corners[currentPathIndex].z));
@@ -348,7 +361,7 @@ public class PlayerController : MonoBehaviour {
 			destinationObject = Instantiate(Resources.Load("DestinationMarker"), targetPosition, Quaternion.identity) as GameObject;
 		//else ClearPath();
 
-		if(!pathObject /*&& timeScale.timeSlowed*/ && distance > 2f){
+		if(!pathObject /*&& timeScale.timeSlowed*/ && distance > 2.3f){
 			pathObject = Instantiate(Resources.Load("PathIndicator"), transform.position + new Vector3(0,0.01f,0) + (transform.forward * 1), Quaternion.identity) as GameObject;
 			agent.SetDestination(targetPosition);
 			pathObject.transform.eulerAngles = transform.eulerAngles;

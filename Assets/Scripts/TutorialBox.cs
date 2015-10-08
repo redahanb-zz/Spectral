@@ -14,13 +14,23 @@ public class TutorialBox : MonoBehaviour {
 
 	float scaleSpeed = 0.1f, colorSpeed = 0.05f;
 
-	int i = 0;
+	float i = 0, forcedTutorialDelay = 3;
 
 	TimeScaler tScaler;
+
+	public 	float 	lastInterval, 
+	timeNow, 
+	myTime;
+
+	float startTime, deltaTime, previousFrameTime = 0;
+
+	bool runOnce = false;
 
 	// Use this for initialization
 	void Start () {
 		Invoke("ShowContinueText", 5);
+
+		startTime = Time.realtimeSinceStartup;
 
 		tScaler = GameObject.Find("Time Manager").GetComponent<TimeScaler>();
 
@@ -42,11 +52,16 @@ public class TutorialBox : MonoBehaviour {
 
 		SetStartingColors();
 
+		i = 0;
+
 	}
 	
 	// Update is called once per frame
 	void Update () {
-
+		deltaTime = Time.realtimeSinceStartup - previousFrameTime;
+		i = deltaTime - startTime;
+		//print( i + " : " +tScaler.myTime + " : " + tScaler.lastInterval + " : " +tScaler.timeNow);
+		//timeNow 		= Time.realtimeSinceStartup;
 
 
 		if(showBox){
@@ -70,8 +85,10 @@ public class TutorialBox : MonoBehaviour {
 				iconImage.color 	= Color.Lerp(iconImage.color, new Color(iconImage.color.r, iconImage.color.g, iconImage.color.b, 0.5f), colorSpeed);
 			}
 
-			i = i + 1;
-			if(i > 350)showContinue = true;
+			//print(i);
+
+
+			if(i > forcedTutorialDelay)showContinue = true;
 		}
 		else{
 			tScaler.ResumeTime();
@@ -87,12 +104,18 @@ public class TutorialBox : MonoBehaviour {
 			//print(backgroundImage.color.a);
 			if(backgroundImage.color.a < 0.01f)Destroy(transform.parent.gameObject);
 
+			previousFrameTime = Time.time;
 		}
 
 
 		if(showContinue == true){
 			continueText.color 		= Color.Lerp(continueText.color, new Color(continueText.color.r, continueText.color.g, continueText.color.b, 1), 0.01f);
 		}
+
+
+		//lastInterval 		= timeNow;
+		//myTime 				= lastInterval/timeNow;
+
 	}
 
 	void ShowContinueText(){
@@ -115,8 +138,10 @@ public class TutorialBox : MonoBehaviour {
 	}
 
 	public void CloseTutorial(){
+		if(showContinue){
 		//Destroy(transform.parent.gameObject);
 		tScaler.ResumeTime();
 		showBox = false;
+		}
 	}
 }

@@ -10,7 +10,8 @@ public class TimeScaler : MonoBehaviour {
 					timeStopped = false;
 
 	public 	float 	myDeltaTime, 
-					slowScale 		= 0.1f, 
+					slowScale 		= 0.1f,
+					stopScale		= 0.01f,
 					normalScale 	= 1f, 
 					currentScale 	= 0.1f;
 
@@ -40,6 +41,10 @@ public class TimeScaler : MonoBehaviour {
 	void Start () {
 		//print(timeSlowed);
 
+		myTime = 0;
+		timeNow = 0;
+		lastInterval = 0;
+
 
 		buttonObject = GameObject.Find("Time Button");
 		if(buttonObject.transform.Find("Text"))	timeText = GameObject.Find("Time Button").transform.Find("Text").GetComponent<Text>();
@@ -61,7 +66,7 @@ public class TimeScaler : MonoBehaviour {
 	}
 
 	public void StopTime(){
-		timeStopped = false;
+		timeStopped = true;
 	}
 	
 	public void SlowTime(){
@@ -83,20 +88,25 @@ public class TimeScaler : MonoBehaviour {
 
 	}
 
-
+	void KeyInput(){
+		if(Input.GetKey(KeyCode.T))SlowTime();
+		else if(Input.GetKeyUp(KeyCode.T))ResumeTime();
+	}
 	
 	// Update is called once per frame
 	void Update () {
+
+		KeyInput();
+
 		//print("Scale: " +Time.timeScale + "  Remaining: " +currentStoredTime);
 
-		
 		if(hasHourglass)Hourglass();
 
 		timeNow 		= Time.realtimeSinceStartup;
 		timeText.text 	= ""+(int)currentStoredTime;
 		
-		if(timeSlowed || Input.GetKey(KeyCode.T))	currentScale = Mathf.MoveTowards(currentScale, slowScale,   0.02f);
-		else if(timeStopped)	currentScale = Mathf.MoveTowards(currentScale, slowScale,   0.00f);
+		if(timeSlowed)			currentScale = Mathf.MoveTowards(currentScale, slowScale,   0.02f);
+		else if(timeStopped)	currentScale = Mathf.MoveTowards(currentScale, stopScale,   0.02f);
 		else 					currentScale = Mathf.MoveTowards(currentScale, normalScale, 0.02f);
 
 		if(playerAnimator) playerAnimator.SetFloat ("animationSpeed", currentScale);

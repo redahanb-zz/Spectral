@@ -80,7 +80,7 @@ public class NextRoomInfo : MonoBehaviour {
 	// Update is called once per frame
 	void FixedUpdate () {
 		//RefreshCurrentRoomColors();
-		print(showInfo);
+		//print(showInfo);
 		if(showInfo){
 			sizeDifference = Vector3.Distance(backgroundTransform.sizeDelta, visibleSize);
 
@@ -125,10 +125,6 @@ public class NextRoomInfo : MonoBehaviour {
 	}
 
 	public void DisplayNewRoomInfo(string roomName, string levelName){
-		print("DISPLAY INFO");
-		print("DISPLAY INFO");
-		print("DISPLAY INFO");
-		print("DISPLAY INFO");
 		roomText.text = roomName;
 		levelText.text = levelName;
 		showInfo = true;

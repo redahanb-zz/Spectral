@@ -56,7 +56,7 @@ public class HUD_Healthbar : MonoBehaviour {
 		int currentHealth = playerHealth.playerHealth;
 		for (int i = 0; i < healthBarSize; i++) {
 			if(i >= currentHealth){
-				healthbarIcons[i].transform.GetChild(0).gameObject.SetActive(false);
+				healthbarIcons[i].transform.GetChild(1).gameObject.SetActive(false);
 			}
 		}
 	}

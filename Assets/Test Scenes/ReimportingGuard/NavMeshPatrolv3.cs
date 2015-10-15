@@ -4,17 +4,20 @@ using UnityEngine.UI;
 
 public class NavMeshPatrolv3 : MonoBehaviour {
 
+	// Patrol waypoints
 	public GameObject point1;
 	public GameObject point2;
 	public GameObject point3;
 	public GameObject A_point1;
 	public GameObject A_point2;
 	public GameObject A_point3;
+	public GameObject sentryPoint;
 
-	//public GameObject speechbubble;
-
+	// Public variables
 	public float pauseTime = 2;
-	
+	public bool StationaryGuard;
+
+	// Private variables/arrays
 	private Vector3[] patrolRoute;
 	private Vector3[] alertRoute;
 	private int nextIndex;
@@ -22,18 +25,31 @@ public class NavMeshPatrolv3 : MonoBehaviour {
 	private float curTime = 0;
 	private bool walking = false;
 	private bool paused = false;
+	private Quaternion lookRotation;
 
+	// enum of guard behaviour state for state machine
+	private enum GuardState
+	{
+		Sentry, Patrol, AlertPatrol, Search, Investigate, Attack
+	}
+	private GuardState state;
+
+	// Script/Component references
+	private GameObject player;
 	private NavMeshAgent navMesh;
 	private EnemySight vision;
 	private GuardAI alertAI;
 	private Animator anim;
-
-	// Use this for initialization
+	
 	void Start () {
+		// Cache references to other scripts/components
 		vision = gameObject.GetComponent<EnemySight> ();
 		anim = GetComponent<Animator> ();
 		alertAI = GetComponent<GuardAI> ();
+		navMesh = gameObject.GetComponent<NavMeshAgent>();
+		player = GameObject.FindWithTag ("Player");
 
+		// initialise starting patrol points to 0 index
 		nextIndex = 0;
 		alertIndex = 0;
 
@@ -47,27 +63,22 @@ public class NavMeshPatrolv3 : MonoBehaviour {
 		};
 
 		// Ditto, for the extra points to patrols when alerted
-		alertRoute = new Vector3[6]{
-			point1.transform.position,
-			point2.transform.position,
-			point3.transform.position,
+		alertRoute = new Vector3[4]{
 			A_point1.transform.position,
 			A_point2.transform.position,
-			A_point3.transform.position
+			A_point3.transform.position,
+			A_point2.transform.position,
+			//point1.transform.position,
+			//point2.transform.position,
+			//point3.transform.position
 		};
 
-		navMesh = gameObject.GetComponent<NavMeshAgent>();
-
-		//Patrol ();
-		//nextPatrolPoint ();
+		// start patrolling at walking speed
 		navMesh.SetDestination (patrolRoute[nextIndex]);
-
-		// start at walking speed
 		anim.SetFloat ("Speed", 1.0f);
 
 	}
-	
-	// Update is called once per frame
+
 	void Update () {
 		// set walking boolean for OnAnimatorMove function
 		if (navMesh.hasPath) {
@@ -76,13 +87,14 @@ public class NavMeshPatrolv3 : MonoBehaviour {
 			walking = false;
 		}
 
-		//Check sight component to refresh state of playerInSight and alert status
-		vision = gameObject.GetComponent<EnemySight> ();
+		//////////////////////////////
+		/// Movement Decision tree ///
+		//////////////////////////////
 
-		// Movement Decision tree
-		// if not alerted, patrol
-		if (vision.alerted == false){ // when guard cannot see the player, either patrol the standard route or the alerted route
-			if(alertAI.alertSystem.GetComponent<AlertManager>().alertActive == true){ // patrol extended route if the system is alerted
+		if (vision.alerted == false){ 
+			// when guard cannot see the player, either patrol the standard route or the alerted route
+			if(alertAI.alertSystem.GetComponent<AlertManager>().alertActive == true){ 
+				// patrol extended route if the system is alerted
 				//print ("Alert patrolling");
 				AlertPatrol();
 				navMesh.SetDestination (alertRoute [alertIndex]);
@@ -102,8 +114,9 @@ public class NavMeshPatrolv3 : MonoBehaviour {
 		else {
 			// if alerted and player is visibile, attack
 			if(vision.playerInSight){ 
-				//if player is in sight, attack
-				//speechbubble.SetActive(true);
+				//if player is in sight, rotate towards player and attack
+				lookRotation = Quaternion.LookRotation(player.transform.position - transform.position);
+				transform.rotation = Quaternion.RotateTowards (transform.rotation, lookRotation, navMesh.angularSpeed * Time.deltaTime);
 				anim.SetBool("InSight", true);
 				Attack ();
 			}
@@ -117,45 +130,48 @@ public class NavMeshPatrolv3 : MonoBehaviour {
 	}
 
 	void OnAnimatorMove(){
+		// Function to sync the walking animation root motion with the NavMesh Agent
 		if (walking)
 		{
+			// Set NavMesh velocity to the root motion of the current frame of the current animation clip
 			GetComponent<NavMeshAgent>().velocity = anim.deltaPosition / Time.deltaTime;
 
-			if(navMesh.desiredVelocity != Vector3.zero) {
-				Quaternion lookRotation = Quaternion.LookRotation (navMesh.desiredVelocity);
+			if(navMesh.desiredVelocity != Vector3.zero) 
+			{
+				lookRotation = Quaternion.LookRotation (navMesh.desiredVelocity);
 				transform.rotation = Quaternion.RotateTowards (transform.rotation, lookRotation, navMesh.angularSpeed * Time.deltaTime);
 			}
 		}
 	}
 
 	void Patrol() {
+		// looping patrol route, moves from point to point in the array, pausing briefly at each destination
 		if(Vector3.Distance(transform.position, patrolRoute[nextIndex]) <= 0.5f ){
+			// stop moving for a brief time at each waypoint
 			if (curTime == 0){
 				curTime = Time.time;
 				anim.SetFloat ("Speed", 0.0f);
 				paused = true;
 			}
+			// wait for the designated pause time before moving to next patrol point
 			if((Time.time - curTime) >= pauseTime){
 				paused = false;
 				nextPatrolPoint();
 				curTime = 0;
 			}
-
-			// testing alternate implementation using Invoke
-//			anim.SetFloat("Speed", 0.0f);
-//			walking = false;
-//			Invoke("nextPatrolPoint", 1.5f);
 		}
 	}
 
 	void AlertPatrol() {
+		// looping patrol route, with more waypoints and faster walking, for greater coverage of area
 		if(Vector3.Distance(transform.position, alertRoute[alertIndex]) <= 0.5f ){
-
+			// stop moving for a brief time at each waypoint
 			if (curTime == 0){
 				curTime = Time.time;
 				anim.SetFloat ("Speed", 0.0f);
 				paused = true;
 			}
+			// wait for the designated pause time before moving to next patrol point
 			if((Time.time - curTime) >= pauseTime*0.75f){ // shorter pause time when on alert
 				paused = false;
 				nextAlertPoint();
@@ -167,6 +183,7 @@ public class NavMeshPatrolv3 : MonoBehaviour {
 	public void nextPatrolPoint() {
 		// function to set the guard back on patrol, at walking speed
 		navMesh.Resume ();
+		// update the target waypoint
 		if (nextIndex == 3) {
 			nextIndex = 0;
 		} 
@@ -180,6 +197,7 @@ public class NavMeshPatrolv3 : MonoBehaviour {
 	public void nextAlertPoint() {
 		// function to set the guard on alert patrol, at faster walking speed
 		navMesh.Resume ();
+		// update the target waypoint
 		if (alertIndex == 5) {
 			alertIndex = 0;
 		} 
@@ -199,6 +217,7 @@ public class NavMeshPatrolv3 : MonoBehaviour {
 			anim.SetFloat ("Speed", 2.0f);
 		}
 		else {
+			// if at search coordinates and no sight of player, wait before resuming patrol
 			navMesh.Stop();
 			anim.SetFloat("Speed", 0.0f);
 			walking = false;
@@ -211,11 +230,8 @@ public class NavMeshPatrolv3 : MonoBehaviour {
 		navMesh.Stop();
 		anim.SetFloat("Speed", 0.0f);
 		walking = false;
+		// fire aim weapon and fire
 		GetComponent<Shooting>().Shoot();
-		// call shoot function from Shooting component
-//		if((GameObject.FindWithTag("Player").GetComponent<Health>().hitPoints) > 0){
-//			GetComponent<Shooting>().Shoot();
-//		}
 	}
 
 	public void Investigate(Vector3 searchPosition){
@@ -224,7 +240,16 @@ public class NavMeshPatrolv3 : MonoBehaviour {
 		GetComponent<EnemySight> ().visionCount = 120;
 		//GetComponent<EnemySight> ().lastPlayerSighting = searchPosition;
 		Search ();
-		anim.SetFloat ("Speed", 1.0f);
+		anim.SetFloat ("Speed", 1.5f);
+	}
+
+	void sentryGuard(){
+		// if not at sentry point, set destination to it
+		if (Vector3.Distance (transform.position, sentryPoint.transform.position) > 0.5f) {
+			navMesh.SetDestination (sentryPoint.transform.position);
+		} else {
+			navMesh.Stop();
+		}
 	}
 	
 }

@@ -3,6 +3,8 @@ using System.Collections;
 
 public class FootstepFX : MonoBehaviour {
 
+	Vector3 drawLoc;
+
 	// Use this for initialization
 	void Start () {
 	
@@ -14,8 +16,8 @@ public class FootstepFX : MonoBehaviour {
 	}
 
 	public void playEcho() {
-		Vector3 drawLoc = transform.position;
-		drawLoc.y += 0.01f;
+		drawLoc = transform.position;
+		drawLoc.y += 0.23f;
 		Instantiate (Resources.Load("FootfallFX"), drawLoc, Quaternion.Euler(90,0,0));
 	}
 }

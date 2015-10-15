@@ -106,6 +106,7 @@ public class AlertManager : MonoBehaviour {
 	}
 
 	public void TriggerAlert(){
+		// Trigger a global alert, putting all guards on alert behaviour
 		alertActive = true;
 		alertCountDown = 20.0f;
 	}

@@ -202,7 +202,7 @@ public class PlayerController : MonoBehaviour {
 	
 	
 	void SetMovement(Transform t, Vector3 v){
-			if(Vector3.Distance(transform.position, new Vector3(v.x, transform.position.y, v.z)) > 1){
+			if(Vector3.Distance(transform.position, new Vector3(v.x, transform.position.y, v.z)) > 0){
 				ClearPath();
 				targetPosition 		= new Vector3(v.x, transform.position.y, v.z);
 				if(!leftClick) 

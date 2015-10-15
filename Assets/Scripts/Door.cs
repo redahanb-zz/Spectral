@@ -56,8 +56,13 @@ public class Door : MonoBehaviour {
 
 	NextRoomInfo nextRoomInformation;
 
+	AlertManager alert;
+
 	// Use this for initialization
 	void Start () {
+
+		alert = GameObject.Find("Alert System").GetComponent<AlertManager>();
+
 		roomX = 0;
 		roomZ = 0;
 
@@ -99,7 +104,7 @@ public class Door : MonoBehaviour {
 		//print(targetTime + " : " +currentTime + " : " +timedAmount);
 
 		CheckPlayerDistance();
-
+		doorOpen = !alert.alertActive;
 
 		timeNow = Time.realtimeSinceStartup;
 		myTime = timeNow - lastInterval;
@@ -111,11 +116,10 @@ public class Door : MonoBehaviour {
 	}
 
 	void CheckPlayerDistance(){
-		//print(doorOpen + " : " +playerDistance);
+		print(doorOpen + " : " +playerDistance);
 		playerDistance = Vector3.Distance(transform.position, playerObject.transform.position);
 		if(playerDistance < 2.25f){
-			doorOpen = true;
-			//playerObject = c.gameObject;
+			//doorOpen = true;
 
 			dButton.SetCurrentDoor(gameObject);
 
@@ -126,7 +130,7 @@ public class Door : MonoBehaviour {
 //			roomInfo.SetTarget(transform);
 		}
 		else{
-			doorOpen = false;
+			//doorOpen = false;
 			if(roomInfo) roomInfo.displayInfo = false;
 		}
 	}
@@ -149,11 +153,6 @@ public class Door : MonoBehaviour {
 		targetLeftDoorPosition		= leftDoorOpenPosition;
 		targetRightDoorPosition		= rightDoorOpenPosition;
 		targetScale = openScale;
-
-
-
-
-
 	}
 
 	void CloseDoor(){

@@ -15,8 +15,12 @@ public class DoorButton : MonoBehaviour {
 
 	float playerDistance = 100;
 
+	AlertManager alert;
+
 	// Use this for initialization
 	void Start () {
+		alert = GameObject.Find("Alert System").GetComponent<AlertManager>();
+
 		playerObject = GameObject.FindGameObjectWithTag("Player");
 		canvasTransform = transform.parent.GetComponent<RectTransform>();
 		doorButtonTransform = GetComponent<RectTransform>();
@@ -25,15 +29,11 @@ public class DoorButton : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-//<<<<<<< Updated upstream:Assets/Scripts/DoorButton.cs
-//=======
-//		//print(playerDistance + " : " +currentDoor);
-//
-//>>>>>>> Stashed changes:Assets/DoorButton.cs
 		if(currentDoor){ 
-			displayDoorButton = true;
+			print(currentDoor);
 			playerDistance = Vector3.Distance(currentDoor.transform.position, playerObject.transform.position);
 			if(playerDistance > 2){displayDoorButton = false; currentDoor = null;}
+			else displayDoorButton = true;
 		}
 		else displayDoorButton = false;
 
@@ -46,9 +46,10 @@ public class DoorButton : MonoBehaviour {
 	}
 
 	void ScaleButton(){
-		if(displayDoorButton && !forceHide){
+		//print("displayDoorButton: " +displayDoorButton +"  forceHide: " +forceHide +"  alert.alertActive: " +alert.alertActive);
+		if(displayDoorButton && !forceHide && !alert.alertActive){
+			print("Displaying Button");
 			doorButtonTransform.localScale = Vector3.Lerp(doorButtonTransform.localScale, new Vector3(0.8f, 0.8f, 0.8f), Time.deltaTime * 22);
-			
 		}
 		else{
 			doorButtonTransform.localScale = Vector3.Lerp(doorButtonTransform.localScale, new Vector3(0, 0, 0), Time.deltaTime * 22);

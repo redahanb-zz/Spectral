@@ -25,7 +25,7 @@ public class DestinationMarker : MonoBehaviour {
 			transform.localScale = Vector3.Lerp(transform.localScale, visibleScale, Time.deltaTime * scaleSpeed);
 		}
 		else{
-			print("Hide: " +transform.localScale.x);
+			//print("Hide: " +transform.localScale.x);
 			transform.localScale = Vector3.Lerp(transform.localScale, hiddenScale, Time.deltaTime * scaleSpeed * 1.6f);
 			if(transform.localScale.x < 0.01f)			Destroy(gameObject);
 

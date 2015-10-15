@@ -146,7 +146,7 @@ public class RoomEditor : EditorWindow {
 			GameObject eventSystemObject = Instantiate(Resources.Load("EventSystem"), Vector3.zero + new Vector3(0,0,0), Quaternion.identity) as GameObject;
 			eventSystemObject.name = "EventSystem";
 
-			GameObject alarmSystemObject = new GameObject("Alarm System");
+			GameObject alarmSystemObject = new GameObject("Alert System");
 			alarmSystemObject.AddComponent<AlertManager>();
 
 			GameObject musicObject = Instantiate(Resources.Load("Music Manager"), Vector3.zero + new Vector3(0,0,0), Quaternion.identity) as GameObject;

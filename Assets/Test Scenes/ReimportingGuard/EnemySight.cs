@@ -15,10 +15,12 @@ public class EnemySight : MonoBehaviour {
 	private GameObject player;
 	private PlayerController playerController;
 	private AudioSource guardCry;
+
 	private bool canCry = true;
-	//private Light visionlight;
-	//private SpriteRenderer visionConeSprite;
-	//PlayerColorChanger pcc;
+
+	private Vector3 direction;
+	private float angle;
+	private RaycastHit hit;
 
 	public int visionCount;
 
@@ -108,10 +110,7 @@ public class EnemySight : MonoBehaviour {
 		alerted = false;
 
 		visionCount = 0;
-		//visionlight = transform.GetChild(0).gameObject.GetComponent<Light>();
-		//visionlight.color = Color.green;
-//		visionConeSprite = transform.GetChild (1).gameObject.GetComponent<SpriteRenderer> ();
-//		visionConeSprite.color = Color.green;
+
 	}
 	
 	// Update is called once per frame
@@ -127,9 +126,7 @@ public class EnemySight : MonoBehaviour {
 			playerController = player.GetComponent<PlayerController> ();
 		}
 
-		//Debug.DrawRay (transform.position, transform.forward);
-
-		/// TESTING ALTERNATE IMPLEMENTATION ///
+		/// TESTING ALTERNATE IMPLEMENTATION: No Trigger Collider ///
 		if (player) {
 			checkSight ();
 		}
@@ -137,50 +134,32 @@ public class EnemySight : MonoBehaviour {
 		if (patrolling) {	
 			if (playerInSight) {
 				if (visionCount >= 60) {
-					//visionlight.color = Color.red;
-					//visionConeSprite.color = Color.red;
 					patrolling = false;
 					alerted = true;
 					visionCount = 120;
 				} else {
 					visionCount += 3;
-					//visionlight.color = Color.yellow;
-					//visionConeSprite.color = Color.yellow;
-					// maybe rotate towards player to look directly at them?
 				}
 			} else {
 				if (visionCount > 0) {
-					//visionlight.color = Color.yellow;
-					//visionConeSprite.color = Color.yellow;
 					visionCount--;
-				} else {
-					//visionlight.color = Color.green;
-					//visionConeSprite.color = Color.green;
 				}
 			}
 		} 
 		else {
-			//visionlight.color = Color.red;
-			//visionConeSprite.color = Color.red;
-
 			// check distance from last known sighting of player, if player is not seen in area, return to patrol
 			float huntRange = Vector3.Distance(transform.position, lastPlayerSighting);
 
 			if (playerInSight == false && huntRange <= 2.0f ){
 				if (visionCount > 0) {
-					//visionlight.color = Color.yellow;
-					//visionConeSprite.color = Color.yellow;
+
 					visionCount--;
 				} 
 				else {
-					//visionlight.color = Color.green;
-					//visionConeSprite.color = Color.green;
-
 					GuardAI guardAI = GetComponent<GuardAI>();
 					guardAI.alerted = false;
 					returnPatrol();
 
-					//NavMeshPatrolv2 patrol = GetComponent<NavMeshPatrolv2>();
 					NavMeshPatrolv3 patrol = GetComponent<NavMeshPatrolv3>();
 					patrol.nextAlertPoint();
 				}
@@ -193,51 +172,46 @@ public class EnemySight : MonoBehaviour {
 	}
 
 	void checkSight() {
-		//print ("Checkingsight");
-		if (Vector3.Distance (transform.position, player.transform.position) < 7.0f) {
+		// Performed every frame to report whether or not the player can be seen by the guard
+		if (Vector3.Distance (transform.position, player.transform.position) < 7.0f) 
+		{
 			//print ("player in range");
 			playerInSight = false;
-			Vector3 direction = player.transform.position - transform.position;
-			float angle = Vector3.Angle (direction, transform.forward); // v3.angle returns acute angle always
+
+			// calculate angle between guard forward vector and player
+			direction = player.transform.position - transform.position;
+			angle = Vector3.Angle (direction, transform.forward); // v3.angle returns acute angle always
 			
 			if (angle <= 50.0f) {
+				// if player is within +-50 degrees of forward vector, cast a ray to player
 				//print("player in field of view");
-				//print ("In range...");
-				RaycastHit hit;
+//				RaycastHit hit;
 				if (Physics.Raycast (transform.position + Vector3.up, direction, out hit, coll.radius)) {
-					//print ("raycast hit: " + hit.collider.gameObject.name);
-					//print (hit.collider.gameObject);
-					Debug.DrawRay(transform.position + Vector3.up, direction);
-					if (hit.collider.gameObject.tag == "Player") {
-						if(playerController.isVisible){
-							//print ("Player in sight!");
+					if (hit.collider.gameObject.tag == "Player") 
+					{
+						// if ray hits player, check player camoflage
+						if(playerController.isVisible)
+						{
 							playerInSight = true;
+
+							// record last sighting coordinates for chasing
 							lastPlayerSighting = player.transform.position;
 
 							// play guard cry sound
-							if(canCry){
+							if(canCry)
+							{
 								AudioSource.PlayClipAtPoint(guardCry.clip, transform.position);
+								// put canCry on cooldown
 								canCry = false;
 								Invoke("resetCanCry", 5);
 							}
 						}
-
-
-						//int camoIndex = player.GetComponent<PlayerColorChanger>().camoIndex;
-						//bool isBlending = player.GetComponent<PlayerColorChanger>().isBlending;
-//						if(camoIndex >= 90 && isBlending ){
-//							print ("Camo: " + camoIndex + ", Blending: " + isBlending);
-//							playerInSight = false;
-//							//lastPlayerSighting = player.transform.position;
-//						} else {
-//							playerInSight = true;
-//							lastPlayerSighting = player.transform.position;
-//						}
-						// ADD CHECKS HERE FOR CAMOFLAGE
 					}
 				}
 			}
-		} else {
+		} 
+		else 
+		{
 			playerInSight = false;
 		}
 
@@ -253,5 +227,5 @@ public class EnemySight : MonoBehaviour {
 //			GetComponent<NavMeshPatrolv2>().Investigate(lastPlayerSighting);
 //		}
 	
-	}	
+	}	// end of checkSight
 }

@@ -35,9 +35,6 @@ public class AlertManager : MonoBehaviour {
 		mainLight = GameObject.Find("Directional Light").GetComponent<Light>();
 		gradientBottomImage = GameObject.Find("Gradient Bottom Color").GetComponent<RawImage>();
 
-		normalGradientColor = gradientBottomImage.color;
-		alertGradientColor = new Color(0,0,0,1);
-
 		SetColors();
 
 		mixer.SetFloat("AlertMusicVolume", alertVolume);
@@ -45,10 +42,12 @@ public class AlertManager : MonoBehaviour {
 	}
 
 	void SetColors(){
+		normalGradientColor = gradientBottomImage.color;
+		alertGradientColor = new Color(0,0,0,1);
 		normalLightColor = mainLight.color;
 		alertLightColor = Color.red;
 		slowColor = new Color(0,0,0.8f);
-		slowAlertColor = new Color(0.6f,0,0.6f);
+		slowAlertColor = new Color(0.3f,0,0.3f);
 	}
 	
 	// Update is called once per frame

@@ -93,7 +93,7 @@ public class NavMeshPatrolv3 : MonoBehaviour {
 
 		if (vision.alerted == false){ 
 			// when guard cannot see the player, either patrol the standard route or the alerted route
-			if(alertAI.alertSystem.GetComponent<AlertManager>().alertActive == true){ 
+			if(alertAI.alertSystem.alertActive == true){ 
 				// patrol extended route if the system is alerted
 				//print ("Alert patrolling");
 				AlertPatrol();
@@ -184,7 +184,7 @@ public class NavMeshPatrolv3 : MonoBehaviour {
 		// function to set the guard back on patrol, at walking speed
 		navMesh.Resume ();
 		// update the target waypoint
-		if (nextIndex == 3) {
+		if (nextIndex == patrolRoute.Length-1) {
 			nextIndex = 0;
 		} 
 		else {
@@ -198,7 +198,7 @@ public class NavMeshPatrolv3 : MonoBehaviour {
 		// function to set the guard on alert patrol, at faster walking speed
 		navMesh.Resume ();
 		// update the target waypoint
-		if (alertIndex == 5) {
+		if (alertIndex == alertRoute.Length-1) {
 			alertIndex = 0;
 		} 
 		else {
@@ -226,21 +226,37 @@ public class NavMeshPatrolv3 : MonoBehaviour {
 
 
 	void Attack() {
-		// stop moving and moving animations
-		navMesh.Stop();
-		anim.SetFloat("Speed", 0.0f);
-		walking = false;
-		// fire aim weapon and fire
-		GetComponent<Shooting>().Shoot();
+		if(Vector3.Distance(transform.position, player.transform.position) < 4.0f){
+			// stop moving and moving animations
+			navMesh.Stop();
+			anim.SetFloat("Speed", 0.0f);
+			walking = false;
+			// fire aim weapon and fire
+			GetComponent<Shooting>().Shoot();
+		}else{
+			// run towards the player to get in range
+			navMesh.SetDestination(player.transform.position);
+			anim.SetFloat("Speed", 2.0f);
+		}
 	}
 
 	public void Investigate(Vector3 searchPosition){
-		// function for when guard is alerted by noisemaker device (called from other room)
-		GetComponent<EnemySight> ().globalAlert(searchPosition);
+		// function for when guard is alerted by a noise
+		print ("Investigating...");
+		//GetComponent<EnemySight> ().globalAlert(searchPosition);
 		GetComponent<EnemySight> ().visionCount = 120;
-		//GetComponent<EnemySight> ().lastPlayerSighting = searchPosition;
-		Search ();
-		anim.SetFloat ("Speed", 1.5f);
+		GetComponent<EnemySight> ().lastPlayerSighting = searchPosition;
+		if( Vector3.Distance(transform.position, GetComponent<EnemySight>().lastPlayerSighting) > 1f ){
+			navMesh.Resume();
+			navMesh.SetDestination(GetComponent<EnemySight>().lastPlayerSighting);
+			anim.SetFloat ("Speed", 1.5f);
+		}
+		else {
+			// if at search coordinates and no sight of player, wait before resuming patrol
+			navMesh.Stop();
+			anim.SetFloat("Speed", 0.0f);
+			walking = false;
+		}
 	}
 
 	void sentryGuard(){

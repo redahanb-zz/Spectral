@@ -14,15 +14,18 @@ public class AlertCountdownIcon : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		countDownIcon = GameObject.Find ("AlertCountdownIcon").GetComponent<Image> ();
+		//countDownIcon = GameObject.Find ("AlertCountdownIcon").GetComponent<Image> ();
+		backgroundRing = GameObject.Find ("AlertCountdownIcon").GetComponent<Image> ();
 		alertManager = GameObject.Find ("Alert System").GetComponent<AlertManager> ();
+		//backgroundRing = transform.GetChild (0).GetComponent<Image> ();
+		countDownIcon = transform.GetChild (0).GetComponent<Image> ();
 		countDownIcon.enabled = false;
-		backgroundRing = transform.GetChild (0).GetComponent<Image> ();
 		timerText = transform.GetChild (1).GetComponent<Text> ();
 		countdown = "00.0";
 		timerText.text = countdown;
 		transpWhite = Color.white;
 		transpWhite.a = 0.5f;
+		backgroundRing.color = transpWhite;
 		//backgroundRing.enabled = false;
 	}
 	

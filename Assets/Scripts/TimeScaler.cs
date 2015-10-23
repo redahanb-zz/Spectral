@@ -47,7 +47,7 @@ public class TimeScaler : MonoBehaviour {
 
 
 		buttonObject = GameObject.Find("Time Button");
-		if(buttonObject.transform.Find("Text"))	timeText = GameObject.Find("Time Button").transform.Find("Text").GetComponent<Text>();
+		if(buttonObject.transform.Find("Text"))	timeText = buttonObject.transform.Find("Text").GetComponent<Text>();
 
 
 		if(buttonObject.transform.Find("Hourglass"))hasHourglass = true;
@@ -103,7 +103,7 @@ public class TimeScaler : MonoBehaviour {
 		if(hasHourglass)Hourglass();
 
 		timeNow 		= Time.realtimeSinceStartup;
-		timeText.text 	= ""+(int)currentStoredTime;
+		if(timeText) timeText.text 	= ""+(int)currentStoredTime;
 		
 		if(timeSlowed)			currentScale = Mathf.MoveTowards(currentScale, slowScale,   0.02f);
 		else if(timeStopped)	currentScale = Mathf.MoveTowards(currentScale, stopScale,   0.02f);

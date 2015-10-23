@@ -58,8 +58,24 @@ public class LevelEnd : MonoBehaviour {
 
 	public void EndLevel(){
 		//sFade.FadeOut();
-		Destroy(endButtonTransform.gameObject);
-		Destroy(gameObject);
+
+		GameObject loadObject = Instantiate(Resources.Load("Basic Level Loader")) as GameObject;
+
+		if(Application.loadedLevelName == "Restore Point"){
+			print("Loading Next Level");
+			loadObject.GetComponent<BasicLevelLoader>().SetNextLevel("Colour Sensor Level 1 - Copy");
+
+		}
+		else{
+			print("Greenlight Screen");
+			loadObject.GetComponent<BasicLevelLoader>().SetNextLevel("Greenlight Screen");
+
+			Destroy(endButtonTransform.gameObject);
+			Destroy(gameObject);
+
+		}
 	}
+
+
 	
 }

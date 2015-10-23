@@ -29,6 +29,8 @@ public class CameraController : MonoBehaviour {
 
 	bool mapButtonDown = false;
 
+	public Transform lookAtOtherTarget;
+
 	// Use this for initialization
 	void Start () {
 
@@ -72,64 +74,76 @@ public class CameraController : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		//print(mapCamera);
-		if(targetCamera.parent.parent.parent.Find("Map Camera Position"))mapCamera = true;
-		else mapCamera = false;
-
-		if(mapCamera){
-			mapCamObject = targetCamera.parent.parent.parent.Find("Map Camera Position").gameObject;
-			zoomedOutPos = mapCamObject.transform.position;
-			zoomedOutRot = mapCamObject.transform.rotation;
-
-		}
-
 		timeNow = Time.realtimeSinceStartup;
 		myTime = timeNow - lastInterval;
 		lastInterval = timeNow;
 
-		//print(intro + " : " +distance);
 
-		if(Input.GetKey(KeyCode.C)){
-			mapButtonDown = true;
+		if(lookAtOtherTarget){
+			transform.LookAt(lookAtOtherTarget.position);
 		}
-		else if(Input.GetKeyUp(KeyCode.C)){
-			mapButtonDown = false;
-		}
-
-		if(mapButtonDown){
-			if(mapCamera){
-				MapView();
-			}
-		}
-
 		else{
+
 			if(targetCamera){
-				
-				distance = Vector3.Distance(transform.position, targetCamera.position);
-				speed = distance * 3;
-				
-				targetCameraPosition = targetCamera.position;
-				targetCameraRotation = targetCamera.eulerAngles;
-				
-				if(transform.position != targetCameraPosition){
-					transform.position = Vector3.Lerp(transform.position, targetCameraPosition, myTime * moveSpeed);
-				}
-				
-				//			if(cameraShake){
-				//				originalPos = targetCameraPosition;
-				//				transform.localPosition = Vector3.Lerp(transform.localPosition, nextPos, Time.deltaTime * distance * .01f);
-				//			}
-				
-				
-				if(target && lookAtTarget){
-					Quaternion rotation = Quaternion.LookRotation(target.position - transform.position);
-					transform.rotation = Quaternion.Slerp(transform.rotation, rotation, 0.003f * damping);
-				}
-				else{
-					transform.rotation = Quaternion.Lerp(transform.rotation, targetCamera.rotation, myTime * rotateSpeed);
-				}
-				
+				if(targetCamera.parent.parent.parent.Find("Map Camera Position"))mapCamera = true;
+				else mapCamera = false;
 			}
+			
+
+			if(mapCamera){
+				mapCamObject = targetCamera.parent.parent.parent.Find("Map Camera Position").gameObject;
+				zoomedOutPos = mapCamObject.transform.position;
+				zoomedOutRot = mapCamObject.transform.rotation;
+
+			}
+
+
+
+			//print(intro + " : " +distance);
+
+			if(Input.GetKey(KeyCode.C)){
+				mapButtonDown = true;
+			}
+			else if(Input.GetKeyUp(KeyCode.C)){
+				mapButtonDown = false;
+			}
+
+			if(mapButtonDown){
+				if(mapCamera){
+					MapView();
+				}
+			}
+
+			else{
+				if(targetCamera){
+					
+					distance = Vector3.Distance(transform.position, targetCamera.position);
+					speed = distance * 3;
+					
+					targetCameraPosition = targetCamera.position;
+					targetCameraRotation = targetCamera.eulerAngles;
+					
+					if(transform.position != targetCameraPosition){
+						transform.position = Vector3.Lerp(transform.position, targetCameraPosition, myTime * moveSpeed);
+					}
+					
+					//			if(cameraShake){
+					//				originalPos = targetCameraPosition;
+					//				transform.localPosition = Vector3.Lerp(transform.localPosition, nextPos, Time.deltaTime * distance * .01f);
+					//			}
+					
+					
+					if(target && lookAtTarget){
+						Quaternion rotation = Quaternion.LookRotation(target.position - transform.position);
+						transform.rotation = Quaternion.Slerp(transform.rotation, rotation, 0.003f * damping);
+					}
+					else{
+						transform.rotation = Quaternion.Lerp(transform.rotation, targetCamera.rotation, myTime * rotateSpeed);
+					}
+					
+				}
+			}
+
 		}
 		lastInterval = timeNow;
 	}

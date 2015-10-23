@@ -49,7 +49,7 @@ public class ScreenFade : MonoBehaviour {
 			if(inventoryObject)	inventoryObject.gameObject.SetActive(false);
 			if(timeButtonObject)	timeButtonObject.gameObject.SetActive(false);
 			//}
-			rImg.color = Color.Lerp(rImg.color, new Color(rImg.color.r, rImg.color.g, rImg.color.g, 1), fadeRate);
+			rImg.color = Color.Lerp(rImg.color, new Color(rImg.color.r, rImg.color.g, rImg.color.g, 1), Time.deltaTime * 3);
 		}
 		else{
 			if(rImg.color.a > 0.6f){
@@ -57,7 +57,7 @@ public class ScreenFade : MonoBehaviour {
 				if(inventoryObject)inventoryObject.gameObject.SetActive(true);
 				if(timeButtonObject)timeButtonObject.gameObject.SetActive(true);
 			}
-			rImg.color = Color.Lerp(rImg.color, new Color(rImg.color.r, rImg.color.g, rImg.color.g, 0), fadeRate);
+			rImg.color = Color.Lerp(rImg.color, new Color(rImg.color.r, rImg.color.g, rImg.color.g, 0), Time.deltaTime * 3);
 		}
 
 		lastInterval = timeNow;
@@ -71,5 +71,6 @@ public class ScreenFade : MonoBehaviour {
 	public void FadeIn(){
 
 		fadeToColor = true;
+		Time.timeScale = 1;
 	}
 }

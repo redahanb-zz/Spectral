@@ -5,8 +5,6 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
-    path: Assets/Levels/Test Build Level Loader.unity
   - enabled: 1
     path: Assets/Motor Tree Intro.unity
   - enabled: 1
@@ -16,13 +14,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Levels/_STAGES/Stage 5.unity
   - enabled: 0
-    path: Assets/Levels/Data Stream Level.unity
-  - enabled: 0
-    path: Assets/SimpleSceneTest.unity
-  - enabled: 0
     path: Assets/Levels/_STAGES/Stage 7.unity
-  - enabled: 0
-    path: Assets/AndroidDemo_Oct5.unity
   - enabled: 0
     path: Assets/Levels/_STAGES/Stage 6.unity
   - enabled: 1

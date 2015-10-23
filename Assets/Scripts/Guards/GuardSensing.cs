@@ -31,11 +31,13 @@ public class GuardSensing : MonoBehaviour {
 	// script references
 	GameObject 			player;
 	PlayerController	playerController;
+	GuardAI 			guardAI;
 	
 	void Start () 
 	{
 		player = GameObject.FindWithTag ("Player");
 		playerController = player.GetComponent<PlayerController>();
+		guardAI = GetComponent<GuardAI> ();
 
 	} // end Start
 	
@@ -90,9 +92,10 @@ public class GuardSensing : MonoBehaviour {
 		distanceToPlayer = Vector3.Distance (transform.position, player.transform.position);
 		if(!playerInSight)
 		{
-			if(distanceToPlayer < hearingRange && playerController.currentMoveState == PlayerController.MoveState.Run)
+			if(distanceToPlayer < hearingRange && playerController.currentMoveState == PlayerController.MoveState.Run && !guardAI.curious)
 			{
 				investigationLocation = player.transform.position;
+				//GameObject.Find("Lastheardlocation").transform.position = investigationLocation;
 				playerHeard = true;
 
 			} else if(distanceToPlayer < hearingRange*0.25 && playerController.currentMoveState == PlayerController.MoveState.Sneak)

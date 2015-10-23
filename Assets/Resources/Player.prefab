@@ -1606,6 +1606,7 @@ GameObject:
   - 136: {fileID: 13687458}
   - 114: {fileID: 11499688}
   - 114: {fileID: 11463562}
+  - 114: {fileID: 11411654}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -5079,6 +5080,17 @@ Animator:
     'RightHand'\n\tand more ...\n\tFrom animation clip 'MOB1_M1_Stand_Relaxed_Idle'"
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+--- !u!114 &11411654
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 179674}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 783517847fd5842e0b8355189bd820fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &11463562
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5153,8 +5165,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isVisible: 1
   isBlending: 0
+  defaultCursor: {fileID: 2800000, guid: 097f487fa8b6e4629bbbbb25be8e330e, type: 3}
+  blendCursor: {fileID: 2800000, guid: 93b84d146533b4fae92d6e05083d0f08, type: 3}
+  pickupCursor: {fileID: 2800000, guid: 2da6b1b79fa5746a68c5c8bb264c0f06, type: 3}
+  useCursor: {fileID: 2800000, guid: 275c5668b8e134eb692c91b0beef70b1, type: 3}
   currentMoveState: 0
-  targetcolor: {r: .5, g: .5, b: .5, a: 1}
+  targetcolor: {r: .257352948, g: .257352948, b: .257352948, a: 1}
 --- !u!136 &13687458
 CapsuleCollider:
   m_ObjectHideFlags: 1
@@ -5298,6 +5314,34 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: m_Enabled
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: defaultCursor
+      value: 
+      objectReference: {fileID: 2800000, guid: 097f487fa8b6e4629bbbbb25be8e330e, type: 3}
+    - target: {fileID: 0}
+      propertyPath: blendCursor
+      value: 
+      objectReference: {fileID: 2800000, guid: 93b84d146533b4fae92d6e05083d0f08, type: 3}
+    - target: {fileID: 0}
+      propertyPath: pickupCursor
+      value: 
+      objectReference: {fileID: 2800000, guid: 2da6b1b79fa5746a68c5c8bb264c0f06, type: 3}
+    - target: {fileID: 0}
+      propertyPath: useCursor
+      value: 
+      objectReference: {fileID: 2800000, guid: 275c5668b8e134eb692c91b0beef70b1, type: 3}
+    - target: {fileID: 0}
+      propertyPath: targetcolor.r
+      value: .257352948
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: targetcolor.g
+      value: .257352948
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: targetcolor.b
+      value: .257352948
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

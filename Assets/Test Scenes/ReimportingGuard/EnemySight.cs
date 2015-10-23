@@ -117,7 +117,7 @@ public class EnemySight : MonoBehaviour {
 	void checkSight() {
 		// Performed every frame to report whether or not the player can be seen by the guard
 		distanceToPlayer = Vector3.Distance (transform.position, player.transform.position);
-		if (distanceToPlayer < visionRange) 
+		if (distanceToPlayer < visionRange && (player.transform.position.y - transform.position.y < 0.1)) 
 		{
 			//print ("player in range");
 			playerInSight = false;

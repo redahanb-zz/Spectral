@@ -27,6 +27,7 @@ public class GuardBehaviour : MonoBehaviour {
 	private Vector3[] 	alertRoute;
 	private int 		alertIndex = 0;
 	private float 		waitCount;
+	private float 		listenCount; // timer for Investigate behaviour
 	private Quaternion 	lookRotation;
 	private Vector3 	lastPlayerSighting;
 
@@ -49,6 +50,7 @@ public class GuardBehaviour : MonoBehaviour {
 	private GuardAI			guardAI;
 	private Shooting 		guardShooting;
 	private Animator		anim;
+	private HealthManager	pHealth;
 
 
 	void Start () 
@@ -59,6 +61,7 @@ public class GuardBehaviour : MonoBehaviour {
 		guardAI = GetComponent<GuardAI> ();
 		guardShooting = GetComponent<Shooting> ();
 		anim = GetComponent<Animator> ();
+		pHealth = GameObject.Find("Health Manager").GetComponent<HealthManager> ();
 
 		// compile patrol and alert routes
 		patrolRoute = new Vector3[4]
@@ -142,6 +145,7 @@ public class GuardBehaviour : MonoBehaviour {
 		else 
 		{
 			navMeshAgent.Stop ();
+			anim.SetFloat("Speed", 0.0f);
 			guardSensing.enabled = false;
 		}
 	} // end Idle
@@ -235,7 +239,7 @@ public class GuardBehaviour : MonoBehaviour {
 	// function for when the guards loses sight of the player, sends the guard to the target location after the player
 	{
 		lastPlayerSighting = guardSensing.lastPlayerSighting;
-		if (Vector3.Distance (transform.position, lastPlayerSighting) > 1.0f) {
+		if (Vector3.Distance (transform.position, lastPlayerSighting) > 1.5f) {
 			navMeshAgent.Resume ();
 			navMeshAgent.SetDestination (lastPlayerSighting);
 			anim.SetBool ("InSight", false);
@@ -256,18 +260,31 @@ public class GuardBehaviour : MonoBehaviour {
 	// function for when the guard hears a noise, sends the guard to investigate the sources of the noise
 	{
 		lastPlayerSighting = guardSensing.investigationLocation;
-		if (Vector3.Distance (transform.position, lastPlayerSighting) > 1.0f) {
-			navMeshAgent.Resume ();
-			navMeshAgent.SetDestination (lastPlayerSighting);
-			anim.SetFloat ("Speed", 1.0f);
-		} else {
+		// pause the guard's motion, and start a quick timer
+		if (listenCount == 0.0f) {
+			listenCount = Time.time;
 			anim.SetFloat("Speed", 0.0f);
-			if(waitCount == 0.0f){
-				waitCount = Time.time;
-			}
-			if(Time.time - waitCount >= 4.0f){
-				//guardSensing.playerDetected = false;
-				waitCount = 0.0f;
+		}
+		// once a 1 second pause has elapsed, start the guard investigating the noise
+		if(Time.time - listenCount >= 1.0f){
+			if (Vector3.Distance (transform.position, lastPlayerSighting) > 1.0f) {
+				// if guard is more than 1m from source of noise, head towards the noise
+				navMeshAgent.Resume ();
+				navMeshAgent.SetDestination (lastPlayerSighting);
+				anim.SetFloat ("Speed", 1.0f);
+			} else {
+				// pause at location of noise when the guard reaches it, start a timer
+				anim.SetFloat("Speed", 0.0f);
+				if(waitCount == 0.0f){
+					waitCount = Time.time;
+				}
+				if(Time.time - waitCount >= 4.0f){
+					// once the wait timer has elasped, reset the timers and set the curious parameter to false
+					// the guardAI script will handle the behaviour change based on the false 'curious' parameter
+					guardAI.curious = false;
+					waitCount = 0.0f;
+					listenCount = 0.0f;
+				}
 			}
 		}
 	} // end Investigate
@@ -290,8 +307,11 @@ public class GuardBehaviour : MonoBehaviour {
 			navMeshAgent.Stop();
 			anim.SetFloat("Speed", 0.0f);
 			walking = false;
-			guardShooting.Shoot ();
+			if(!pHealth.playerDead){
+				guardShooting.Shoot ();
+			} else {
+				anim.SetBool("InSight", false);
+			}
 		}
-
 	} // end Attack
 }

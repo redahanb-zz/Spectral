@@ -46,7 +46,7 @@ public class GuardSensing : MonoBehaviour {
 		CheckHearing ();
 
 		if (playerInSight) {
-			if (timeInSight <= 1.0f) {
+			if (timeInSight <= 0.5f) {
 				timeInSight += Time.deltaTime;
 			} else {
 				playerDetected = true;
@@ -65,7 +65,7 @@ public class GuardSensing : MonoBehaviour {
 		angleToPlayer = Vector3.Angle (directionToPlayer, transform.forward);
 
 		playerInSight = false;
-		if(distanceToPlayer < sightRange)
+		if(distanceToPlayer < sightRange && (player.transform.position.y - transform.position.y < 0.1))
 		{
 			if(angleToPlayer < fieldOfView)
 			{

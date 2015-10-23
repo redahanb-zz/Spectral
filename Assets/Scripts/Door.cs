@@ -116,7 +116,7 @@ public class Door : MonoBehaviour {
 	}
 
 	void CheckPlayerDistance(){
-		print(doorOpen + " : " +playerDistance);
+		//print(doorOpen + " : " +playerDistance);
 		playerDistance = Vector3.Distance(transform.position, playerObject.transform.position);
 		if(playerDistance < 2.25f){
 			//doorOpen = true;

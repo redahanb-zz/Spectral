@@ -54,7 +54,9 @@ public class AlertManager : MonoBehaviour {
 	void Update () {
 		//timeNow 		= Time.realtimeSinceStartup;
 
-
+		if (!mainLight) {
+			mainLight = GameObject.Find ("Directional Loght").GetComponent<Light> ();
+		}
 
 		//print(alertActive + " : " +alertVolume);
 		mixer.SetFloat("AlertMusicVolume", alertVolume);

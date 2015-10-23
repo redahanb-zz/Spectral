@@ -32,7 +32,7 @@ public class PauseManager : MonoBehaviour {
 			blurFX.enabled = true;
 			blurFX.blurSize = Mathf.Lerp (blurFX.blurSize, 10.0f, Time.deltaTime * 5.0f);
 		} else {
-			blurFX.blurSize = Mathf.Lerp (blurFX.blurSize, 0.0f, Time.deltaTime * 40.0f);
+			blurFX.blurSize = Mathf.Lerp (blurFX.blurSize, 0.0f, Time.deltaTime * 50.0f);
 		}
 
 		if(blurFX.blurSize <= 0.0f){

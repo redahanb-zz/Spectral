@@ -9,6 +9,7 @@ public class Shooting : MonoBehaviour {
 	EnemySight 			enemySight;
 	Animator 			anim;
 	GameObject 			player;
+	GameObject			torso;
 	HealthManager		pHealth;
 	public GameObject 	gunBarrel;
 
@@ -19,6 +20,7 @@ public class Shooting : MonoBehaviour {
 	void Start () {
 		enemySight = GetComponent<EnemySight> ();
 		player = GameObject.FindWithTag("Player");
+		torso = GameObject.Find ("ppl_chest");
 		anim = GetComponent<Animator> ();
 		pHealth = GameObject.Find ("Health Manager").GetComponent<HealthManager> ();
 		//gunBarrel = transform.Find("GunBarrel").gameObject;
@@ -43,7 +45,7 @@ public class Shooting : MonoBehaviour {
 			aimWeight = 1.0f;
 		}
 		if (player) {
-			anim.SetIKPosition (AvatarIKGoal.RightHand, player.transform.position + Vector3.up * 1.0f);
+			anim.SetIKPosition (AvatarIKGoal.RightHand, torso.transform.position);
 			anim.SetIKPositionWeight (AvatarIKGoal.RightHand, aimWeight);
 		}
 
@@ -57,8 +59,6 @@ public class Shooting : MonoBehaviour {
 
 			GameObject bullet = Instantiate(Resources.Load("Enemies/Bullet"), gunBarrel.transform.position, gunBarrel.transform.rotation) as GameObject;
 			bullet.GetComponent<Rigidbody>().AddForce(bullet.transform.up*1.5f, ForceMode.Impulse);
-
-			//player.gameObject.GetComponent<Health>().takeDamage(shotDmg);
 
 		}
 	}

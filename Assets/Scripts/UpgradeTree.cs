@@ -184,4 +184,28 @@ public class UpgradeTree : MonoBehaviour {
 		Destroy(transform.parent.Find("Return").gameObject);
 		Destroy(gameObject);
 	}
+
+	public void CloseUpgrades(){
+		print("1");
+		StartCoroutine(RTB());
+		print("2");
+		//Invoke("ReturnToRestorePoint", 1);
+	}
+
+	public void ReturnToRestorePoint(){
+
+		Application.LoadLevel("Restore Point");
+	}
+
+	IEnumerator RTB(){
+		print("RTB1");
+
+		yield return new WaitForSeconds(1.5f);
+		print("RTB2");
+
+		Application.LoadLevel("Restore Point");
+		print("RTB3");
+
+
+	}
 }

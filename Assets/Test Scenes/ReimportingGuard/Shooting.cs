@@ -7,6 +7,7 @@ public class Shooting : MonoBehaviour {
 	public float 		reloadTime;
 	
 	EnemySight 			enemySight;
+	GuardSensing		sensing;
 	Animator 			anim;
 	GameObject 			player;
 	GameObject			torso;
@@ -19,6 +20,7 @@ public class Shooting : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		enemySight = GetComponent<EnemySight> ();
+		sensing = GetComponent<GuardSensing> ();
 		player = GameObject.FindWithTag("Player");
 		torso = GameObject.Find ("ppl_chest");
 		anim = GetComponent<Animator> ();
@@ -32,7 +34,7 @@ public class Shooting : MonoBehaviour {
 			player = GameObject.FindWithTag ("Player");
 		}
 
-		if(enemySight.alerted){
+		if(enemySight.alerted || sensing.playerInSight){
 			if(counter >= 0){
 				counter -= Time.deltaTime;
 			}
@@ -54,12 +56,15 @@ public class Shooting : MonoBehaviour {
 
 
 	public void Shoot() {
-		if(counter <= 0 && !pHealth.playerDead){
+		if (counter <= 0 && !pHealth.playerDead) {
+			//print ("shooting!");
 			counter = reloadTime;
 
-			GameObject bullet = Instantiate(Resources.Load("Enemies/Bullet"), gunBarrel.transform.position, gunBarrel.transform.rotation) as GameObject;
-			bullet.GetComponent<Rigidbody>().AddForce(bullet.transform.up*1.5f, ForceMode.Impulse);
-
+			GameObject bullet = Instantiate (Resources.Load ("Enemies/Bullet"), gunBarrel.transform.position, gunBarrel.transform.rotation) as GameObject;
+			bullet.GetComponent<Rigidbody> ().AddForce (bullet.transform.up * 1.5f, ForceMode.Impulse);
+		} else if(pHealth.playerDead) {
+			anim.SetBool("InSight", false);
+			anim.SetFloat("Aim Weight", 0.0f);
 		}
 	}
 }

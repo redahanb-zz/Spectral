@@ -32,10 +32,11 @@ public class PlayerBodyparts : MonoBehaviour {
 			//part.GetComponent<Rigidbody>().useGravity = false;
 			//Destroy (part, Random.Range(1.0f,2.0f));
 		}
-		//Invoke ("delayDestruct", 1); // destroy player object
+		Invoke ("delayDestruct", 1); // destroy player object
 	}
 
 	void delayDestruct(){
-		Destroy (this.gameObject);
+		//Destroy (this.gameObject);
+		gameObject.SetActive (false);
 	}
 }

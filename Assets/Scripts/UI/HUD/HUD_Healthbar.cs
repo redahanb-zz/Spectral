@@ -7,19 +7,20 @@ public class HUD_Healthbar : MonoBehaviour {
 	GameObject healthManager;
 	HealthManager playerHealth;
 
-	int healthBarSize;
+	public int healthBarSize;
+	int currentHealth;
 	public int panelSize;
 	
 	// Use this for initialization
 	void Start () {
 		healthManager = GameObject.Find ("Health Manager");
 		playerHealth = healthManager.GetComponent<HealthManager> ();
-		healthBarSize = playerHealth.maxHealth;
-		buildHealthbarUI (healthBarSize);
+//		healthBarSize = playerHealth.maxHealth;
+//		buildHealthbarUI (healthBarSize);
 	}
-	
-	// Update is called once per frame
-	void Update () {
+
+	void Update () 
+	{
 		updateIcons ();
 	}
 	
@@ -53,7 +54,7 @@ public class HUD_Healthbar : MonoBehaviour {
 	}
 
 	void updateIcons(){
-		int currentHealth = playerHealth.playerHealth;
+		currentHealth = playerHealth.playerHealth;
 		for (int i = 0; i < healthBarSize; i++) {
 			if(i >= currentHealth){
 				healthbarIcons[i].transform.GetChild(1).gameObject.SetActive(false);

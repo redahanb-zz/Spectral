@@ -8,13 +8,18 @@ public class HealthManager : MonoBehaviour {
 	public bool playerDead = false;
 
 	PlayerBodyparts bodyParts;
+	HUD_Healthbar healthUI;
 
 	// Use this for initialization
 	void Start () {
-//		maxHealth = 5;
-//		playerHealth = 5;
-
+		// Pull health data from GameState object
+//		maxHealth = GameState.data.maxHealth;
+//		playerHealth = GameState.data.currentHealth;
+		healthUI = GameObject.Find ("HUD_Healthbar").GetComponent<HUD_Healthbar>();
+		healthUI.buildHealthbarUI (maxHealth);
+		healthUI.healthBarSize = maxHealth;
 		bodyParts = GameObject.FindWithTag ("Player").GetComponent<PlayerBodyparts> ();
+
 	}
 	
 	// Update is called once per frame
@@ -30,7 +35,7 @@ public class HealthManager : MonoBehaviour {
 		}
 
 		if(playerHealth <= 0){
-			print ("Player was killed...");
+			//print ("Player was killed...");
 			bodyParts.selfDestruct();
 		}
 	}

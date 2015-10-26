@@ -14,6 +14,7 @@ public class BasicLevelLoader : MonoBehaviour {
 		Invoke("StartLoad", 2);}
 	
 	void StartLoad(){
+		Time.timeScale = 1;
 		startLoad = true;
 	}
 

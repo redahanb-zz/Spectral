@@ -5,25 +5,26 @@ using UnityEngine.UI;
 public class PlayerInventory : MonoBehaviour {
 		
 	public GameObject[] playerInventory;
-	public int inventorySize = 0;
+	public int inventorySize;
 	public int highlightedSlot = 0;
 
 	GameObject player;
-
-//	Image itemIcon;
-//	Color itemColor;
-//	Text itemValue;
-	
 	HUD_Inventory inventoryUI;
-	
-	// Use this for initialization
+
 	void Awake () 
 	{
-		inventorySize = 6; // This value should be loaded from the player data file, as its size can be upgraded in between missions
-		playerInventory = new GameObject[inventorySize];
+		// This value should be loaded from the player data file, as its size can be upgraded in between missions
+		//inventorySize = GameState.data.inventorySize;
+		//playerInventory = new GameObject[inventorySize];
 		inventoryUI = GameObject.Find("HUD_Inventory").GetComponent<HUD_Inventory>();
 		player = GameObject.FindWithTag ("Player");
 
+	}
+
+	void Start()
+	{
+		playerInventory = new GameObject[inventorySize];
+		inventoryUI.buildInventoryUI (inventorySize);
 	}
 	
 	// Update is called once per frame
@@ -38,7 +39,6 @@ public class PlayerInventory : MonoBehaviour {
 			int emptySlot = nextAvailableSlot();
 			pickup.GetComponent<InventoryItem> ().pickUpItem (); // move the object to the player's position and hide it
 			playerInventory [emptySlot] = pickup; // put item in next available slot
-			//inventoryUI.updateIcon (emptySlot);
 			inventoryUI.updateIcon(emptySlot);
 		}	
 	}
@@ -63,13 +63,13 @@ public class PlayerInventory : MonoBehaviour {
 		}
 	}
 	
-	public void throwItem()
-	{
-		Vector3 dropLocation = transform.position + transform.forward * 0.3f + Vector3.up;
-		playerInventory [highlightedSlot].transform.position = dropLocation;
-		playerInventory [highlightedSlot].gameObject.SetActive (true);
-		playerInventory [highlightedSlot].GetComponent<Rigidbody> ().AddForce (transform.forward * 2.5f, ForceMode.Impulse);
-	}
+//	public void throwItem()
+//	{
+//		Vector3 dropLocation = transform.position + transform.forward * 0.3f + Vector3.up;
+//		playerInventory [highlightedSlot].transform.position = dropLocation;
+//		playerInventory [highlightedSlot].gameObject.SetActive (true);
+//		playerInventory [highlightedSlot].GetComponent<Rigidbody> ().AddForce (transform.forward * 2.5f, ForceMode.Impulse);
+//	}
 	
 	public int nextAvailableSlot() 
 	{
@@ -83,5 +83,5 @@ public class PlayerInventory : MonoBehaviour {
 		}
 		return -1;
 	}
-	
+
 }

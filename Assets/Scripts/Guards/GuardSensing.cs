@@ -31,11 +31,13 @@ public class GuardSensing : MonoBehaviour {
 	// script references
 	GameObject 			player;
 	PlayerController	playerController;
+	GuardAI 			guardAI;
 	
 	void Start () 
 	{
 		player = GameObject.FindWithTag ("Player");
 		playerController = player.GetComponent<PlayerController>();
+		guardAI = GetComponent<GuardAI> ();
 
 	} // end Start
 	
@@ -46,7 +48,7 @@ public class GuardSensing : MonoBehaviour {
 		CheckHearing ();
 
 		if (playerInSight) {
-			if (timeInSight <= 1.0f) {
+			if (timeInSight <= 0.5f) {
 				timeInSight += Time.deltaTime;
 			} else {
 				playerDetected = true;
@@ -65,7 +67,7 @@ public class GuardSensing : MonoBehaviour {
 		angleToPlayer = Vector3.Angle (directionToPlayer, transform.forward);
 
 		playerInSight = false;
-		if(distanceToPlayer < sightRange)
+		if(distanceToPlayer < sightRange && (player.transform.position.y - transform.position.y < 0.1))
 		{
 			if(angleToPlayer < fieldOfView)
 			{
@@ -90,9 +92,10 @@ public class GuardSensing : MonoBehaviour {
 		distanceToPlayer = Vector3.Distance (transform.position, player.transform.position);
 		if(!playerInSight)
 		{
-			if(distanceToPlayer < hearingRange && playerController.currentMoveState == PlayerController.MoveState.Run)
+			if(distanceToPlayer < hearingRange && playerController.currentMoveState == PlayerController.MoveState.Run && !guardAI.curious)
 			{
 				investigationLocation = player.transform.position;
+				//GameObject.Find("Lastheardlocation").transform.position = investigationLocation;
 				playerHeard = true;
 
 			} else if(distanceToPlayer < hearingRange*0.25 && playerController.currentMoveState == PlayerController.MoveState.Sneak)

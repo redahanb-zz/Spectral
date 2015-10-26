@@ -14,6 +14,8 @@ public class LevelEnd : MonoBehaviour {
 
 	ScreenFade sFade;
 
+	GameState gameState;
+
 	// Use this for initialization
 	void Start () {
 		player = GameObject.FindGameObjectWithTag("Player").transform;
@@ -60,6 +62,11 @@ public class LevelEnd : MonoBehaviour {
 		//sFade.FadeOut();
 
 		GameObject loadObject = Instantiate(Resources.Load("Basic Level Loader")) as GameObject;
+
+		if (!gameState) {
+			gameState = GameObject.Find("GameState").GetComponent<GameState>();
+		}
+		gameState.SaveGame ();
 
 		if(Application.loadedLevelName == "Restore Point"){
 			print("Loading Next Level");

@@ -10,32 +10,32 @@ public class HUD_Inventory : MonoBehaviour {
 	PlayerInventory playerInventory;
 	public Sprite defaultIcon;
 
-	// optimizing script
+	// optimizing script: global variables to reuse
 	Image itemIcon;
 	Color iconColor;
 	Text valueText;
 
 
 	// Use this for initialization
-	void Start () {
+	void Start () 
+	{
 		playerInventory = GameObject.Find ("Inventory Manager").GetComponent<PlayerInventory> ();
-		inventorySize = playerInventory.inventorySize;
-		//print (inventorySize);
-		buildInventoryUI (inventorySize);
+//		inventorySize = playerInventory.inventorySize;
+//		buildInventoryUI (inventorySize);
 	}
 	
 	// Update is called once per frame
-	void Update () {
-		//updateIcon ();
+	void Update () 
+	{
+
 	}
 
 	public void buildInventoryUI(int size) {
 		// Take size from player inventory, instantiate UI box for each slot, plus bookend graphics
-		//print ("Building Inventory: " + size);
 		inventoryIcons = new GameObject[size];
 		Vector3 panelPosition;
 
-		// draw shoulder buttons
+		// Draw shoulder graphics
 		GameObject L_bookend = Instantiate (Resources.Load("UI/HUD/Inventory/HUD_Bookend_Inv_L"), new Vector3(-1*((size*panelSize)/2) - panelSize/2, 20, 0), Quaternion.identity) as GameObject;
 		L_bookend.transform.SetParent(gameObject.transform, false);
 		L_bookend.GetComponent<RectTransform>().anchoredPosition = new Vector2(-1*((size*panelSize)/2) - panelSize/2, 20) ;
@@ -57,31 +57,7 @@ public class HUD_Inventory : MonoBehaviour {
 			// name them as an index for the UI array
 			inventoryIcons[i].gameObject.name = "Cell " + i.ToString();
 		}	
-	}	
-
-//	public void updateIcon(){
-//		for (int i = 0; i < inventorySize; i++) {
-//			if(playerInventory.playerInventory[i] != null){
-//				// set icon
-//				itemIcon = inventoryIcons[i].transform.GetChild(1).transform.GetComponent<Image>();
-//				itemIcon.sprite = playerInventory.playerInventory[i].GetComponent<InventoryItem>().itemIcon;
-//				// set color
-//				iconColor = playerInventory.playerInventory[i].GetComponent<InventoryItem>().itemColor;
-//				iconColor.a = 1;
-//				itemIcon.color = iconColor;
-//				// set value
-//				valueText = inventoryIcons[i].transform.GetComponentInChildren<Text>();
-//				valueText.text = playerInventory.playerInventory[i].GetComponent<InventoryItem>().itemValue.ToString();
-//			} else {
-//				// icon is default
-//				itemIcon = inventoryIcons[i].transform.GetChild(1).transform.GetComponent<Image>();
-//				itemIcon.sprite = defaultIcon;
-//				itemIcon.color = Color.white;
-//				valueText = inventoryIcons[i].transform.GetComponentInChildren<Text>();
-//				valueText.text = "-";
-//			}
-//		}
-//	}
+	} // end buildInventoryUI
 
 	public void updateIcon(int i){
 		if(playerInventory.playerInventory[i] != null){
@@ -103,5 +79,5 @@ public class HUD_Inventory : MonoBehaviour {
 			valueText = inventoryIcons[i].transform.GetComponentInChildren<Text>();
 			valueText.text = "-";
 		}
-	}
+	} // end updateIcon
 }

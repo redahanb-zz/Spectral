@@ -9,6 +9,9 @@ public class HUD_Inventory : MonoBehaviour {
 	int inventorySize;
 	PlayerInventory playerInventory;
 	public Sprite defaultIcon;
+	public float hideSpeed;
+	bool hideInvHUD = false;
+	RectTransform rectTran;
 
 	// optimizing script: global variables to reuse
 	Image itemIcon;
@@ -19,15 +22,25 @@ public class HUD_Inventory : MonoBehaviour {
 	// Use this for initialization
 	void Start () 
 	{
+		rectTran = GetComponent<RectTransform> ();
 		playerInventory = GameObject.Find ("Inventory Manager").GetComponent<PlayerInventory> ();
 //		inventorySize = playerInventory.inventorySize;
 //		buildInventoryUI (inventorySize);
+		//Invoke ("UpdateAllIcons", 2.0f);
 	}
 	
 	// Update is called once per frame
 	void Update () 
 	{
-
+//		if(Input.GetKeyDown(KeyCode.H)){
+//			toggleHide();
+//		}
+		
+		if (hideInvHUD) {
+			hideHUD();
+		} else {
+			returnHUD();
+		}
 	}
 
 	public void buildInventoryUI(int size) {
@@ -80,4 +93,28 @@ public class HUD_Inventory : MonoBehaviour {
 			valueText.text = "-";
 		}
 	} // end updateIcon
+
+	public void UpdateAllIcons(){
+		if (!playerInventory) {
+			playerInventory = GameObject.Find ("Inventory Manager").GetComponent<PlayerInventory> ();
+		}
+
+		for(int x = 0; x < inventoryIcons.Length; x++){
+			updateIcon(x);
+		}
+	}
+
+	void hideHUD()
+	{
+		rectTran.anchoredPosition = Vector3.Lerp (rectTran.anchoredPosition, new Vector3(0, -75, 0), Time.deltaTime*hideSpeed/2);
+	}
+	
+	void returnHUD()
+	{
+		rectTran.anchoredPosition = Vector3.Lerp (rectTran.anchoredPosition, new Vector3(0, 25, 0), Time.deltaTime*hideSpeed);
+	}
+
+	public void toggleHide(){
+		hideInvHUD = !hideInvHUD;
+	}
 }

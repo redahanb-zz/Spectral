@@ -23,8 +23,8 @@ public class PlayerInventory : MonoBehaviour {
 
 	void Start()
 	{
-		playerInventory = new GameObject[inventorySize];
-		inventoryUI.buildInventoryUI (inventorySize);
+		//playerInventory = new GameObject[inventorySize];
+		//inventoryUI.buildInventoryUI (inventorySize);
 	}
 	
 	// Update is called once per frame

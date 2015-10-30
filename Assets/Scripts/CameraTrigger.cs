@@ -4,7 +4,7 @@ using System.Collections;
 public class CameraTrigger : MonoBehaviour {
 
 	CameraController cController;
-
+	public bool lookAtPlayer = true;
 	// Use this for initialization
 	void Start () {
 		cController = Camera.main.GetComponent<CameraController>();

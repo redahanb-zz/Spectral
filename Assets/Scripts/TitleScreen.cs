@@ -51,7 +51,7 @@ public class TitleScreen : MonoBehaviour {
 		//mapButtonObject.SetActive(false);
 
 		//gameManagerObject.SetActive(false);
-		//playerObject.SetActive(false);
+		playerObject.SetActive(false);
 		//alertSystemObject.SetActive(false);
 
 		lvl = GameObject.Find("Level").GetComponent<Level>();
@@ -59,6 +59,15 @@ public class TitleScreen : MonoBehaviour {
 
 		logoImage.color = new Color(0,0,0,0);
 		continueText.color = new Color(0,0,0,0);
+
+
+		if(GameObject.Find("HideTitleObject")){
+			showTitleScreen = false;
+			playerObject.SetActive(true);
+			dof.objectFocus = playerObject.transform;
+			EnableHudAndControls();
+			Destroy(gameObject);
+		}
 	}
 
 
@@ -69,6 +78,9 @@ public class TitleScreen : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+
+
+
 		//print(lookAtTarget + " : " +cController.lookAtOtherTarget);
 		GetInput();
 		ChangeColors();
@@ -128,9 +140,9 @@ public class TitleScreen : MonoBehaviour {
 
 			showTitleScreen = false;
 			//normalCanvasObject.SetActive(true);
-			playerObject.SetActive(true);
-
-			dof.objectFocus = playerObject.transform;
+//			playerObject.SetActive(true);
+//
+//			dof.objectFocus = playerObject.transform;
 			Invoke("EnableHudAndControls", 1);
 		}
 	}
@@ -152,6 +164,10 @@ public class TitleScreen : MonoBehaviour {
 		lvl.enabled = true;
 
 		roomInfoObject.SetActive(true);
+
+		playerObject.SetActive(true);
+		dof.objectFocus = playerObject.transform;
+
 
 		Destroy(this.gameObject);
 

@@ -409,7 +409,7 @@ RectTransform:
   m_RootOrder: 5
   m_AnchorMin: {x: .5, y: .5}
   m_AnchorMax: {x: .5, y: .5}
-  m_AnchoredPosition: {x: 0, y: 5.4000001}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 1000, y: 600}
   m_Pivot: {x: .5, y: .5}
 --- !u!114 &184470257
@@ -437,14 +437,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "Lorem ipsum dolor sit amet, vel expetenda contentiones no, sea at epicuri
-    partiendo. Pri cu stet nominavi expetendis, cu vis dolorem tacimates definitionem,
-    noster everti assueverit sea at. In mazim movet invenire ius. Vis unum ponderum
-    lobortis eu, ad est latine mediocritatem. Est eu ocurreret reformidans accommodare,
-    est elitr dolorem argumentum ei.\r\n\r\nQuo civibus conceptam adversarium an,
-    semper graecis salutatus est at, no stet scaevola luptatum nam. Pro ex ferri commune.
-    Admodum corrumpit consequat eum ad, vix ei scribentur comprehensam, id ferri docendi
-    his. No eos aliquam evertitur percipitur, eu duo falli equidem consulatu.\r\n"
+  m_Text: The Spectral gameplay demo is solely for use by end users for the purpose
+    of playtesting. Any reproduction, sale or redistribution of the Spectral gameplay
+    demo expressly prohibited.
 --- !u!222 &184470258
 CanvasRenderer:
   m_ObjectHideFlags: 0

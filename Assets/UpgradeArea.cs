@@ -9,9 +9,14 @@ public class UpgradeArea : MonoBehaviour {
 	bool displayDropInstructions = false, displayActivateInstructions = false, offerItem = false;
 	ScreenFade fade;
 	Transform itemTransform;
+	Transform playerTransform;
+	BoxCollider boxCol;
 
 	// Use this for initialization
 	void Start () {
+		boxCol = GetComponent<BoxCollider>();
+		playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
+
 		Time.timeScale = 1;
 		fade = GameObject.Find("Screen Fade").GetComponent<ScreenFade>();
 		tintImage = GameObject.Find("Upgrade Fader").GetComponent<RawImage>();
@@ -22,15 +27,33 @@ public class UpgradeArea : MonoBehaviour {
 		activateText 			= GameObject.Find("ActivateText").GetComponent<Text>();
 		activateText.color 		= new Color(0,0,0,0);
 
-		GameObject[] objs = GameObject.FindGameObjectsWithTag("Pickup");
-		foreach(GameObject g in objs)print(g.name);
+
 
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		//print("INSTRUCTIONS :" + displayDropInstructions + " ACTIVATE:" +displayActivateInstructions + " ITEM: " + itemTransform);
-		if(itemTransform)print(itemTransform.position);
+		//if(boxCol.bounds.Contains(playerTransform.position))print("Player inside trigger");
+		//   else print("Player outside trigger");
+
+
+		GameObject[] objs = GameObject.FindGameObjectsWithTag("Pickup");
+		foreach(GameObject g in objs){
+			if(boxCol.bounds.Contains(g.transform.position)){
+				itemTransform = g.transform;
+				//displayDropInstructions = false;
+				displayActivateInstructions = true;
+			}
+			else{
+				//displayDropInstructions = true;
+				displayActivateInstructions = false;
+			}
+		}
+		if(objs.Length <= 0){
+		//	displayDropInstructions = true;
+			displayActivateInstructions = false;
+		}
+
 		Instructions();
 		TintScreen();
 		GetInput();
@@ -87,11 +110,11 @@ public class UpgradeArea : MonoBehaviour {
 		if(c.tag == "Player"){
 			displayDropInstructions = true;
 		}
-		else if(c.tag == "Pickup"){
-			itemTransform = c.transform;
-			displayDropInstructions = false;
-			displayActivateInstructions = true;
-		}
+//		else if(c.tag == "Pickup"){
+//			itemTransform = c.transform;
+//			displayDropInstructions = false;
+//			displayActivateInstructions = true;
+//		}
 	}
 
 	void OnTriggerExit(Collider c){
@@ -99,9 +122,9 @@ public class UpgradeArea : MonoBehaviour {
 			displayDropInstructions = false;
 			displayActivateInstructions = false;
 		}
-		else if(c.tag == "Pickup"){
-			displayDropInstructions = true;
-			displayActivateInstructions = false;
-		}
+//		else if(c.tag == "Pickup"){
+//			displayDropInstructions = true;
+//			displayActivateInstructions = false;
+//		}
 	}
 }

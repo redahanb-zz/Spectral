@@ -31,13 +31,14 @@ GameObject:
   - 114: {fileID: 11446260}
   - 95: {fileID: 9549174}
   - 114: {fileID: 11453188}
+  - 65: {fileID: 6581940}
   m_Layer: 0
   m_Name: DataCube
   m_TagString: Pickup
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &104166
 GameObject:
   m_ObjectHideFlags: 0
@@ -227,7 +228,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 102120}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -50, y: -50, z: -50}
+  m_LocalPosition: {x: -2.51467609, y: .659711361, z: -7.33764124}
   m_LocalScale: {x: .400000006, y: .400000006, z: .400000006}
   m_Children:
   - {fileID: 494474}
@@ -556,6 +557,18 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 159898}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!65 &6581940
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 102120}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: .800000012, y: .800000012, z: .800000012}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!95 &9549174
 Animator:
   serializedVersion: 3

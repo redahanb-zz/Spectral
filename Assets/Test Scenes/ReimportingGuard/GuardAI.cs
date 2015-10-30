@@ -37,14 +37,6 @@ public class GuardAI : MonoBehaviour {
 
 	void Update () 
 	{
-		// OLD VERSION //
-		// check every frame to see if a guard can see the player
-//		if (vision.alerted) {
-//			// if a guard sees the player, trigger the Alert System
-//			alertSystem.GetComponent<AlertManager>().TriggerAlert();
-////			// update last player location from vision to Alert System
-////			lastSighting = vision.lastPlayerSighting;
-//		}
 
 		if(sensing.playerDetected)
 		{
@@ -95,25 +87,6 @@ public class GuardAI : MonoBehaviour {
 			behaviour.guardState = GuardBehaviour.GuardState.Idle;
 		}
 
-//		// Alternate State Machine (clone of old version)
-//		if (!sensing.playerDetected) {
-//			if (alerted) {
-//				behaviour.guardState = GuardBehaviour.GuardState.AlertPatrol;
-//			} else {
-//				if(patrolling){
-//				behaviour.guardState = GuardBehaviour.GuardState.Patrol;
-//				sensing.playerDetected = false;
-//				} else{
-//					behaviour.guardState = GuardBehaviour.GuardState.Sentry;
-//				}
-//			}
-//		} else {
-//			if(sensing.playerInSight){
-//				behaviour.guardState = GuardBehaviour.GuardState.Attack;
-//			} else{
-//				behaviour.guardState = GuardBehaviour.GuardState.Search;
-//			}
-//		}
 	} // end Update
 	
 }

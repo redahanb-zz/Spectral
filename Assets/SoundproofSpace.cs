@@ -22,10 +22,10 @@ public class SoundproofSpace : MonoBehaviour {
 	}
 
 	void OnTriggerStay(Collider coll){
-		//if (coll.tag == "Guard") {
-			print (coll.name);
+		if (coll.tag == "Guard") {
+			//print (coll.name);
 			coll.transform.GetComponent<GuardSensing>().soundProofed = true;
-		//}
+		}
 	}
 
 	void OnTriggerExit(Collider coll){

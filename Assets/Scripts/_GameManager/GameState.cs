@@ -17,6 +17,7 @@ public class GameState : MonoBehaviour {
 	public static GameState 	gameState;
 
 	private HealthManager 		pHealth;
+	private HUD_Healthbar		healthHUD;
 	private PlayerInventory		pInventory;
 	private InventoryItem 		invItem;
 	private HUD_Inventory 		invHUD;
@@ -46,6 +47,7 @@ public class GameState : MonoBehaviour {
 		print ("GameState start!");
 		// Cache references to scripts that utilise GameState variables
 		pHealth = GameObject.Find ("Health Manager").GetComponent<HealthManager> ();
+		healthHUD = GameObject.Find ("HUD_Healthbar").GetComponent<HUD_Healthbar> ();
 		pInventory = GameObject.Find ("Inventory Manager").GetComponent<PlayerInventory> ();
 		invHUD = GameObject.Find ("HUD_Inventory").GetComponent<HUD_Inventory> ();
 		pTime = GameObject.Find("Time Manager").GetComponent<TimeScaler>();
@@ -134,6 +136,8 @@ public class GameState : MonoBehaviour {
 			}
 			invHUD.buildInventoryUI (pInventory.inventorySize);
 			invHUD.UpdateAllIcons();
+			healthHUD.buildHealthbarUI(pHealth.maxHealth);
+			healthHUD.healthBarSize = pHealth.maxHealth;
 		} else {
 			print ("No save file found... Initialising default player stats.");
 			pHealth.maxHealth = 3;
@@ -141,6 +145,8 @@ public class GameState : MonoBehaviour {
 			pInventory.inventorySize = 4;
 			pInventory.playerInventory = new GameObject[4];
 			invHUD.buildInventoryUI (4);
+			healthHUD.buildHealthbarUI(3);
+			healthHUD.healthBarSize = 3;
 
 		}
 	} // end LoadGame

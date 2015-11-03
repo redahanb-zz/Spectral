@@ -17,13 +17,13 @@ EditorBuildSettings:
     path: Assets/Levels/_STAGES/Stage 7.unity
   - enabled: 0
     path: Assets/Levels/_STAGES/Stage 6.unity
-  - enabled: 1
+  - enabled: 0
     path: Assets/Levels/_STAGES/Stage 6.unity
-  - enabled: 1
+  - enabled: 0
     path: Assets/Loading Screen.unity
   - enabled: 1
     path: Assets/Colour Sensor Level 1 - Copy.unity
   - enabled: 1
     path: Assets/Greenlight Screen.unity
-  - enabled: 1
+  - enabled: 0
     path: Assets/Levels/Upgrades Screen.unity

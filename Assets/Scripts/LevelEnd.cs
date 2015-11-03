@@ -70,6 +70,7 @@ public class LevelEnd : MonoBehaviour {
 
 		if(Application.loadedLevelName == "Restore Point"){
 			print("Loading Next Level");
+			//loadObject.GetComponent<BasicLevelLoader>().SetNextLevel("Colour Sensor Level 1 - Copy");
 			loadObject.GetComponent<BasicLevelLoader>().SetNextLevel("Colour Sensor Level 1 - Copy");
 
 		}

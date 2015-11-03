@@ -27,7 +27,7 @@ public class BasicLevelLoader : MonoBehaviour {
 	void Update () {
 		if(startLoad){
 			if(!runOnce){
-				Application.LoadLevel(nextLevelName);
+				Application.LoadLevel(2);
 				runOnce = true;
 			}
 		}

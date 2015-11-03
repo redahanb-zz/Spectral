@@ -19,6 +19,7 @@ public class GuardSensing : MonoBehaviour {
 	public bool 		playerInSight;
 	public bool 		playerDetected;
 	public bool 		playerHeard;
+	public bool 		soundProofed;
 
 	// private variables
 	private float 		distanceToPlayer;
@@ -26,8 +27,7 @@ public class GuardSensing : MonoBehaviour {
 	private Vector3 	directionToPlayer;
 	private RaycastHit 	rayHit;
 	private float 		timeInSight;
-
-
+	
 	// script references
 	GameObject 			player;
 	PlayerController	playerController;
@@ -90,18 +90,29 @@ public class GuardSensing : MonoBehaviour {
 	{
 		// update data on player
 		distanceToPlayer = Vector3.Distance (transform.position, player.transform.position);
-		if(!playerInSight)
-		{
-			if(distanceToPlayer < hearingRange && playerController.currentMoveState == PlayerController.MoveState.Run && !guardAI.curious)
-			{
-				investigationLocation = player.transform.position;
-				//GameObject.Find("Lastheardlocation").transform.position = investigationLocation;
-				playerHeard = true;
 
-			} else if(distanceToPlayer < hearingRange*0.25 && playerController.currentMoveState == PlayerController.MoveState.Sneak)
+		if (distanceToPlayer <= hearingRange) {
+			//print ("Player in hearing range!");
+			player.GetComponent<FootstepFX> ().enemyInRange = true;
+		} else {
+			//print ("Player outisde hearing range!");
+			player.GetComponent<FootstepFX> ().enemyInRange = false;
+		}
+
+		if(!soundProofed){
+			if(!playerInSight)
 			{
-				investigationLocation = player.transform.position;
-				playerHeard = true;
+				if(distanceToPlayer < hearingRange && playerController.currentMoveState == PlayerController.MoveState.Run && !guardAI.curious)
+				{
+					investigationLocation = player.transform.position;
+					//GameObject.Find("Lastheardlocation").transform.position = investigationLocation;
+					playerHeard = true;
+
+				} else if(distanceToPlayer < hearingRange*0.25 && playerController.currentMoveState == PlayerController.MoveState.Sneak)
+				{
+					investigationLocation = player.transform.position;
+					playerHeard = true;
+				}
 			}
 		}
 

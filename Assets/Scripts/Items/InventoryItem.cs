@@ -70,7 +70,9 @@ public class InventoryItem : MonoBehaviour {
 
 	public void pickupAnim()
 	{
-		StartCoroutine (pickupONCE ("PickedUp"));
+		if(playerInventory.nextAvailableSlot() != -1){
+			StartCoroutine (pickupONCE ("PickedUp"));
+		}
 	}
 
 
@@ -98,8 +100,8 @@ public class InventoryItem : MonoBehaviour {
 
 	public void addItemToInventory()
 	{
-		playerInventory.addItem (gameObject);
-		pickupButton.GetComponent<ItemInfoButton>().deactivateButton();
+			playerInventory.addItem (gameObject);
+			pickupButton.GetComponent<ItemInfoButton>().deactivateButton();
 	}
 
 

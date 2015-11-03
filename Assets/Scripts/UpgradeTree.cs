@@ -52,9 +52,9 @@ public class UpgradeTree : MonoBehaviour {
 		startPoint = GetComponent<RectTransform>().localPosition;
 		healthPoint = GameObject.Find("Health Button").GetComponent<RectTransform>().localPosition;
 		inventoryPoint = GameObject.Find("Inventory Button").GetComponent<RectTransform>().localPosition;
-		speedPoint = GameObject.Find("Move Speed Button").GetComponent<RectTransform>().localPosition;
+//		speedPoint = GameObject.Find("Move Speed Button").GetComponent<RectTransform>().localPosition;
 //		colourPoint = GameObject.Find("Colour Speed Button").GetComponent<RectTransform>().localPosition;
-//		noisePoint = GameObject.Find("Move Noise Button").GetComponent<RectTransform>().localPosition;
+		noisePoint = GameObject.Find("Move Noise Button").GetComponent<RectTransform>().localPosition;
 		timescalePoint = GameObject.Find("Timescale Button").GetComponent<RectTransform>().localPosition;
 
 		centerPoint = startPoint;

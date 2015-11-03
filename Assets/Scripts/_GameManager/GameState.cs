@@ -47,8 +47,10 @@ public class GameState : MonoBehaviour {
 		// Cache references to scripts that utilise GameState variables
 		pHealth = GameObject.Find ("Health Manager").GetComponent<HealthManager> ();
 		pInventory = GameObject.Find ("Inventory Manager").GetComponent<PlayerInventory> ();
-		invHUD = GameObject.Find ("HUD_Inventory").GetComponent<HUD_Inventory> ();
-		pTime = GameObject.Find("Time Manager").GetComponent<TimeScaler>();
+		if(Application.loadedLevelName != "Upgrades Screen"){
+			invHUD = GameObject.Find ("HUD_Inventory").GetComponent<HUD_Inventory> ();
+			pTime = GameObject.Find("Time Manager").GetComponent<TimeScaler>();
+		}
 
 		LoadGame ();
 	}

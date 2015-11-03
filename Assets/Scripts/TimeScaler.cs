@@ -39,26 +39,33 @@ public class TimeScaler : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		//print(timeSlowed);
 
-		myTime = 0;
-		timeNow = 0;
-		lastInterval = 0;
-
-
-		buttonObject = GameObject.Find("Time Button");
-		if(buttonObject.transform.Find("Text"))	timeText = buttonObject.transform.Find("Text").GetComponent<Text>();
-
-
-		if(buttonObject.transform.Find("Hourglass"))hasHourglass = true;
-		if(hasHourglass){
-			rotateComponent = buttonObject.transform.Find("Hourglass").GetComponent<UIRotateOverTime>();
-			fillTransform = GameObject.Find("Hourglass").transform.Find("Fill").GetComponent<RectTransform>();
+		if(Application.loadedLevelName == "Upgrades Screen"){
+			gameObject.SetActive(false);
 		}
-		playerAnimator 	= GameObject.FindGameObjectWithTag("Player").GetComponent<Animator>();
-		myDeltaTime 	= Time.deltaTime;
-		lastInterval 	= Time.realtimeSinceStartup;
-		//pauseManager = GameObject.Find ("Pause Manager").GetComponent<PauseManager> ();
+		else{
+			//print(timeSlowed);
+			
+			myTime = 0;
+			timeNow = 0;
+			lastInterval = 0;
+			
+			
+			buttonObject = GameObject.Find("Time Button");
+			if(buttonObject.transform.Find("Text"))	timeText = buttonObject.transform.Find("Text").GetComponent<Text>();
+			
+			
+			if(buttonObject.transform.Find("Hourglass"))hasHourglass = true;
+			if(hasHourglass){
+				rotateComponent = buttonObject.transform.Find("Hourglass").GetComponent<UIRotateOverTime>();
+				fillTransform = GameObject.Find("Hourglass").transform.Find("Fill").GetComponent<RectTransform>();
+			}
+			playerAnimator 	= GameObject.FindGameObjectWithTag("Player").GetComponent<Animator>();
+			myDeltaTime 	= Time.deltaTime;
+			lastInterval 	= Time.realtimeSinceStartup;
+			//pauseManager = GameObject.Find ("Pause Manager").GetComponent<PauseManager> ();
+
+		}
 	}
 
 	public void ToggleTime(){

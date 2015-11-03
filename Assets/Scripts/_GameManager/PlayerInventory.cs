@@ -16,8 +16,8 @@ public class PlayerInventory : MonoBehaviour {
 		// This value should be loaded from the player data file, as its size can be upgraded in between missions
 		//inventorySize = GameState.data.inventorySize;
 		//playerInventory = new GameObject[inventorySize];
-		inventoryUI = GameObject.Find("HUD_Inventory").GetComponent<HUD_Inventory>();
-		player = GameObject.FindWithTag ("Player");
+		if(GameObject.Find("HUD_Inventory")) inventoryUI = GameObject.Find("HUD_Inventory").GetComponent<HUD_Inventory>();
+		//player = GameObject.FindWithTag ("Player");
 
 	}
 

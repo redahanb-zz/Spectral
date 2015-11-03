@@ -10,15 +10,29 @@ public class HealthManager : MonoBehaviour {
 	PlayerBodyparts bodyParts;
 	HUD_Healthbar healthUI;
 
+	GameState gState;
+
+	UpgradeHealth upgradeInfo;
+
 	// Use this for initialization
 	void Start () {
+
+
 		// Pull health data from GameState object
-//		maxHealth = GameState.data.maxHealth;
-//		playerHealth = GameState.data.currentHealth;
-		healthUI = GameObject.Find ("HUD_Healthbar").GetComponent<HUD_Healthbar>();
-		healthUI.buildHealthbarUI (maxHealth);
-		healthUI.healthBarSize = maxHealth;
-		bodyParts = GameObject.FindWithTag ("Player").GetComponent<PlayerBodyparts> ();
+		// maxHealth = GameState.data.maxHealth;
+		// playerHealth = GameState.data.currentHealth;
+
+		if(Application.loadedLevelName != "Upgrades Screen"){
+			healthUI = GameObject.Find ("HUD_Healthbar").GetComponent<HUD_Healthbar>();
+			healthUI.buildHealthbarUI (maxHealth);
+			healthUI.healthBarSize = maxHealth;
+			bodyParts = GameObject.FindWithTag ("Player").GetComponent<PlayerBodyparts> ();
+		}
+		else{
+			upgradeInfo = GameObject.Find("Health Upgrade Info").GetComponent<UpgradeHealth>();
+			upgradeInfo.currentHealth = maxHealth;
+		}
+
 
 	}
 	
@@ -36,7 +50,11 @@ public class HealthManager : MonoBehaviour {
 
 		if(playerHealth <= 0){
 			//print ("Player was killed...");
-			bodyParts.selfDestruct();
+			if(Application.loadedLevelName != "Upgrades Screen")bodyParts.selfDestruct();
 		}
+	}
+
+	public void IncreaseMaxHealth(){
+		maxHealth = maxHealth + 1;
 	}
 }

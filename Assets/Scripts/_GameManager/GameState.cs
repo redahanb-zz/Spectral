@@ -27,7 +27,7 @@ public class GameState : MonoBehaviour {
 	// Singleton design pattern - there can only be one GameState Object: the one from the first scene loaded
 	void Awake () 
 	{
-		print ("GameState awake!");
+		//print ("GameState awake!");
 		if (gameState == null) {
 			// If this is the first scene loaded, set this as the GameState object
 			DontDestroyOnLoad (gameObject);
@@ -44,7 +44,7 @@ public class GameState : MonoBehaviour {
 	
 	void Start()
 	{
-		print ("GameState start!");
+		//print ("GameState start!");
 		// Cache references to scripts that utilise GameState variables
 		pHealth = GameObject.Find ("Health Manager").GetComponent<HealthManager> ();
 		healthHUD = GameObject.Find ("HUD_Healthbar").GetComponent<HUD_Healthbar> ();

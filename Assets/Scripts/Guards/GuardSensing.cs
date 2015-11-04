@@ -65,9 +65,9 @@ public class GuardSensing : MonoBehaviour {
 		distanceToPlayer = Vector3.Distance (transform.position, player.transform.position);
 		directionToPlayer = player.transform.position - transform.position;
 		angleToPlayer = Vector3.Angle (directionToPlayer, transform.forward);
-
-		playerInSight = false;
-		if(distanceToPlayer < sightRange && (player.transform.position.y - transform.position.y < 0.1))
+        //print("V Sight " + (player.transform.position.y - transform.position.y));
+        playerInSight = false;
+		if(distanceToPlayer < sightRange && (Mathf.Abs(player.transform.position.y - transform.position.y) < 0.05))
 		{
 			if(angleToPlayer < fieldOfView)
 			{
@@ -95,20 +95,21 @@ public class GuardSensing : MonoBehaviour {
 			//print ("Player in hearing range!");
 			player.GetComponent<FootstepFX> ().enemyInRange = true;
 		} else {
-			//print ("Player outisde hearing range!");
+			//print ("Player outside hearing range!");
 			player.GetComponent<FootstepFX> ().enemyInRange = false;
 		}
 
 		if(!soundProofed){
 			if(!playerInSight)
 			{
-				if(distanceToPlayer < hearingRange && playerController.currentMoveState == PlayerController.MoveState.Run && !guardAI.curious)
+				if(distanceToPlayer < hearingRange && (Mathf.Abs(player.transform.position.y - transform.position.y) < 0.05) && playerController.currentMoveState == PlayerController.MoveState.Run && !guardAI.curious)
 				{
-					investigationLocation = player.transform.position;
+                    //print("V Hearing " + (player.transform.position.y - transform.position.y));
+                    investigationLocation = player.transform.position;
 					//GameObject.Find("Lastheardlocation").transform.position = investigationLocation;
 					playerHeard = true;
 
-				} else if(distanceToPlayer < hearingRange*0.25 && playerController.currentMoveState == PlayerController.MoveState.Sneak)
+				} else if(distanceToPlayer < hearingRange*0.25 && (Mathf.Abs(player.transform.position.y - transform.position.y) < 0.05) && playerController.currentMoveState == PlayerController.MoveState.Sneak)
 				{
 					investigationLocation = player.transform.position;
 					playerHeard = true;

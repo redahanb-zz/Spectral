@@ -76,9 +76,9 @@ public class PlayerController : MonoBehaviour {
 //		playerRenderer 	= transform.Find("Model").GetComponent<Renderer>();
 //		playerRenderer.material.color = Color.grey;
 
-		agent 			= GetComponent<NavMeshAgent>();
+		agent 				= GetComponent<NavMeshAgent>();
 		agent.SetDestination(transform.position);
-		timeScale 		= GameObject.Find("Time Manager").GetComponent<TimeScaler>();
+		timeScale 			= GameObject.Find("Time Manager").GetComponent<TimeScaler>();
 		Invoke("ToggleCanMove", 0.1f);
 		
 	}
@@ -102,6 +102,8 @@ public class PlayerController : MonoBehaviour {
 				part.GetComponent<Renderer>().material.color = Color.Lerp(part.GetComponent<Renderer>().material.color, targetcolor, 10*Time.deltaTime);
 			}
 		}
+
+
 	} // end update
 
 	//Assigns action per state and sets the animator move state

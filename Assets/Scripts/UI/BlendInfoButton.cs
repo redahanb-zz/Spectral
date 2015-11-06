@@ -46,6 +46,10 @@ public class BlendInfoButton : MonoBehaviour {
 		icon.color = Color.Lerp (icon.color, playerColor, 10*Time.deltaTime);
 		//icon.color = playerColor;
 
+		if(target.activeSelf == false || Vector3.Distance(target.transform.position, player.transform.position) > 3.0f){
+			gameObject.SetActive(false);
+		}
+
 	}
 	
 	public void deactivateButton(){

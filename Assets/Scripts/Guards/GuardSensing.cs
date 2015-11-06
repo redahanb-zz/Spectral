@@ -48,7 +48,7 @@ public class GuardSensing : MonoBehaviour {
 		CheckHearing ();
 
 		if (playerInSight) {
-			if (timeInSight <= 0.5f) {
+			if (timeInSight <= 0.3f) {
 				timeInSight += Time.deltaTime;
 			} else {
 				playerDetected = true;
@@ -67,7 +67,7 @@ public class GuardSensing : MonoBehaviour {
 		angleToPlayer = Vector3.Angle (directionToPlayer, transform.forward);
         //print("V Sight " + (player.transform.position.y - transform.position.y));
         playerInSight = false;
-		if(distanceToPlayer < sightRange && (Mathf.Abs(player.transform.position.y - transform.position.y) < 0.05))
+		if(distanceToPlayer < sightRange && (Mathf.Abs(player.transform.position.y - transform.position.y) < 0.5))
 		{
 			if(angleToPlayer < fieldOfView)
 			{
@@ -76,6 +76,7 @@ public class GuardSensing : MonoBehaviour {
 					if(rayHit.transform.tag == "Player"){
 						if(playerController.isVisible)
 						{
+							print ("Player is VISIBLE!!!");
 							playerInSight = true;
 							lastPlayerSighting = player.transform.position;
 						}

@@ -17,7 +17,7 @@ public class PlayerInventory : MonoBehaviour {
 		//inventorySize = GameState.data.inventorySize;
 		//playerInventory = new GameObject[inventorySize];
 		if(GameObject.Find("HUD_Inventory")) inventoryUI = GameObject.Find("HUD_Inventory").GetComponent<HUD_Inventory>();
-		//player = GameObject.FindWithTag ("Player");
+		player = GameObject.FindWithTag ("Player");
 
 	}
 

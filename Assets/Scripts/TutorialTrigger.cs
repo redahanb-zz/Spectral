@@ -7,7 +7,6 @@ public class TutorialTrigger : MonoBehaviour {
 	GameObject tutorialObject;
 	Text textObj;
 
-
 	TimeScaler tScaler;
 	PlayerController pController;
 	// Use this for initialization
@@ -23,20 +22,16 @@ public class TutorialTrigger : MonoBehaviour {
 
 	void OnTriggerEnter(Collider c){
 		if(c.tag == "Player"){
-			//tScaler.StopTime();
+			tScaler.StopTime();
 			pController = c.GetComponent<PlayerController>();
 			pController.StopMoving();
 
-			if(GameObject.Find("Tutorial"))GameObject.Find("Tutorial").GetComponent<SimpleTutorial>().InterruptTutorial();
-
-
-			tutorialObject = Instantiate(Resources.Load("Tutorial_Box"), Vector3.zero, Quaternion.identity) as GameObject;
+			tutorialObject = Instantiate(Resources.Load("Tutorial"), Vector3.zero, Quaternion.identity) as GameObject;
 			tutorialObject.name = "Tutorial";
 			tutorialObject.transform.parent = GameObject.Find("Canvas").transform;
-			tutorialObject.transform.position = tutorialObject.transform.parent.position + new Vector3(0,(-Screen.height/2) + 200,0);
+			tutorialObject.transform.position = tutorialObject.transform.parent.position;
 
-
-			textObj = tutorialObject.transform.Find("Background").Find("Text").GetComponent<Text>();
+			textObj = tutorialObject.transform.Find("Tutorial Box").Find("Tutorial Text").GetComponent<Text>();
 			textObj.text = tutorialText;
 			Destroy(gameObject);
 		}

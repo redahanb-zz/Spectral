@@ -8,6 +8,7 @@ public class ScreenFade : MonoBehaviour {
 	GameObject fadeObject;
 	RawImage rImg;
 	RectTransform rTrans;
+	GameObject canvas;
 
 	public float lastInterval, timeNow, myTime;
 	//
@@ -31,6 +32,7 @@ public class ScreenFade : MonoBehaviour {
 		rTrans = transform.Find("Fade").GetComponent<RectTransform>();
 		rTrans.sizeDelta = new Vector2(Screen.width, Screen.height);
 		fadeToColor = false;
+		canvas = gameObject.transform.parent.gameObject;
 	}
 
 	public void ToggleCanFade(){
@@ -72,5 +74,11 @@ public class ScreenFade : MonoBehaviour {
 
 		fadeToColor = true;
 		Time.timeScale = 1;
+	}
+
+	public void ResetParent(){
+		print ("Restting fader in hierarchy!");
+		transform.SetParent (null);
+		transform.SetParent (canvas.transform);
 	}
 }

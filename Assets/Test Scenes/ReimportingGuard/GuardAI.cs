@@ -18,11 +18,11 @@ public class GuardAI : MonoBehaviour {
 	public Vector3 			lastSighting;
 
 	// cache references
-	//private EnemySight 		vision;  // from old version
 	private GuardSensing 	sensing;
 	private GuardBehaviour 	behaviour;
 	private HealthManager	pHealth;
 	public AlertManager 	alertSystem;
+	//private EnemySight 		vision;  // from old version
 	
 	void Start () 
 	{

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class GuardSelfDestruct : MonoBehaviour {
 
 	public GameObject[] bodyparts = new GameObject[29];
+	public GameObject[] colorParts = new GameObject[8];
 	//List<GameObject> bodyparts = new List<GameObject>();
 
 	// Use this for initialization

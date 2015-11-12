@@ -5054,9 +5054,9 @@ Rigidbody:
   m_Drag: 0
   m_AngularDrag: .0500000007
   m_UseGravity: 1
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
-  m_Constraints: 80
+  m_Constraints: 126
   m_CollisionDetection: 0
 --- !u!95 &9516924
 Animator:
@@ -5091,6 +5091,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 783517847fd5842e0b8355189bd820fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyInRange: 0
 --- !u!114 &11463562
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5342,6 +5343,14 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: targetcolor.b
       value: .257352948
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_IsKinematic
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_Constraints
+      value: 126
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

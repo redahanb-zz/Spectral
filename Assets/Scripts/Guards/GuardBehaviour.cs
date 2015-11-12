@@ -11,25 +11,25 @@ using System.Collections;
 public class GuardBehaviour : MonoBehaviour {
 
 	// public variables
-	public GameObject 	sentryPoint;
-	public GameObject 	waypoint1;
-	public GameObject 	waypoint2;
-	public GameObject 	waypoint3;
-	public GameObject 	alertWaypoint1;
-	public GameObject 	alertWaypoint2;
-	public GameObject 	alertWaypoint3;
-	public float 		waitTime;
+	public GameObject 			sentryPoint;
+	public GameObject 			waypoint1;
+	public GameObject 			waypoint2;
+	public GameObject 			waypoint3;
+	public GameObject 			alertWaypoint1;
+	public GameObject 			alertWaypoint2;
+	public GameObject 			alertWaypoint3;
+	public float 				waitTime;
 
 	// private variables
-	private bool 		walking;
-	private Vector3[] 	patrolRoute;
-	private int 		patrolIndex = 0;
-	private Vector3[] 	alertRoute;
-	private int 		alertIndex = 0;
-	private float 		waitCount;
-	private float 		listenCount; // timer for Investigate behaviour
-	private Quaternion 	lookRotation;
-	private Vector3 	lastPlayerSighting;
+	private bool 				walking;
+	private Vector3[] 			patrolRoute;
+	private int 				patrolIndex = 0;
+	private Vector3[] 			alertRoute;
+	private int 				alertIndex = 0;
+	private float 				waitCount;
+	private float 				listenCount; // timer for Investigate behaviour
+	private Quaternion 			lookRotation;
+	private Vector3 			lastPlayerSighting;
 
 	public enum GuardState 
 	{
@@ -44,13 +44,14 @@ public class GuardBehaviour : MonoBehaviour {
 	public GuardState 		guardState;
 
 	// script references
-	private GameObject 		player;
-	private NavMeshAgent 	navMeshAgent;
-	private GuardSensing 	guardSensing;
-	private GuardAI			guardAI;
-	private Shooting 		guardShooting;
-	private Animator		anim;
-	private HealthManager	pHealth;
+	private GameObject 			player;
+	private NavMeshAgent 		navMeshAgent;
+	private GuardSensing 		guardSensing;
+	private GuardAI				guardAI;
+	private Shooting 			guardShooting;
+	private Animator			anim;
+	private HealthManager		pHealth;
+	private GuardSelfDestruct 	guardBodyParts;
 
 
 	void Start () 
@@ -62,6 +63,7 @@ public class GuardBehaviour : MonoBehaviour {
 		guardShooting = GetComponent<Shooting> ();
 		anim = GetComponent<Animator> ();
 		pHealth = GameObject.Find("Health Manager").GetComponent<HealthManager> ();
+		guardBodyParts = GetComponent<GuardSelfDestruct> ();
 
 		// compile patrol and alert routes
 		patrolRoute = new Vector3[4]
@@ -148,6 +150,7 @@ public class GuardBehaviour : MonoBehaviour {
 			anim.SetFloat("Speed", 0.0f);
 			guardSensing.enabled = false;
 		}
+		updateColour (Color.blue);
 	} // end Idle
 
 	void Sentry()
@@ -161,6 +164,7 @@ public class GuardBehaviour : MonoBehaviour {
 			navMeshAgent.Stop ();
 			anim.SetFloat("Speed", 0.0f);
 		}
+		updateColour (Color.gray);
 	} // end Sentry
 
 	void Patrol()
@@ -182,7 +186,7 @@ public class GuardBehaviour : MonoBehaviour {
 				waitCount = 0.0f;
 			}
 		} 
-
+		updateColour (Color.gray);
 	} // end Patrol
 
 	void nextPatrolPoint()
@@ -218,6 +222,7 @@ public class GuardBehaviour : MonoBehaviour {
 				waitCount = 0.0f;
 			}
 		}
+		updateColour (Color.red);
 	} // end AlertPatrol
 
 	void nextAlertPoint()
@@ -254,6 +259,7 @@ public class GuardBehaviour : MonoBehaviour {
 				waitCount = 0.0f;
 			}
 		}
+		updateColour (Color.red);
 	} // end Search
 
 	void Investigate()
@@ -287,6 +293,7 @@ public class GuardBehaviour : MonoBehaviour {
 				}
 			}
 		}
+		updateColour (Color.yellow);
 	} // end Investigate
 
 	void Attack()
@@ -313,5 +320,12 @@ public class GuardBehaviour : MonoBehaviour {
 				anim.SetBool("InSight", false);
 			}
 		}
+		updateColour (Color.red);
 	} // end Attack
+
+	void updateColour(Color targetColor){
+		foreach(GameObject bodypart in guardBodyParts.colorParts){
+			bodypart.GetComponent<Renderer>().material.color = Color.Lerp(bodypart.GetComponent<Renderer>().material.color,targetColor, Time.deltaTime * 5.0f);
+		}
+	}
 }

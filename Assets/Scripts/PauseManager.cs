@@ -11,7 +11,9 @@ public class PauseManager : MonoBehaviour {
 
 	GameObject mainCanvas;
 	public GameObject pauseScreen;
+	public GameObject failScreen;
 	TimeManager timeManager;
+	HealthManager healthManager;
 	//DepthOfFieldDeprecated DOField;
 	BlurOptimized blurFX;
 
@@ -19,8 +21,10 @@ public class PauseManager : MonoBehaviour {
 	void Start () {
 		mainCanvas = GameObject.Find ("Canvas");
 		timeManager = GameObject.Find ("Time Manager").GetComponent<TimeManager>();
+		healthManager = GameObject.Find ("Health Manager").GetComponent<HealthManager> ();
 		//pauseScreen = GameObject.Find ("Pause Screen");
 		pauseScreen.SetActive (false);
+		failScreen.SetActive (false);
 		//DOField = GameObject.FindWithTag ("MainCamera").GetComponent<DepthOfFieldDeprecated> ();
 		blurFX = GameObject.FindWithTag ("MainCamera").GetComponent<BlurOptimized> ();
 		blurFX.enabled = false;
@@ -37,6 +41,11 @@ public class PauseManager : MonoBehaviour {
 
 		if(blurFX.blurSize <= 0.0f){
 			blurFX.enabled = false;
+		}
+
+		if(healthManager.playerDead){
+			gamePaused = true;
+			failScreen.SetActive(true);
 		}
 	}
 

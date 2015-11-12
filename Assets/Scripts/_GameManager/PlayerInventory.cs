@@ -45,7 +45,7 @@ public class PlayerInventory : MonoBehaviour {
 		
 	public void dropItem()
 	{
-		Vector3 dropLocation = player.transform.position + (player.transform.forward*0.3f);
+		Vector3 dropLocation = player.transform.position + (player.transform.forward*-0.5f);
 		playerInventory[highlightedSlot].transform.position = dropLocation;
 		playerInventory[highlightedSlot].gameObject.SetActive (true);
 	}
@@ -54,23 +54,16 @@ public class PlayerInventory : MonoBehaviour {
 	{
 		if(playerInventory[index])
 		{
-			Vector3 dropLocation = player.transform.position + (player.transform.forward*0.3f) + (Vector3.up * 0.25f);
+			Vector3 dropLocation = player.transform.position + (player.transform.forward*-0.5f) + (Vector3.up * 0.25f);
 			playerInventory[index].transform.position = dropLocation;
+			playerInventory[index].transform.SetParent(null);
 			playerInventory[index].gameObject.SetActive (true);
 			playerInventory[index].gameObject.GetComponent<InventoryItem>().dropAnim();
 			playerInventory [index] = null;
 			inventoryUI.updateIcon(index);
 		}
 	}
-	
-//	public void throwItem()
-//	{
-//		Vector3 dropLocation = transform.position + transform.forward * 0.3f + Vector3.up;
-//		playerInventory [highlightedSlot].transform.position = dropLocation;
-//		playerInventory [highlightedSlot].gameObject.SetActive (true);
-//		playerInventory [highlightedSlot].GetComponent<Rigidbody> ().AddForce (transform.forward * 2.5f, ForceMode.Impulse);
-//	}
-	
+		
 	public int nextAvailableSlot() 
 	{
 		// searches the inventory for the first available slot 

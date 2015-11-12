@@ -20,6 +20,8 @@ public class BlendInfoButton : MonoBehaviour {
 		player = GameObject.FindWithTag ("Player");
 		playerController = player.GetComponent<PlayerController> ();
 		icon = transform.GetChild(0).gameObject.GetComponent<Image> ();
+		GameObject.Find ("Screen Fade").GetComponent<ScreenFade> ().ResetParent ();
+		print (GameObject.Find ("Screen Fade"));
 	}
 	
 	public void setTarget(GameObject t){

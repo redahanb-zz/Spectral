@@ -3,19 +3,21 @@ using System.Collections;
 
 public class InventoryItem : MonoBehaviour {
 
-	PlayerInventory playerInventory;
-	Animator anim;
+	PlayerInventory 	playerInventory;
+	Animator 			anim;
+	HUD_Inventory 		inv_HUD;
 
-	public string itemName;
-	public Color itemColor;
-	public Sprite itemIcon;
-	public int itemValue;
+	public string 	itemName;
+	public Color 	itemColor;
+	public Sprite 	itemIcon;
+	public int 		itemValue;
 
-	GameObject pickupButton;
+	GameObject 		pickupButton;
 	
 	// Use this for initialization
 	void Start () {
 		playerInventory = GameObject.Find ("Inventory Manager").GetComponent<PlayerInventory> ();
+		inv_HUD = GameObject.Find("HUD_Inventory").GetComponent<HUD_Inventory>();
 		anim = GetComponent<Animator> ();
 
 		Renderer[] childMeshes = GetComponentsInChildren<Renderer> ();
@@ -49,11 +51,13 @@ public class InventoryItem : MonoBehaviour {
 		if(playerInventory.nextAvailableSlot() != -1){
 			StartCoroutine (pickupONCE ("PickedUp"));
 		}
+		inv_HUD.pickupSound ();
 	}
 	
 	public void dropAnim()
 	{
 		StartCoroutine (dropONCE("Dropped"));
+		inv_HUD.dropSound ();
 	}
 
 

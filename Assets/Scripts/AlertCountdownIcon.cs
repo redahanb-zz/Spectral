@@ -4,20 +4,20 @@ using UnityEngine.UI;
 
 public class AlertCountdownIcon : MonoBehaviour {
 
-	Image countDownIcon;
-	Image backgroundRing;
-	AlertManager alertManager;
-	Text timerText;
-	string countdown;
-	Color transpWhite;
+	Image 			countDownIcon;
+	Image 			backgroundRing;
+	AlertManager 	alertManager;
+	Text 			timerText;
+	string 			countdown;
+	Color 			transpWhite;
 	//public float threshold = 0.5f;
 
 	// Use this for initialization
 	void Start () {
-		//countDownIcon = GameObject.Find ("AlertCountdownIcon").GetComponent<Image> ();
+
 		backgroundRing = GameObject.Find ("AlertCountdownIcon").GetComponent<Image> ();
 		alertManager = GameObject.Find ("Alert System").GetComponent<AlertManager> ();
-		//backgroundRing = transform.GetChild (0).GetComponent<Image> ();
+
 		countDownIcon = transform.GetChild (0).GetComponent<Image> ();
 		countDownIcon.enabled = false;
 		timerText = transform.GetChild (1).GetComponent<Text> ();
@@ -26,7 +26,6 @@ public class AlertCountdownIcon : MonoBehaviour {
 		transpWhite = Color.white;
 		transpWhite.a = 0.5f;
 		backgroundRing.color = transpWhite;
-		//backgroundRing.enabled = false;
 	}
 	
 	// Update is called once per frame
@@ -34,16 +33,21 @@ public class AlertCountdownIcon : MonoBehaviour {
 		if (alertManager.alertActive) {
 			countDownIcon.enabled = true;
 			backgroundRing.enabled = true;
+			backgroundRing.color = Color.white;
 			countDownIcon.fillAmount = alertManager.alertCountDown / 20.0f;
 			countDownIcon.color = Color.Lerp(Color.red, Color.white, (1.0f - alertManager.alertCountDown / 20.0f));
 			timerText.text = string.Format("{0:0.0}", alertManager.alertCountDown);
 			timerText.color = Color.white;
-			//backgroundRing.color = Color.Lerp(Color.red, Color.white, (1.0f - alertManager.alertCountDown / 20.0f));
+			transpWhite = Color.white;
+			transpWhite.a = 0.5f;
 		} else {
 			countDownIcon.enabled = false;
-			//backgroundRing.enabled = false;
-			timerText.text =countdown;
+			timerText.text = countdown;
+
+			transpWhite.a = Mathf.Lerp(transpWhite.a, 0.0f, Time.deltaTime * 2.5f);
+
 			timerText.color = transpWhite;
+			backgroundRing.color = transpWhite;
 		}
 	}
 }

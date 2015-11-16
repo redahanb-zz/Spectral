@@ -32,12 +32,14 @@ public class GuardSensing : MonoBehaviour {
 	GameObject 			player;
 	PlayerController	playerController;
 	GuardAI 			guardAI;
+	GuardBehaviour		gBehaviour;
 	
 	void Start () 
 	{
 		player = GameObject.FindWithTag ("Player");
 		playerController = player.GetComponent<PlayerController>();
 		guardAI = GetComponent<GuardAI> ();
+		gBehaviour = GetComponent<GuardBehaviour> ();
 
 	} // end Start
 	
@@ -109,12 +111,15 @@ public class GuardSensing : MonoBehaviour {
                     investigationLocation = player.transform.position;
 					//GameObject.Find("Lastheardlocation").transform.position = investigationLocation;
 					playerHeard = true;
+					gBehaviour.waitCount = 0.0f;
 
-				} else if(distanceToPlayer < hearingRange*0.25 && (Mathf.Abs(player.transform.position.y - transform.position.y) < 0.05) && playerController.currentMoveState == PlayerController.MoveState.Sneak)
-				{
-					investigationLocation = player.transform.position;
-					playerHeard = true;
-				}
+				} 
+//				else if(distanceToPlayer < hearingRange*0.25 && (Mathf.Abs(player.transform.position.y - transform.position.y) < 0.05) && playerController.currentMoveState == PlayerController.MoveState.Sneak)
+//				{
+//					investigationLocation = player.transform.position;
+//					playerHeard = true;
+//					gBehaviour.waitCount = 0.0f;
+//				}
 			}
 		}
 

@@ -26,7 +26,7 @@ public class GuardBehaviour : MonoBehaviour {
 	private int 				patrolIndex = 0;
 	private Vector3[] 			alertRoute;
 	private int 				alertIndex = 0;
-	private float 				waitCount;
+	public float 				waitCount;
 	private float 				listenCount; // timer for Investigate behaviour
 	private Quaternion 			lookRotation;
 	private Vector3 			lastPlayerSighting;
@@ -207,6 +207,7 @@ public class GuardBehaviour : MonoBehaviour {
 	void AlertPatrol()
 	// secondary patrol routine for the guard, patrols at a faster pace to a different array of waypoints
 	{
+		anim.SetBool ("InSight", false);
 		navMeshAgent.Resume();
 		
 		if (Vector3.Distance (transform.position, alertRoute [alertIndex]) >= 0.5f) {

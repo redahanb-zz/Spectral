@@ -12,7 +12,7 @@ public class PauseManager : MonoBehaviour {
 	GameObject mainCanvas;
 	public GameObject pauseScreen;
 	public GameObject failScreen;
-	TimeManager timeManager;
+	TimeScaler timeScaler;
 	HealthManager healthManager;
 	//DepthOfFieldDeprecated DOField;
 	BlurOptimized blurFX;
@@ -20,7 +20,7 @@ public class PauseManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		mainCanvas = GameObject.Find ("Canvas");
-		timeManager = GameObject.Find ("Time Manager").GetComponent<TimeManager>();
+		timeScaler = GameObject.Find ("Time Manager").GetComponent<TimeScaler>();
 		healthManager = GameObject.Find ("Health Manager").GetComponent<HealthManager> ();
 		//pauseScreen = GameObject.Find ("Pause Screen");
 		pauseScreen.SetActive (false);
@@ -35,8 +35,10 @@ public class PauseManager : MonoBehaviour {
 		if (gamePaused) {
 			blurFX.enabled = true;
 			blurFX.blurSize = Mathf.Lerp (blurFX.blurSize, 10.0f, Time.deltaTime * 5.0f);
+			timeScaler.StopTime();
 		} else {
 			blurFX.blurSize = Mathf.Lerp (blurFX.blurSize, 0.0f, Time.deltaTime * 50.0f);
+			timeScaler.ResumeTime();
 		}
 
 		if(blurFX.blurSize <= 0.0f){

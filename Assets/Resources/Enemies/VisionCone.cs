@@ -64,14 +64,14 @@ public class VisionCone : MonoBehaviour {
 			{
 				temp = transform.InverseTransformPoint(hit.point);
 				//temp = hit.point;
-				vertices[i] = new Vector3(temp.x,0.1f,temp.z);
+				vertices[i] = new Vector3(temp.x,0.005f,temp.z);
 				//Debug.DrawLine (transform.position, hit.point, Color.red);
 			} 
 			else
 			{
 				temp = transform.InverseTransformPoint(transform.position + dir);
 				//temp = transform.position + dir;
-				vertices[i] = new Vector3(temp.x,0.1f,temp.z);
+				vertices[i] = new Vector3(temp.x,0.005f,temp.z);
 			}
 			
 		} // end loop

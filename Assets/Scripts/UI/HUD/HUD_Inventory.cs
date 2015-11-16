@@ -13,28 +13,27 @@ public class HUD_Inventory : MonoBehaviour {
 	bool hideInvHUD = false;
 	RectTransform rectTran;
 
+	public AudioClip pickUpFX;
+	public AudioClip dropFX;
+
 	// optimizing script: global variables to reuse
 	Image itemIcon;
 	Color iconColor;
 	Text valueText;
-
 
 	// Use this for initialization
 	void Start () 
 	{
 		rectTran = GetComponent<RectTransform> ();
 		playerInventory = GameObject.Find ("Inventory Manager").GetComponent<PlayerInventory> ();
-//		inventorySize = playerInventory.inventorySize;
-//		buildInventoryUI (inventorySize);
-		//Invoke ("UpdateAllIcons", 2.0f);
 	}
 	
 	// Update is called once per frame
 	void Update () 
 	{
-//		if(Input.GetKeyDown(KeyCode.H)){
-//			toggleHide();
-//		}
+		if(Input.GetKeyDown(KeyCode.H)){
+			toggleHide();
+		}
 		
 		if (hideInvHUD) {
 			hideHUD();
@@ -116,5 +115,15 @@ public class HUD_Inventory : MonoBehaviour {
 
 	public void toggleHide(){
 		hideInvHUD = !hideInvHUD;
+	}
+
+	public void pickupSound()
+	{
+		AudioSource.PlayClipAtPoint (pickUpFX, Camera.main.transform.position);
+	}
+
+	public void dropSound()
+	{
+		AudioSource.PlayClipAtPoint (dropFX, Camera.main.transform.position);
 	}
 }

@@ -27,9 +27,9 @@ public class HUD_Healthbar : MonoBehaviour {
 	{
 		updateIcons ();
 
-//		if(Input.GetKeyDown(KeyCode.H)){
-//			toggleHide();
-//		}
+		if(Input.GetKeyDown(KeyCode.H)){
+			toggleHide();
+		}
 
 		if (hideHealthHUD) {
 			hideHUD();

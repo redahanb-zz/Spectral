@@ -325,7 +325,7 @@ public class GuardBehaviour : MonoBehaviour {
 
 	void updateColour(Color targetColor){
 		foreach(GameObject bodypart in guardBodyParts.colorParts){
-			bodypart.GetComponent<Renderer>().material.color = Color.Lerp(bodypart.GetComponent<Renderer>().material.color,targetColor, Time.deltaTime * 5.0f);
+			//bodypart.GetComponent<Renderer>().material.color = Color.Lerp(bodypart.GetComponent<Renderer>().material.color,targetColor, Time.deltaTime * 5.0f);
 		}
 	}
 }

@@ -6,6 +6,7 @@ public class PathIndicator : MonoBehaviour {
 	CharacterController controller;
 	
 	NavMeshPath 		path;
+	NavMeshAgent		playerAgent;
 	
 	bool 				pathSet = false;
 
@@ -13,17 +14,19 @@ public class PathIndicator : MonoBehaviour {
 
 	float 				distanceToNextCorner = 100;
 
-	GameObject	 		destinationObject, arrowObject;
+	GameObject	 		destinationObject, arrowObject, playerObject;
 
 	TimeScaler timeScale;
 
 	float pathDistance = 1.0f, distanceFromLastArrow = 100;
 
-	public float lastInterval, timeNow, myTime;
+	public float lastInterval, timeNow, customDeltaTime;
 
 
 	void Start(){
 		timeScale = GameObject.Find("Time Manager").GetComponent<TimeScaler>();
+		playerObject = GameObject.FindGameObjectWithTag("Player");
+		playerAgent = playerObject.GetComponent<NavMeshAgent>();
 	}
 
 	void CreatePathArrow(){
@@ -47,7 +50,7 @@ public class PathIndicator : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		timeNow = Time.realtimeSinceStartup;
-		myTime = timeNow - lastInterval;
+		customDeltaTime = timeNow - lastInterval;
 
 
 		if(arrowObject)distanceFromLastArrow = Vector3.Distance(transform.position, arrowObject.transform.position);
@@ -62,9 +65,10 @@ public class PathIndicator : MonoBehaviour {
 			}
 
 			if(currentPathIndex != path.corners.Length){ 
-					distanceToNextCorner = Vector3.Distance(transform.position, path.corners[currentPathIndex]);
-					transform.position = Vector3.MoveTowards(transform.position, path.corners[currentPathIndex], Time.deltaTime * 7);
-					transform.LookAt(path.corners[currentPathIndex]);
+				distanceToNextCorner = Vector3.Distance(transform.position, path.corners[currentPathIndex]);
+				transform.position = Vector3.MoveTowards(transform.position, path.corners[currentPathIndex], customDeltaTime * 5);
+				//transform.LookAt(path.corners[currentPathIndex]);
+				SmoothLookAt(path.corners[currentPathIndex]);
 			}
 			else{ 
 				//print("END OF PATH REACHED");
@@ -73,6 +77,10 @@ public class PathIndicator : MonoBehaviour {
 
 		}
 		lastInterval = timeNow;
+	}
 
+	void SmoothLookAt(Vector3 targetPosition){
+		Quaternion rotation = Quaternion.LookRotation(targetPosition - transform.position);
+		transform.rotation = Quaternion.Slerp(transform.rotation, rotation, customDeltaTime * 8.5f);
 	}
 }

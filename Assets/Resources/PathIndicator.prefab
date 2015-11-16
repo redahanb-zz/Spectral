@@ -179,6 +179,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a213404cc6ae7c741bbaec3aa5d155b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lastInterval: 0
+  timeNow: 0
+  customDeltaTime: 0
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

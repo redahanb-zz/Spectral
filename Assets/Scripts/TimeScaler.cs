@@ -44,17 +44,13 @@ public class TimeScaler : MonoBehaviour {
 			gameObject.SetActive(false);
 		}
 		else{
-			//print(timeSlowed);
-			
 			myTime = 0;
 			timeNow = 0;
 			lastInterval = 0;
-			
-			
+
 			buttonObject = GameObject.Find("Time Button");
 			if(buttonObject.transform.Find("Text"))	timeText = buttonObject.transform.Find("Text").GetComponent<Text>();
-			
-			
+
 			if(buttonObject.transform.Find("Hourglass"))hasHourglass = true;
 			if(hasHourglass){
 				rotateComponent = buttonObject.transform.Find("Hourglass").GetComponent<UIRotateOverTime>();
@@ -63,8 +59,6 @@ public class TimeScaler : MonoBehaviour {
 			playerAnimator 	= GameObject.FindGameObjectWithTag("Player").GetComponent<Animator>();
 			myDeltaTime 	= Time.deltaTime;
 			lastInterval 	= Time.realtimeSinceStartup;
-			//pauseManager = GameObject.Find ("Pause Manager").GetComponent<PauseManager> ();
-
 		}
 	}
 
@@ -77,7 +71,6 @@ public class TimeScaler : MonoBehaviour {
 	}
 	
 	public void SlowTime(){
-		//print ("Slow time function called");
 		if(currentStoredTime > 0.01f){
 			timeSlowed 		= true;
 			timeStopped = false;
@@ -88,7 +81,6 @@ public class TimeScaler : MonoBehaviour {
 	}
 	
 	public void ResumeTime(){
-		//print ("Resume time function called");
 		timeSlowed 		= false;
 		timeStopped = false;
 		Invoke("StartFill", 3);
@@ -102,11 +94,7 @@ public class TimeScaler : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-
 		KeyInput();
-
-		//print("Scale: " +Time.timeScale + "  Remaining: " +currentStoredTime);
-
 		if(hasHourglass)Hourglass();
 
 		timeNow 		= Time.realtimeSinceStartup;
@@ -132,9 +120,6 @@ public class TimeScaler : MonoBehaviour {
 	}
 
 	void Hourglass(){
-		//print(currentStoredTime);
-
-
 		if(currentStoredTime == maxStoredTime){
 			rotateComponent.enabled = true;
 		}
@@ -145,24 +130,17 @@ public class TimeScaler : MonoBehaviour {
 		if(timeSlowed){
 			currentStoredTime = currentStoredTime - ((Time.deltaTime/maxStoredTime) * 100);
 			canFill = false;
-
-
 			if(currentStoredTime <= 0){
 				currentStoredTime = 0;
 				ResumeTime();
-				//buttonObject.SetActive(false);
-
 			}
-
-
 		}
 		else{
-			if(canFill)currentStoredTime = currentStoredTime + ((Time.deltaTime/maxStoredTime) * 10);
+			if(canFill)currentStoredTime = currentStoredTime + ((Time.deltaTime/maxStoredTime) * 50);
 			if(currentStoredTime > maxStoredTime)currentStoredTime = maxStoredTime;
 
 		}
 		hourglassYscale = currentStoredTime * 4;
-
 		hourglassYscale = currentStoredTime/maxStoredTime;
 		hourglassYscale = hourglassYscale * (40/1);
 		fillTransform.sizeDelta = new Vector2(fillTransform.sizeDelta.x, hourglassYscale);
@@ -172,7 +150,4 @@ public class TimeScaler : MonoBehaviour {
 		canFill = true;
 	}
 
-	void FixedUpdate(){
-		
-	}
 }

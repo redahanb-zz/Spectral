@@ -30,7 +30,6 @@ public class DoorButton : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if(currentDoor){ 
-			print(currentDoor);
 			playerDistance = Vector3.Distance(currentDoor.transform.position, playerObject.transform.position);
 			if(playerDistance > 2){displayDoorButton = false; currentDoor = null;}
 			else displayDoorButton = true;

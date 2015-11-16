@@ -11,6 +11,7 @@ public class BlendInfoButton : MonoBehaviour {
 	Image icon;
 	RectTransform canvasTransform;
 	RectTransform iconTransform;
+	HealthManager pHealth;
 	
 	// Use this for initialization
 	void Start () {
@@ -19,6 +20,7 @@ public class BlendInfoButton : MonoBehaviour {
 		iconTransform = GetComponent<RectTransform> ();
 		player = GameObject.FindWithTag ("Player");
 		playerController = player.GetComponent<PlayerController> ();
+		pHealth = GameObject.Find("Health Manager").GetComponent<HealthManager>();
 		icon = transform.GetChild(0).gameObject.GetComponent<Image> ();
 		GameObject.Find ("Screen Fade").GetComponent<ScreenFade> ().ResetParent ();
 		print (GameObject.Find ("Screen Fade"));
@@ -48,7 +50,19 @@ public class BlendInfoButton : MonoBehaviour {
 		icon.color = Color.Lerp (icon.color, playerColor, 10*Time.deltaTime);
 		//icon.color = playerColor;
 
-		if(target.activeSelf == false || Vector3.Distance(target.transform.position, player.transform.position) > 3.0f){
+		// Hide button when player is out of range
+		if(target.activeSelf == false || Vector3.Distance(target.transform.position, player.transform.position) > 3.0f)
+		{
+			gameObject.SetActive(false);
+		}
+
+		if(!playerController.isVisible){
+			gameObject.SetActive(false);
+		}
+
+		if(pHealth.playerDead)
+		{
+			//Destroy(gameObject);
 			gameObject.SetActive(false);
 		}
 

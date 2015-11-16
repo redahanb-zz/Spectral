@@ -5,6 +5,7 @@ using System.Collections;
 public class TeleportButton : MonoBehaviour {
 
 	GameObject currentTeleporter, playerObject;
+	HealthManager healthManager;
 	bool buttonActive = false;
 
 	bool textVisible = false;
@@ -23,16 +24,18 @@ public class TeleportButton : MonoBehaviour {
 		button = GetComponent<Button>();
 		canvasTransform = GameObject.Find("Canvas").GetComponent<RectTransform>();
 		playerObject = GameObject.FindGameObjectWithTag("Player");
+		healthManager = GameObject.Find ("Health Manager").GetComponent<HealthManager> ();
 		rTransform = GetComponent<RectTransform>();
 		InvokeRepeating("ToggleText", 1, 3);
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void Update () 
+	{
 
 		if(currentTeleporter){ 
 			playerDistance = Vector3.Distance(currentTeleporter.transform.position, playerObject.transform.position);
-			if(playerDistance > 2){buttonActive = false; currentTeleporter = null;}
+			if(playerDistance > 2 || healthManager.playerDead){buttonActive = false; currentTeleporter = null;}
 		}
 
 		if(Input.GetKeyDown(KeyCode.G))buttonActive = !buttonActive;

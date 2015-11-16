@@ -56,7 +56,7 @@ public class Shooting : MonoBehaviour {
 
 
 	public void Shoot() {
-		if (counter <= 0 && !pHealth.playerDead) {
+		if (counter <= 0 && !pHealth.playerDead && anim.GetFloat("Aim Weight") >= 1.0f) {
 			//print ("shooting!");
 			counter = reloadTime;
 

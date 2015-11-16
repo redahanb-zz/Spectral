@@ -8,6 +8,8 @@ public class ItemInfo : MonoBehaviour {
 	GameObject canvasObject;
 	GameObject player;
 
+	HealthManager healthManager;
+
 	InventoryItem inventoryItem;
 
 	// Use this for initialization
@@ -16,6 +18,7 @@ public class ItemInfo : MonoBehaviour {
 		canvasObject = GameObject.Find ("Canvas");
 		inventoryItem = GetComponent<InventoryItem> ();
 		player = GameObject.FindWithTag ("Player");
+		healthManager = GameObject.Find ("Health Manager").GetComponent<HealthManager> ();
 	}
 	
 	// Update is called once per frame
@@ -52,6 +55,10 @@ public class ItemInfo : MonoBehaviour {
 			{
 				button.GetComponent<ItemInfoButton>().deactivateButton();
 			}
+		}
+
+		if (healthManager.playerDead) {
+			button.SetActive(false);
 		}
 
 	} // end Update

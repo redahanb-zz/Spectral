@@ -136,6 +136,26 @@ public class PlayerController : MonoBehaviour {
 		//timeSinceLastClick = timeSinceLastClick + customDeltaTime;
 		ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
+		// use ray to determine the object, change the cursor accordingly
+//		if(Physics.Raycast(ray, out rayHit, 100.0f)){
+//			switch(rayHit.transform.tag){
+//				case "Blend Surface" :
+//				Cursor.SetCursor(blendCursor, Vector2.zero, CursorMode.Auto);
+//					break;
+//				case "Pickup" :
+//				Cursor.SetCursor(pickupCursor, Vector2.zero, CursorMode.Auto);
+//					break;
+//				case "Door" :
+//				Cursor.SetCursor(useCursor, Vector2.zero, CursorMode.Auto);
+//					break;
+//				case "Load Door" :
+//				Cursor.SetCursor(useCursor, Vector2.zero, CursorMode.Auto);
+//					break;
+//				default:
+//					Cursor.SetCursor(defaultCursor, Vector2.zero, CursorMode.Auto);
+//					break;
+//			}
+//		}
 		
 		if(Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1)){
 			if(Input.GetMouseButtonDown(0))leftClick = true;

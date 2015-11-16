@@ -9,6 +9,7 @@ public class BlendInfo : MonoBehaviour {
 	GameObject player;
 	PlayerController pController;
 	Renderer rend;
+	HealthManager pHealth;
 
 	Color playerColor;
 	Color wallColor;
@@ -22,6 +23,7 @@ public class BlendInfo : MonoBehaviour {
 		canvasObject = GameObject.Find ("Canvas");
 		//inventoryItem = GetComponent<InventoryItem> ();
 		rend = GetComponent<Renderer> ();
+		pHealth = GameObject.Find ("Health Manager").GetComponent<HealthManager> ();
 	}
 	
 	// Update is called once per frame
@@ -39,14 +41,15 @@ public class BlendInfo : MonoBehaviour {
 				Vector3 direction = player.transform.position - transform.position;
 				float angle = Vector3.Angle(direction, -transform.forward); 
 				if(angle <= 90.0f){
-					if(!button){
+					if(!button && !pHealth.playerDead){
 						button = Instantiate(Resources.Load("UI/Worldspace Buttons/Blend Info"), canvasObject.transform.position, Quaternion.identity) as GameObject;
 						button.transform.SetParent(canvasObject.transform);
 						button.GetComponent<BlendInfoButton>().setTarget(gameObject);
 						button.GetComponent<Button>().onClick.AddListener( GetComponent<BlendInfo>().callPlayertoBlend );
 						//button.GetComponent<Button>().onClick.AddListener( button.GetComponent<ItemInfoButton>().target.GetComponent<InventoryItem>().pickupAnim );
 						//inventoryItem.identifyButton(button);
-					} else {
+					} else if(!pHealth.playerDead && pController.isVisible) 
+					{
 						button.SetActive(true);
 						if(button.GetComponent<Button>().interactable == false){
 							button.GetComponent<Button>().interactable = true;

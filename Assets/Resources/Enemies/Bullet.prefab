@@ -574,6 +574,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3621c98bb4c5640e0a63e4859cb3da75, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shootSound: {fileID: 8300000, guid: 26173dc0d0e9a47eb96cd2eb25eaaecd, type: 3}
+  damageSound: {fileID: 8300000, guid: 6ef71aad6d01b4b99878c99666822c6b, type: 3}
 --- !u!136 &13613214
 CapsuleCollider:
   m_ObjectHideFlags: 1
@@ -1704,6 +1706,14 @@ Prefab:
       propertyPath: m_StartWidth
       value: .5
       objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: damageSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 6ef71aad6d01b4b99878c99666822c6b, type: 3}
+    - target: {fileID: 0}
+      propertyPath: shootSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 26173dc0d0e9a47eb96cd2eb25eaaecd, type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 151396}

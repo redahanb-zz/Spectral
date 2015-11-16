@@ -3883,7 +3883,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 115936}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 161.537048, y: .189999998, z: 156.547791}
+  m_LocalPosition: {x: 6.03630447, y: .150151253, z: 6.35456419}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 473136}
@@ -6604,6 +6604,7 @@ MonoBehaviour:
   alertWaypoint2: {fileID: 149792}
   alertWaypoint3: {fileID: 154244}
   waitTime: 2
+  waitCount: 0
   guardState: 0
 --- !u!114 &11406806
 MonoBehaviour:
@@ -6701,6 +6702,15 @@ MonoBehaviour:
   - {fileID: 178610}
   - {fileID: 156950}
   - {fileID: 142594}
+  colorParts:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!114 &11478838
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -6735,6 +6745,7 @@ MonoBehaviour:
   playerDetected: 0
   playerHeard: 0
   soundProofed: 0
+  guardAlertRoar: {fileID: 8300000, guid: e5b865a8646c541f2baac4da95468dae, type: 3}
 --- !u!135 &13510920
 SphereCollider:
   m_ObjectHideFlags: 1

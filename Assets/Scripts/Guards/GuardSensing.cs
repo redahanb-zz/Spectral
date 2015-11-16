@@ -20,6 +20,7 @@ public class GuardSensing : MonoBehaviour {
 	public bool 		playerDetected;
 	public bool 		playerHeard;
 	public bool 		soundProofed;
+	public AudioClip 	guardAlertRoar;
 
 	// private variables
 	private float 		distanceToPlayer;
@@ -27,6 +28,7 @@ public class GuardSensing : MonoBehaviour {
 	private Vector3 	directionToPlayer;
 	private RaycastHit 	rayHit;
 	private float 		timeInSight;
+	private bool 		canRoar = true;
 	
 	// script references
 	GameObject 			player;
@@ -78,9 +80,14 @@ public class GuardSensing : MonoBehaviour {
 					if(rayHit.transform.tag == "Player"){
 						if(playerController.isVisible)
 						{
-							print ("Player is VISIBLE!!!");
 							playerInSight = true;
 							lastPlayerSighting = player.transform.position;
+							if(canRoar)
+							{
+								AudioSource.PlayClipAtPoint(guardAlertRoar, Camera.main.transform.position);
+								canRoar = false;
+								Invoke("ResetCanRoar", 5.0f);
+							}
 						}
 					}
 				}
@@ -124,4 +131,9 @@ public class GuardSensing : MonoBehaviour {
 		}
 
 	} // end CheckHearing
+
+	void ResetCanRoar()
+	{
+		canRoar = true;
+	}
 }

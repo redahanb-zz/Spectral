@@ -30,7 +30,9 @@ public class InventoryItem : MonoBehaviour {
 	// Update is called once per frame
 	void Update () 
 	{
-
+		if (!inv_HUD) {
+			inv_HUD = GameObject.Find("HUD_Inventory").GetComponent<HUD_Inventory>(); // dubLUDO bug
+		}
 	}
 
 	public void pickUpItem() 

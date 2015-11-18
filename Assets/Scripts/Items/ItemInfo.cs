@@ -58,7 +58,9 @@ public class ItemInfo : MonoBehaviour {
 		}
 
 		if (healthManager.playerDead) {
-			button.SetActive(false);
+			if(button){
+				button.SetActive(false);
+			}
 		}
 
 	} // end Update

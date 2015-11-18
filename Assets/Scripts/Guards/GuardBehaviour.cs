@@ -30,6 +30,7 @@ public class GuardBehaviour : MonoBehaviour {
 	private float 				listenCount; // timer for Investigate behaviour
 	private Quaternion 			lookRotation;
 	private Vector3 			lastPlayerSighting;
+	private Color				transpColor;
 
 	public enum GuardState 
 	{
@@ -52,6 +53,7 @@ public class GuardBehaviour : MonoBehaviour {
 	private Animator			anim;
 	private HealthManager		pHealth;
 	private GuardSelfDestruct 	guardBodyParts;
+	private GameObject 			visionCone;
 
 
 	void Start () 
@@ -64,6 +66,7 @@ public class GuardBehaviour : MonoBehaviour {
 		anim = GetComponent<Animator> ();
 		pHealth = GameObject.Find("Health Manager").GetComponent<HealthManager> ();
 		guardBodyParts = GetComponent<GuardSelfDestruct> ();
+		visionCone = transform.Find ("VisionCone").gameObject;
 
 		// compile patrol and alert routes
 		patrolRoute = new Vector3[4]
@@ -325,8 +328,18 @@ public class GuardBehaviour : MonoBehaviour {
 	} // end Attack
 
 	void updateColour(Color targetColor){
+		transpColor = targetColor;
+		transpColor.a = visionCone.GetComponent<Renderer> ().material.color.a;
+		visionCone.GetComponent<Renderer>().material.color = Color.Lerp(visionCone.GetComponent<Renderer>().material.color,transpColor, Time.deltaTime * 5.0f);
+//		Renderer rend = guardBodyParts.colorParts[4].GetComponent<Renderer> ();
+//		print (guardBodyParts.colorParts [4]);
+//		//transform.Find("pg1_arrowhead_R").gameObject
+//		rend.material.color = Color.Lerp(rend.material.color, targetColor, Time.deltaTime * 5.0f);
 		foreach(GameObject bodypart in guardBodyParts.colorParts){
-			//bodypart.GetComponent<Renderer>().material.color = Color.Lerp(bodypart.GetComponent<Renderer>().material.color,targetColor, Time.deltaTime * 5.0f);
+			bodypart.GetComponent<Renderer>().materials[0].color = Color.Lerp(bodypart.GetComponent<Renderer>().materials[0].color,targetColor, Time.deltaTime * 5.0f);
+			if(bodypart.GetComponent<Renderer>().materials.Length > 1){
+				bodypart.GetComponent<Renderer>().materials[1].color = Color.Lerp(bodypart.GetComponent<Renderer>().materials[1].color,targetColor, Time.deltaTime * 5.0f);
+			}
 		}
 	}
 }

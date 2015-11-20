@@ -31,6 +31,7 @@ public class InventoryItem : MonoBehaviour {
 	void Update () 
 	{
 		if (!inv_HUD) {
+			print ("Delayed assignment of HUD_Inv");
 			inv_HUD = GameObject.Find("HUD_Inventory").GetComponent<HUD_Inventory>(); // dubLUDO bug
 		}
 	}

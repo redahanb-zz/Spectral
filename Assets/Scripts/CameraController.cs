@@ -31,6 +31,11 @@ public class CameraController : MonoBehaviour {
 
 	public Transform lookAtOtherTarget;
 
+	HUD_Inventory 		invHUD;
+	HUD_Healthbar		healthHUD;
+	HideHUDElement		hidePause;
+	HideHUDElement 		hideTime;
+
 	// Use this for initialization
 	void Start () {
 
@@ -103,9 +108,27 @@ public class CameraController : MonoBehaviour {
 
 			if(Input.GetKey(KeyCode.C)){
 				mapButtonDown = true;
+
+				if(!invHUD){
+					invHUD = GameObject.Find("HUD_Inventory").GetComponent<HUD_Inventory>();
+					healthHUD = GameObject.Find("HUD_Healthbar").GetComponent<HUD_Healthbar>();
+					hidePause = GameObject.Find("PauseButton").GetComponent<HideHUDElement>();
+					hideTime = GameObject.Find("Time Button").GetComponent<HideHUDElement>();
+				}
+
+				invHUD.hide();
+				healthHUD.hide();
+				hidePause.hide();
+				hideTime.hide();
 			}
 			else if(Input.GetKeyUp(KeyCode.C)){
-				mapButtonDown = false;
+				if(invHUD){
+					mapButtonDown = false;
+					invHUD.show();
+					healthHUD.show ();
+					hidePause.show();
+					hideTime.show();
+				}
 			}
 
 			if(mapButtonDown){

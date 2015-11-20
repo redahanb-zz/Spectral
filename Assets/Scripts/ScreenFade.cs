@@ -47,16 +47,16 @@ public class ScreenFade : MonoBehaviour {
 
 		if(fadeToColor){
 			//if(rImg.color.a > 0.6f){
-			if(healthBarObject) healthBarObject.gameObject.SetActive(false);
-			if(inventoryObject)	inventoryObject.gameObject.SetActive(false);
+			//if(healthBarObject) healthBarObject.gameObject.SetActive(false);
+			//if(inventoryObject)	inventoryObject.gameObject.SetActive(false);
 			if(timeButtonObject)	timeButtonObject.gameObject.SetActive(false);
 			//}
 			rImg.color = Color.Lerp(rImg.color, new Color(rImg.color.r, rImg.color.g, rImg.color.g, 1), Time.deltaTime * 3);
 		}
 		else{
 			if(rImg.color.a > 0.6f){
-				if(healthBarObject)healthBarObject.gameObject.SetActive(true);
-				if(inventoryObject)inventoryObject.gameObject.SetActive(true);
+				//if(healthBarObject)healthBarObject.gameObject.SetActive(true);
+				//if(inventoryObject)inventoryObject.gameObject.SetActive(true);
 				if(timeButtonObject)timeButtonObject.gameObject.SetActive(true);
 			}
 			rImg.color = Color.Lerp(rImg.color, new Color(rImg.color.r, rImg.color.g, rImg.color.g, 0), Time.deltaTime * 3);

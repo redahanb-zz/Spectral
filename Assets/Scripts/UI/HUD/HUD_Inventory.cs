@@ -117,6 +117,14 @@ public class HUD_Inventory : MonoBehaviour {
 		hideInvHUD = !hideInvHUD;
 	}
 
+	public void hide(){
+		hideInvHUD = true;
+	}
+
+	public void show(){
+		hideInvHUD = false;
+	}
+
 	public void pickupSound()
 	{
 		AudioSource.PlayClipAtPoint (pickUpFX, Camera.main.transform.position);

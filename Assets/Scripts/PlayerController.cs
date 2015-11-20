@@ -21,13 +21,13 @@ public class PlayerController : MonoBehaviour {
 	private NavMeshAgent 	agent;
 	private NavMeshPath		path;
 	private Ray 			ray;
-	private RaycastHit 		rayHit;
+	private RaycastHit 		rayHit, cursorRayhit;
 	private Renderer		playerRenderer;
 	private GameObject[]	bodyParts;
 	private GameObject 		pathObject, 
-							destinationObject,
-							buttonBlendObject, 				// gameObject for when a blend order is given using the button
-							mouseCursorObject;
+	destinationObject,
+	buttonBlendObject, 				// gameObject for when a blend order is given using the button
+	mouseCursorObject;
 	
 	public 	Color 			targetcolor = Color.grey;
 	private Transform 		pickupItemTransform, currentBlendSurface;
@@ -52,30 +52,31 @@ public class PlayerController : MonoBehaviour {
 	customDeltaTime,
 	normalLookAtRate 	= 8.5f,
 	slowTimeLookAtRate 	= 40.0f;
-	
+	float colorDistance;
 	
 	private Vector3 		targetPosition;
 	
 	
 	private bool 			
-	hasPath 		 	= false,
-	doubleTap 		 	= false,
-	performAction 	 	= false,
-	buttonBlendOrder 	= false, 	//bool for when a blend order is given using the button
-	leftClick   	 	= true;		//used to indicate that a left click event occured.
+		hasPath 		 	= false,
+		doubleTap 		 	= false,
+		buttonBlendOrder 	= false, 	//bool for when a blend order is given using the button
+		leftClick   	 	= true;		//used to indicate that a left click event occured.
 	
 	public 	bool 		isVisible 			= true,		//indicates if the player is visible to guards and hazards.
 	isBlending 			= false,	//indicates if the player is attempting to hide.
-	canMove 		 	= false;
+	canMove 		 	= false,
+	performAction 	 	= false;
+	
 	
 	//public 
 	Sprite 				defaultCursor,
-						blendCursor,
-						pickupCursor,
-						useCursor;
-
+	blendCursor,
+	pickupCursor,
+	useCursor;
+	
 	Color wallColor, newColor;
-
+	
 	RectTransform mouseTransform;
 	Image mouseImage;
 	
@@ -92,16 +93,16 @@ public class PlayerController : MonoBehaviour {
 		agent 			 = GetComponent<NavMeshAgent>();
 		
 		customDeltaTime  = Time.deltaTime;
-
+		
 		SetupMouseCursor();
-
-
+		
+		
 		foreach (GameObject part in bodyParts)part.GetComponent<Renderer>().material.color = Color.green;
 		agent.SetDestination(transform.position);
 		playerAnimator.updateMode = AnimatorUpdateMode.UnscaledTime;
 		Invoke("ToggleCanMove", 0.1f);
 	}
-
+	
 	void SetupMouseCursor(){
 		mouseCursorObject = Instantiate(Resources.Load("Mouse Cursor"), Vector3.zero, Quaternion.identity) as GameObject;
 		mouseCursorObject.transform.parent = GameObject.Find("Canvas").transform;
@@ -122,12 +123,13 @@ public class PlayerController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		
 		timeNow 		= Time.realtimeSinceStartup;
 		customDeltaTime = timeNow - lastInterval;
 		lastInterval 	= timeNow;
-
+		
 		hasPath = agent.hasPath;
-
+		
 		ContextualMouseCursor();
 		if(canMove){
 			GetInput();
@@ -142,7 +144,7 @@ public class PlayerController : MonoBehaviour {
 	public void ToggleCanMove(){
 		canMove = !canMove;
 	}
-
+	
 	private void SetBodyColour(){
 		if(!pHealth.playerDead){
 			// change colour of each bodypart in the array
@@ -162,20 +164,20 @@ public class PlayerController : MonoBehaviour {
 		case MoveState.Blend_Stand: 	BlendWhileStanding(); 	isBlending = true; 						break;
 		}
 	}
-
+	
 	void ContextualMouseCursor(){
 		mouseTransform.position = Input.mousePosition + new Vector3(mouseTransform.sizeDelta.x/2 , -mouseTransform.sizeDelta.y/2, 0);
-
+		
 		ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-		if (Physics.Raycast(ray, out rayHit, 100f)){
-			switch(rayHit.transform.tag){
-				case "Blend Surface" :		//if(rayHit.transform.GetComponent<Renderer>().material.color == newColor){ 
-					mouseImage.sprite = blendCursor;	mouseTransform.sizeDelta = new Vector3(64,64,0);
-											//}
-											//else{
-					//mouseImage.sprite = defaultCursor;	mouseTransform.sizeDelta = new Vector3(32,32,0);
-											//}
-					break;
+		if (Physics.Raycast(ray, out cursorRayhit, 100f)){
+			switch(cursorRayhit.transform.tag){
+			case "Blend Surface" :		//if(rayHit.transform.GetComponent<Renderer>().material.color == newColor){ 
+				mouseImage.sprite = blendCursor;	mouseTransform.sizeDelta = new Vector3(64,64,0);
+				//}
+				//else{
+				//mouseImage.sprite = defaultCursor;	mouseTransform.sizeDelta = new Vector3(32,32,0);
+				//}
+				break;
 			case "Pickup" :				mouseImage.sprite = pickupCursor;	mouseTransform.sizeDelta = new Vector3(64,64,0);break;
 			case "Door" :				mouseImage.sprite = useCursor;		mouseTransform.sizeDelta = new Vector3(64,64,0);break;
 			case "Load Door" :			mouseImage.sprite = useCursor;		mouseTransform.sizeDelta = new Vector3(64,64,0);break;
@@ -183,50 +185,22 @@ public class PlayerController : MonoBehaviour {
 			}
 		}
 	}
-
-
+	
+	
 	//Get input from the Player
 	void GetInput(){
-		//timeSinceLastClick = timeSinceLastClick + customDeltaTime;
 		ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-		// use ray to determine the object, change the cursor accordingly
-//				if(Physics.Raycast(ray, out rayHit, 100.0f)){
-//					switch(rayHit.transform.tag){
-//						case "Blend Surface" :
-//						Cursor.SetCursor(blendCursor, Vector2.zero, CursorMode.Auto);
-//							break;
-//						case "Pickup" :
-//						Cursor.SetCursor(pickupCursor, Vector2.zero, CursorMode.Auto);
-//							break;
-//						case "Door" :
-//						Cursor.SetCursor(useCursor, Vector2.zero, CursorMode.Auto);
-//							break;
-//						case "Load Door" :
-//						Cursor.SetCursor(useCursor, Vector2.zero, CursorMode.Auto);
-//							break;
-//						default:
-//							Cursor.SetCursor(defaultCursor, Vector2.zero, CursorMode.Auto);
-//							break;
-//					}
-//				}
 		
 		if(Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1)){
 			if(Input.GetMouseButtonDown(0))leftClick = true;
 			if(Input.GetMouseButtonDown(1))leftClick = false;
-			//			buttonBlendOrder = false;
-			//			//Check for DOuble Tap
-			//			if(timeSinceLastClick < 1)
-			//				doubleTap = true;
-			//			else 
-			//				doubleTap = false;
-			//			timeSinceLastClick = 0;
 			if(!eventSystem.IsPointerOverGameObject())
 			if (Physics.Raycast(ray, out rayHit, 100f)){
 				isBlending = false;
 				buttonBlendOrder = false;
-
-				print(rayHit.transform);
-				
+				distance = 1000;
+				//print(rayHit.transform);
+				performAction = false;
 				switch(rayHit.transform.tag){
 				case "Tile" : 
 					currentBlendSurface = null;
@@ -241,14 +215,25 @@ public class PlayerController : MonoBehaviour {
 					
 				case "Blend Surface" :
 					if(rayHit.transform != currentBlendSurface){
-						SetMovement(rayHit.transform, rayHit.transform.position + (-rayHit.transform.forward * 0.2f));
+						SetMovement(rayHit.transform, rayHit.transform.position + (-rayHit.transform.forward * 0.3f));
 						Color newColor = bodyParts[0].GetComponent<Renderer>().material.color;
 						Color wallColor = rayHit.transform.GetComponent<Renderer>().material.color;
-						float colorDistance = Vector3.Distance(new Vector3(newColor.r, newColor.g, newColor.b), new Vector3(wallColor.r, wallColor.g, wallColor.b));
+						colorDistance = Vector3.Distance(new Vector3(newColor.r, newColor.g, newColor.b), new Vector3(wallColor.r, wallColor.g, wallColor.b));
 						if(colorDistance < 0.1f){
 							performAction = true;
 							currentBlendSurface = rayHit.transform;
+							isBlending = true;
+							transform.forward = -rayHit.transform.forward;
+							currentMoveState = MoveState.Run;
 						}
+						else{
+							performAction = false;
+							isBlending = false;
+							currentMoveState = MoveState.Run;
+						}
+					}
+					else{
+						print("ELSE!!!!!!!!!!!!");
 					}
 					break;
 					
@@ -332,7 +317,7 @@ public class PlayerController : MonoBehaviour {
 		SetSneakSpeed();
 		PathIndicator();
 		
-		if(distance < 1f){
+		if(distance < 0.1f){
 			if(performAction)
 				PerformAnAction();
 			else currentMoveState = MoveState.Idle;
@@ -388,35 +373,6 @@ public class PlayerController : MonoBehaviour {
 		currentSpeed = Mathf.Lerp(currentSpeed, targetSpeed, customDeltaTime * 5);
 		playerAnimator.SetFloat("movementSpeed" , currentSpeed);
 		playerAnimator.speed = 1;
-		
-		
-		if(timeScale.timeSlowed){
-			//agent.speed = Mathf.Lerp(agent.speed, currentSpeed * 5, 0.02f);
-			//agent.speed = 100;
-			//agent.acceleration = Mathf.Lerp(agent.acceleration, 100, 0.02f);
-			//agent.acceleration = 100;
-			//playerAnimator.speed = Mathf.Lerp(playerAnimator.speed, 1, 0.02f);
-		}
-		else{
-			//agent.speed  = Mathf.Lerp(agent.speed, currentSpeed, 0.02f);
-			//agent.acceleration = Mathf.Lerp(agent.acceleration, 50, 0.02f);
-			//agent.acceleration = 50;
-			//playerAnimator.speed = Mathf.Lerp(playerAnimator.speed, 1, 0.02f);
-		}
-		
-		//		if(timeScale.timeSlowed){
-		//			playerAnimator.SetFloat("movementSpeed" , currentSpeed);
-		//			//agent.speed = Mathf.Lerp(agent.speed, currentSpeed * 10, 0.02f);
-		//			agent.speed = currentSpeed * 10;
-		//			//playerAnimator.speed = Mathf.Lerp(playerAnimator.speed, 3, 0.02f);
-		//		}
-		//		else{
-		//			playerAnimator.SetFloat("movementSpeed" , currentSpeed);
-		//			//agent.speed  = Mathf.Lerp(agent.speed, currentSpeed, 0.02f);
-		//			agent.speed = currentSpeed;
-		//			//playerAnimator.speed = Mathf.Lerp(playerAnimator.speed, 1, 0.02f);
-		//			//playerAnimator.speed = 1;
-		//		}
 		
 		//Rotate the player to face the next corner on the path, otherwise look at the path end.
 		if(path.corners.Length > 2)SmoothLookAt(new Vector3(path.corners[currentPathIndex].x, transform.position.y, path.corners[currentPathIndex].z));
@@ -488,9 +444,15 @@ public class PlayerController : MonoBehaviour {
 	//Chooses an action to perform based on what was clicked by the player.
 	void PerformAnAction(){
 		if(rayHit.transform.tag == "Blend Surface"){
-			transform.forward = -rayHit.transform.forward;
-			isBlending = true;
-			currentMoveState = MoveState.Blend_Stand;
+			if(colorDistance < 0.1f){
+				transform.forward = -rayHit.transform.forward;
+				isBlending = true;
+				currentMoveState = MoveState.Blend_Stand;
+			}
+			else{
+				currentMoveState = MoveState.Idle;
+				
+			}
 		}
 		else if(rayHit.transform.tag == "Pickup"){
 			transform.forward = -rayHit.transform.forward;
@@ -522,6 +484,8 @@ public class PlayerController : MonoBehaviour {
 			rayHit.transform.parent.GetComponent<Teleporter>().Teleport();
 			currentMoveState = MoveState.Idle;
 		}
+		performAction = false;
+		
 		
 		if(buttonBlendOrder){
 			transform.forward = -buttonBlendObject.transform.forward;

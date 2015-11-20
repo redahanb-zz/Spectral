@@ -46,4 +46,13 @@ public class HideHUDElement : MonoBehaviour {
 	public void toggleHide(){
 		hideHUDPiece = !hideHUDPiece;
 	}
+
+	public void hide(){
+		hideHUDPiece = true;
+	}
+
+	public void show(){
+		hideHUDPiece = false;
+	}
+
 }

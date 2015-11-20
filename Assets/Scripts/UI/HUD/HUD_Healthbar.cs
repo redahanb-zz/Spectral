@@ -91,4 +91,14 @@ public class HUD_Healthbar : MonoBehaviour {
 	public void toggleHide(){
 		hideHealthHUD = !hideHealthHUD;
 	}
+
+	public void hide()
+	{
+		hideHealthHUD = true;
+	}
+
+	public void show()
+	{
+		hideHealthHUD = false;
+	}
 }

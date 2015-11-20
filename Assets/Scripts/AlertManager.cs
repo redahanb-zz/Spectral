@@ -54,7 +54,7 @@ public class AlertManager : MonoBehaviour {
 	void Update () {
 		//timeNow 		= Time.realtimeSinceStartup;
 
-		print (mainLight.color + " " + gradientBottomImage.color);
+		//print (mainLight.color + " " + gradientBottomImage.color);
 
 		if (!mainLight) {
 			mainLight = GameObject.Find ("Directional Light").GetComponent<Light> ();
@@ -70,13 +70,11 @@ public class AlertManager : MonoBehaviour {
 			if(normalVolume > -60f)normalVolume = normalVolume - 0.5f;
 
 			if(tScaler.timeSlowed){
-				print ("Alert SLOW COLOUR" + mainLight.color + " " + slowAlertColor);
 				mainLight.color = Color.Lerp(mainLight.color, slowAlertColor, Time.deltaTime * lightChangeRate);
 				gradientBottomImage.color  = Color.Lerp(gradientBottomImage.color, slowAlertColor, Time.deltaTime * lightChangeRate);
 
 			}
 			else{
-				print ("Alert NORMAL COLOUR" + mainLight.color + " " + slowAlertColor);
 				mainLight.color = Color.Lerp(mainLight.color, alertLightColor, Time.deltaTime * lightChangeRate);
 				gradientBottomImage.color  = Color.Lerp(gradientBottomImage.color, alertGradientColor, Time.deltaTime * lightChangeRate);
 
@@ -89,13 +87,11 @@ public class AlertManager : MonoBehaviour {
 			if(normalVolume < 0f)normalVolume = normalVolume + 1.0f;
 
 			if(tScaler.timeSlowed){
-				print ("SLOW COLOUR" + mainLight.color + " " + slowAlertColor);
 				mainLight.color = Color.Lerp(mainLight.color, slowColor, Time.deltaTime * lightChangeRate);
 				gradientBottomImage.color  = Color.Lerp(gradientBottomImage.color, slowColor, Time.deltaTime * lightChangeRate);
 
 			}
 			else{ 
-				print ("Normal COLOUR" + mainLight.color + " " + slowAlertColor);
 				mainLight.color = Color.Lerp(mainLight.color, normalLightColor, Time.deltaTime * lightChangeRate);
 				gradientBottomImage.color  = Color.Lerp(gradientBottomImage.color, normalGradientColor, Time.deltaTime * lightChangeRate);
 			}

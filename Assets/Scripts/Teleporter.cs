@@ -9,6 +9,10 @@ public class Teleporter : MonoBehaviour {
 	float playerDistance = 100;
 	GameObject teleportButtonObject;
 
+	PauseManager pManager;
+
+	PlayerController pController;
+
 	// Use this for initialization
 	void Start () {
 		player = GameObject.FindGameObjectWithTag("Player").transform;
@@ -20,6 +24,7 @@ public class Teleporter : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		if(!pController)pController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
 		playerDistance = Vector3.Distance(player.position, transform.position);
 		//if(name == "Teleporter 1")print(playerDistance);
 
@@ -40,26 +45,39 @@ public class Teleporter : MonoBehaviour {
 	}
 
 	void TeleportPlayer(){
+
 		player.gameObject.SetActive(false);
 		player.position = new Vector3(pairedTeleporter.position.x,pairedTeleporter.position.y + 1,pairedTeleporter.position.z);
 		player.gameObject.SetActive(true);
 	}
 
-	void ScalePlayerDown(){
+	void DisablePlayerMovement(){
+		pController.canMove = false;
+	}
 
+	void EnablePlayerMovement(){
+		pController.canMove = true;
+	}
+
+	void ScalePlayerDown(){
 		player.localScale = Vector3.Lerp(player.localScale, new Vector3(1, 1, 1), tick);
 	}
 
 	public void Teleport(){
-		//print("Teleporting to " +pairedTeleporter);
-		canTeleport = false;
-		//teleportButtonObject.GetComponent<TeleportButton>().SetCurrentTeleporter(null);
-		Invoke("ToggleScaleUp", 	0.2f);
-		Invoke("ToggleScaleUp", 	1f);
-		Invoke("TeleportPlayer", 	1f);
-		Invoke("ToggleScaleDown", 	1.2f);
-		Invoke("ToggleScaleDown", 	2f);
-		canTeleport = true;
+		if(!pController.isBlending){
+			//print("Teleporting to " +pairedTeleporter);
+			canTeleport = false;
+			if(pController.canMove)DisablePlayerMovement();
+			Invoke("EnablePlayerMovement", 1.5f);
+
+			//teleportButtonObject.GetComponent<TeleportButton>().SetCurrentTeleporter(null);
+			Invoke("ToggleScaleUp", 	0.2f);
+			Invoke("ToggleScaleUp", 	1f);
+			Invoke("TeleportPlayer", 	1f);
+			Invoke("ToggleScaleDown", 	1.2f);
+			Invoke("ToggleScaleDown", 	2f);
+			canTeleport = true;
+		}
 	}
 
 	void ToggleScaleUp(){scaleUp 		= !scaleUp;}

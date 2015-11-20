@@ -3,7 +3,7 @@
 using System.Collections;
 
 public class BasicLevelLoader : MonoBehaviour {
-	public string nextLevelName = "Restore Point";
+	public string nextLevelName = "Restore Point - NEW";
 	bool runOnce = false;
 	AsyncOperation async;
 	bool startLoad = false;

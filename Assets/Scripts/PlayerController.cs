@@ -6,6 +6,7 @@
 //
 
 using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.EventSystems;
 
@@ -24,8 +25,9 @@ public class PlayerController : MonoBehaviour {
 	private Renderer		playerRenderer;
 	private GameObject[]	bodyParts;
 	private GameObject 		pathObject, 
-	destinationObject,
-	buttonBlendObject; 				// gameObject for when a blend order is given using the button
+							destinationObject,
+							buttonBlendObject, 				// gameObject for when a blend order is given using the button
+							mouseCursorObject;
 	
 	public 	Color 			targetcolor = Color.grey;
 	private Transform 		pickupItemTransform, currentBlendSurface;
@@ -55,22 +57,27 @@ public class PlayerController : MonoBehaviour {
 	private Vector3 		targetPosition;
 	
 	
-	private bool 			canMove 		 	= false,
+	private bool 			
 	hasPath 		 	= false,
 	doubleTap 		 	= false,
 	performAction 	 	= false,
 	buttonBlendOrder 	= false, 	//bool for when a blend order is given using the button
 	leftClick   	 	= true;		//used to indicate that a left click event occured.
 	
-	public 	bool 			isVisible 			= true,		//indicates if the player is visible to guards and hazards.
-	isBlending 			= false;	//indicates if the player is attempting to hide.
+	public 	bool 		isVisible 			= true,		//indicates if the player is visible to guards and hazards.
+	isBlending 			= false,	//indicates if the player is attempting to hide.
+	canMove 		 	= false;
 	
-	public Texture2D 		defaultCursor,
-	blendCursor,
-	pickupCursor,
-	useCursor;
+	//public 
+	Sprite 				defaultCursor,
+						blendCursor,
+						pickupCursor,
+						useCursor;
 
 	Color wallColor, newColor;
+
+	RectTransform mouseTransform;
+	Image mouseImage;
 	
 	
 	// Use this for initialization
@@ -85,12 +92,30 @@ public class PlayerController : MonoBehaviour {
 		agent 			 = GetComponent<NavMeshAgent>();
 		
 		customDeltaTime  = Time.deltaTime;
-		
+
+		SetupMouseCursor();
+
+
 		foreach (GameObject part in bodyParts)part.GetComponent<Renderer>().material.color = Color.green;
 		agent.SetDestination(transform.position);
 		playerAnimator.updateMode = AnimatorUpdateMode.UnscaledTime;
-		//playerAnimator.speed = 1;
 		Invoke("ToggleCanMove", 0.1f);
+	}
+
+	void SetupMouseCursor(){
+		mouseCursorObject = Instantiate(Resources.Load("Mouse Cursor"), Vector3.zero, Quaternion.identity) as GameObject;
+		mouseCursorObject.transform.parent = GameObject.Find("Canvas").transform;
+		mouseTransform = mouseCursorObject.GetComponent<RectTransform>();
+		mouseImage = mouseCursorObject.GetComponent<Image>();
+		
+		defaultCursor = Resources.Load<Sprite>("UI/Cursors/Cursor_Main");
+		blendCursor = Resources.Load<Sprite>("UI/Cursors/Cursor_Blend");
+		pickupCursor = Resources.Load<Sprite>("UI/Cursors/Cursor_Pickup");
+		useCursor = Resources.Load<Sprite>("UI/Cursors/Cursor_Use");
+		
+		Cursor.visible = false;
+		
+		mouseImage.sprite = defaultCursor;
 	}
 	
 	
@@ -100,29 +125,31 @@ public class PlayerController : MonoBehaviour {
 		timeNow 		= Time.realtimeSinceStartup;
 		customDeltaTime = timeNow - lastInterval;
 		lastInterval 	= timeNow;
-		
-		//print(timeScale.currentScale + " : " + agent.speed);
-		
-		print (agent.speed);
-		
+
 		hasPath = agent.hasPath;
+
+		ContextualMouseCursor();
 		if(canMove){
 			GetInput();
 			MoveStateManager();
 		}
 		else StopMoving();
 		
+		SetBodyColour();
+		lastInterval = timeNow;
+	} // end update
+	
+	public void ToggleCanMove(){
+		canMove = !canMove;
+	}
+
+	private void SetBodyColour(){
 		if(!pHealth.playerDead){
 			// change colour of each bodypart in the array
 			foreach (GameObject part in bodyParts) {
 				part.GetComponent<Renderer>().material.color = Color.Lerp(part.GetComponent<Renderer>().material.color, targetcolor, 10*Time.deltaTime);
 			}
 		}
-		lastInterval = timeNow;
-	} // end update
-	
-	public void ToggleCanMove(){
-		canMove = !canMove;
 	}
 	
 	//Assigns action per state and sets the animator move state
@@ -135,12 +162,33 @@ public class PlayerController : MonoBehaviour {
 		case MoveState.Blend_Stand: 	BlendWhileStanding(); 	isBlending = true; 						break;
 		}
 	}
-	
+
+	void ContextualMouseCursor(){
+		mouseTransform.position = Input.mousePosition + new Vector3(mouseTransform.sizeDelta.x/2 , -mouseTransform.sizeDelta.y/2, 0);
+
+		ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+		if (Physics.Raycast(ray, out rayHit, 100f)){
+			switch(rayHit.transform.tag){
+				case "Blend Surface" :		//if(rayHit.transform.GetComponent<Renderer>().material.color == newColor){ 
+					mouseImage.sprite = blendCursor;	mouseTransform.sizeDelta = new Vector3(64,64,0);
+											//}
+											//else{
+					//mouseImage.sprite = defaultCursor;	mouseTransform.sizeDelta = new Vector3(32,32,0);
+											//}
+					break;
+			case "Pickup" :				mouseImage.sprite = pickupCursor;	mouseTransform.sizeDelta = new Vector3(64,64,0);break;
+			case "Door" :				mouseImage.sprite = useCursor;		mouseTransform.sizeDelta = new Vector3(64,64,0);break;
+			case "Load Door" :			mouseImage.sprite = useCursor;		mouseTransform.sizeDelta = new Vector3(64,64,0);break;
+			default:					mouseImage.sprite = defaultCursor;	mouseTransform.sizeDelta = new Vector3(32,32,0); break;
+			}
+		}
+	}
+
+
 	//Get input from the Player
 	void GetInput(){
 		//timeSinceLastClick = timeSinceLastClick + customDeltaTime;
 		ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-		
 		// use ray to determine the object, change the cursor accordingly
 //				if(Physics.Raycast(ray, out rayHit, 100.0f)){
 //					switch(rayHit.transform.tag){

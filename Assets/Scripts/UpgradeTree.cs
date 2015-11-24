@@ -39,8 +39,6 @@ public class UpgradeTree : MonoBehaviour {
 		lastPosition = Input.mousePosition;
 		healthInfo = transform.parent.Find("Health Upgrade Info").GetComponent<UpgradeHealth>();
 		invSizeInfo = transform.parent.Find("Inventory Upgrade Info").GetComponent<UpgradeInventorySize>();
-		speedInfo = transform.parent.Find("MoveSpeed Upgrade Info").GetComponent<UpgradeMoveSpeed>();
-		colourInfo = transform.parent.Find("Colour Upgrade Info").GetComponent<UpgradeColourChange>();
 		noiseInfo = transform.parent.Find("Noise Upgrade Info").GetComponent<UpgradeMoveNoise>();
 		timescaleInfo = transform.parent.Find("Timescale Upgrade Info").GetComponent<UpgradeReactionTime>();
 
@@ -52,8 +50,6 @@ public class UpgradeTree : MonoBehaviour {
 		startPoint = GetComponent<RectTransform>().localPosition;
 		healthPoint = GameObject.Find("Health Button").GetComponent<RectTransform>().localPosition;
 		inventoryPoint = GameObject.Find("Inventory Button").GetComponent<RectTransform>().localPosition;
-//		speedPoint = GameObject.Find("Move Speed Button").GetComponent<RectTransform>().localPosition;
-//		colourPoint = GameObject.Find("Colour Speed Button").GetComponent<RectTransform>().localPosition;
 		noisePoint = GameObject.Find("Move Noise Button").GetComponent<RectTransform>().localPosition;
 		timescalePoint = GameObject.Find("Timescale Button").GetComponent<RectTransform>().localPosition;
 
@@ -81,18 +77,14 @@ public class UpgradeTree : MonoBehaviour {
 		panelVisible = true;
 		if(visiblePanelType == "health")   	healthInfo.displayPanel  = true;
 		if(visiblePanelType == "inventory")	invSizeInfo.displayPanel = true;
-		if(visiblePanelType == "speed")		speedInfo.displayPanel = true;
-		if(visiblePanelType == "colour")	colourInfo.displayPanel = true;
-		if(visiblePanelType == "noise")		colourInfo.displayPanel = true;
+		if(visiblePanelType == "noise")		noiseInfo.displayPanel = true;
 		if(visiblePanelType == "timescale")	timescaleInfo.displayPanel = true;
 	}
 
 	void HidePanel(){
 		if(visiblePanelType != "health")   	healthInfo.displayPanel  = false;
 		if(visiblePanelType != "inventory")	invSizeInfo.displayPanel = false;
-		if(visiblePanelType != "speed")	   	speedInfo.displayPanel = false;
-		if(visiblePanelType != "colour")   	colourInfo.displayPanel = false;
-		if(visiblePanelType != "noise")		colourInfo.displayPanel = false;
+		if(visiblePanelType != "noise")		noiseInfo.displayPanel = false;
 		if(visiblePanelType != "timescale")	timescaleInfo.displayPanel = false;
 	}
 

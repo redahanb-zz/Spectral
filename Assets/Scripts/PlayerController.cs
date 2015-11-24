@@ -170,19 +170,22 @@ public class PlayerController : MonoBehaviour {
 		
 		ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 		if (Physics.Raycast(ray, out cursorRayhit, 100f)){
-			switch(cursorRayhit.transform.tag){
-			case "Blend Surface" :		//if(rayHit.transform.GetComponent<Renderer>().material.color == newColor){ 
-				mouseImage.sprite = blendCursor;	mouseTransform.sizeDelta = new Vector3(64,64,0);
-				//}
-				//else{
-				//mouseImage.sprite = defaultCursor;	mouseTransform.sizeDelta = new Vector3(32,32,0);
-				//}
-				break;
-			case "Pickup" :				mouseImage.sprite = pickupCursor;	mouseTransform.sizeDelta = new Vector3(64,64,0);break;
-			case "Door" :				mouseImage.sprite = useCursor;		mouseTransform.sizeDelta = new Vector3(64,64,0);break;
-			case "Load Door" :			mouseImage.sprite = useCursor;		mouseTransform.sizeDelta = new Vector3(64,64,0);break;
-			default:					mouseImage.sprite = defaultCursor;	mouseTransform.sizeDelta = new Vector3(32,32,0); break;
+			switch(cursorRayhit.transform.name){
+			case "Teleporter 1" :		mouseImage.sprite = useCursor;	mouseTransform.sizeDelta = new Vector3(64,64,0);break;
+			case "Teleporter 2" :		mouseImage.sprite = useCursor;	mouseTransform.sizeDelta = new Vector3(64,64,0);break;
+			case "Base" :				mouseImage.sprite = useCursor;		mouseTransform.sizeDelta = new Vector3(64,64,0);break;
+			case "Threshold" :			mouseImage.sprite = useCursor;		mouseTransform.sizeDelta = new Vector3(64,64,0);break;
 			}
+
+			switch(cursorRayhit.transform.tag){
+				case "Blend Surface" :		mouseImage.sprite = blendCursor;	mouseTransform.sizeDelta = new Vector3(64,64,0);break;
+				case "Pickup" :				mouseImage.sprite = pickupCursor;	mouseTransform.sizeDelta = new Vector3(64,64,0);break;
+				case "Door" :				mouseImage.sprite = useCursor;		mouseTransform.sizeDelta = new Vector3(64,64,0);break;
+				case "Load Door" :			mouseImage.sprite = useCursor;		mouseTransform.sizeDelta = new Vector3(64,64,0);break;
+				default:					mouseImage.sprite = defaultCursor;	mouseTransform.sizeDelta = new Vector3(32,32,0); break;
+			}
+
+
 		}
 	}
 	

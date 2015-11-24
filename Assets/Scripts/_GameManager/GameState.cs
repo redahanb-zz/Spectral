@@ -171,8 +171,9 @@ public class GameState : MonoBehaviour {
 		public float[][] 		itemColours;
 
 		// Upgrade Data
-		//public float 			timeSlowFactor;
-		//public float 			timeSlowCharge;
+		public int 				timeSlowCharge;
+
+		public bool 			noiseDampening;
 
 	} // end SaveData class
 	

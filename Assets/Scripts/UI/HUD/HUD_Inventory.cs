@@ -9,7 +9,7 @@ public class HUD_Inventory : MonoBehaviour {
 	int inventorySize;
 	PlayerInventory playerInventory;
 	public Sprite defaultIcon;
-	public float hideSpeed;
+	private float hideSpeed = 10.0f;
 	bool hideInvHUD = false;
 	RectTransform rectTran;
 

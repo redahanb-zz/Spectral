@@ -11,7 +11,7 @@ public class HUD_Healthbar : MonoBehaviour {
 	public int healthBarSize;
 	int currentHealth;
 	public int panelSize;
-	public float hideSpeed;
+	private float hideSpeed = 10.0f;
 	bool hideHealthHUD = false;
 	
 	// Use this for initialization

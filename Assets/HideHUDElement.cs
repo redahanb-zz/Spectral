@@ -3,7 +3,7 @@ using System.Collections;
 
 public class HideHUDElement : MonoBehaviour {
 
-	public float hideSpeed;
+	private float hideSpeed = 10.0f;
 	public Vector3 showLocation;
 	public Vector3 hideLocation;
 

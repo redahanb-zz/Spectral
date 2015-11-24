@@ -12,7 +12,7 @@ GameObject:
   - 114: {fileID: 11431222}
   m_Layer: 0
   m_Name: FootfallFX
-  m_TagString: Untagged
+  m_TagString: Footstep
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -42,6 +42,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fadeSpeed: 1.5
   growSpeed: .5
+  startTime: 0
 --- !u!212 &21257378
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -74,7 +75,15 @@ Prefab:
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
-    m_Modifications: []
+    m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: m_TagString
+      value: Footstep
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 131730}

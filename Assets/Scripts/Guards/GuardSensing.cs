@@ -7,6 +7,7 @@
 
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class GuardSensing : MonoBehaviour {
 
@@ -29,12 +30,17 @@ public class GuardSensing : MonoBehaviour {
 	private RaycastHit 	rayHit;
 	private float 		timeInSight;
 	private bool 		canRoar = true;
+	private bool		footstepInRange;
 	
 	// script references
 	GameObject 			player;
 	PlayerController	playerController;
 	GuardAI 			guardAI;
 	GuardBehaviour		gBehaviour;
+
+	public GameObject[] footsteps;
+	Footfall 			tempFootstep;
+	//List<GameObject> 	footsteps;
 	
 	void Start () 
 	{
@@ -49,7 +55,8 @@ public class GuardSensing : MonoBehaviour {
 	void Update () 
 	{
 		CheckSight ();
-		CheckHearing ();
+		//CheckHearing ();
+		CheckHearing2 ();
 
 		if (playerInSight) {
 			if (timeInSight <= 0.3f) {
@@ -69,8 +76,8 @@ public class GuardSensing : MonoBehaviour {
 		distanceToPlayer = Vector3.Distance (transform.position, player.transform.position);
 		directionToPlayer = player.transform.position - transform.position;
 		angleToPlayer = Vector3.Angle (directionToPlayer, transform.forward);
-        //print("V Sight " + (player.transform.position.y - transform.position.y));
         playerInSight = false;
+
 		if(distanceToPlayer < sightRange && (Mathf.Abs(player.transform.position.y - transform.position.y) < 0.5))
 		{
 			if(angleToPlayer < fieldOfView)
@@ -96,41 +103,111 @@ public class GuardSensing : MonoBehaviour {
 
 	} // end CheckSight
 
-	void CheckHearing()
-	{
-		// update data on player
-		distanceToPlayer = Vector3.Distance (transform.position, player.transform.position);
-
-		if (distanceToPlayer <= hearingRange) {
-			//print ("Player in hearing range!");
-			player.GetComponent<FootstepFX> ().enemyInRange = true;
-		} else {
-			//print ("Player outside hearing range!");
-			player.GetComponent<FootstepFX> ().enemyInRange = false;
-		}
-
-		if(!soundProofed){
-			if(!playerInSight)
-			{
-				if(distanceToPlayer < hearingRange && (Mathf.Abs(player.transform.position.y - transform.position.y) < 0.05) && playerController.currentMoveState == PlayerController.MoveState.Run && !guardAI.curious)
-				{
-                    //print("V Hearing " + (player.transform.position.y - transform.position.y));
-                    investigationLocation = player.transform.position;
-					//GameObject.Find("Lastheardlocation").transform.position = investigationLocation;
-					playerHeard = true;
-					gBehaviour.waitCount = 0.0f;
-
-				} 
-//				else if(distanceToPlayer < hearingRange*0.25 && (Mathf.Abs(player.transform.position.y - transform.position.y) < 0.05) && playerController.currentMoveState == PlayerController.MoveState.Sneak)
+//	void CheckHearing()
+//	{
+//		// update data on player
+//		distanceToPlayer = Vector3.Distance (transform.position, player.transform.position);
+//
+//		if (distanceToPlayer <= hearingRange) {
+//			//print ("Player in hearing range!");
+//			player.GetComponent<FootstepFX> ().enemyInRange = true;
+//		} else {
+//			//print ("Player outside hearing range!");
+//			player.GetComponent<FootstepFX> ().enemyInRange = false;
+//		}
+//
+//		if(!soundProofed){
+//			if(!playerInSight)
+//			{
+//				if(distanceToPlayer < hearingRange && (Mathf.Abs(player.transform.position.y - transform.position.y) < 0.05) && playerController.currentMoveState == PlayerController.MoveState.Run && !guardAI.curious)
+//				{
+//                    investigationLocation = player.transform.position;
+//					//GameObject.Find("Lastheardlocation").transform.position = investigationLocation;
+//					playerHeard = true;
+//					gBehaviour.waitCount = 0.0f;
+//
+//				} 
+//				else if(distanceToPlayer < hearingRange*0.25 && (Mathf.Abs(player.transform.position.y - transform.position.y) < 0.05))
 //				{
 //					investigationLocation = player.transform.position;
 //					playerHeard = true;
 //					gBehaviour.waitCount = 0.0f;
 //				}
+//			}
+//		}
+//
+//	} // end CheckHearing
+
+	void CheckHearing2()
+	{
+		// update data on player
+		distanceToPlayer = Vector3.Distance (transform.position, player.transform.position);
+
+		// Play footstep visualisation if player is in range
+		if (distanceToPlayer <= hearingRange) 
+		{
+			player.GetComponent<FootstepFX> ().enemyInRange = true;
+			print ("Player in hearing range!");
+		} 
+		else 
+		{
+			player.GetComponent<FootstepFX> ().enemyInRange = false;
+			print ("Player outside hearing range!");
+		}
+
+		// record all footsteps in range, use position of most recent one as position to investigate
+		footsteps = GameObject.FindGameObjectsWithTag ("Footstep");
+		float spawnOrder = 0.0f;
+		footstepInRange = false;
+		foreach (GameObject echo in footsteps) {
+			tempFootstep = echo.GetComponent<Footfall>();
+			if(Vector3.Distance(echo.transform.position, transform.position) <= hearingRange)
+			{	
+				if(spawnOrder == 0.0f)
+				{
+					spawnOrder = tempFootstep.startTime;
+					footstepInRange = true;
+				}
+				else if(tempFootstep.startTime > spawnOrder)
+				{
+					spawnOrder = tempFootstep.startTime;
+					investigationLocation = echo.transform.position;
+				}
 			}
 		}
 
-	} // end CheckHearing
+		// record the player as 'heard' if in range and not in sight, and not in a soundproofed room
+		if(!soundProofed)
+		{
+			if(!playerInSight)
+			{
+				if(footstepInRange && (Mathf.Abs(player.transform.position.y - transform.position.y) < 0.05))
+				{
+					print ("Playerheard!!");
+					playerHeard = true;
+					gBehaviour.waitCount = 0.0f;
+					
+				} 
+			}
+		}
+	}
+
+//	void OnTriggerStay()
+//	{
+//		footsteps = GameObject.FindGameObjectsWithTag ("Footstep");
+//		float spawnOrder = 0.0f;
+//		foreach (GameObject echo in footsteps) {
+//			tempFootstep = echo.GetComponent<Footfall>();
+//			if(spawnOrder == 0.0f){
+//				spawnOrder = tempFootstep.startTime;
+//			}
+//			else if(tempFootstep.startTime > spawnOrder){
+//				spawnOrder = tempFootstep.startTime;
+//				investigationLocation = echo.transform.position;
+//			}
+//		}
+//
+//	}
 
 	void ResetCanRoar()
 	{

@@ -77,4 +77,9 @@ public class PlayerInventory : MonoBehaviour {
 		return -1;
 	}
 
+	public void UpgradeInventory()
+	{
+		inventorySize++;
+	}
+
 }

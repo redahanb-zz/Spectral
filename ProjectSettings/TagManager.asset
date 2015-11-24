@@ -21,6 +21,7 @@ TagManager:
   - Load Door
   - Guard
   - Bodypart
+  - Footstep
   layers:
   - Default
   - TransparentFX

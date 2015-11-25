@@ -23,6 +23,8 @@ public class PauseManager : MonoBehaviour {
 	GameObject			pauseButton;
 	GameObject 			alertCountdown;
 
+	bool runOnce = false;
+
 	// Use this for initialization
 	void Start () {
 		mainCanvas = GameObject.Find ("Canvas");
@@ -50,9 +52,14 @@ public class PauseManager : MonoBehaviour {
 			blurFX.enabled = true;
 			blurFX.blurSize = Mathf.Lerp (blurFX.blurSize, 10.0f, Time.deltaTime * 5.0f);
 			timeScaler.StopTime();
-		} else {
+			runOnce = false;
+		} 
+		else {
 			blurFX.blurSize = Mathf.Lerp (blurFX.blurSize, 0.0f, Time.deltaTime * 50.0f);
-			timeScaler.ResumeTime();
+			if(!runOnce){
+				timeScaler.ResumeTime();
+				runOnce = true;
+			}
 		}
 
 		if(blurFX.blurSize <= 0.0f){

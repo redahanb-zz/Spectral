@@ -40,7 +40,6 @@ public class TimeScaler : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
-		
 		if(Application.loadedLevelName == "Upgrades Screen"){
 			gameObject.SetActive(false);
 		}
@@ -95,6 +94,8 @@ public class TimeScaler : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		//print(timeSlowed + " : " + currentScale);
+
 		timeNow 		= Time.realtimeSinceStartup;
 		customDeltaTime = timeNow - lastInterval;
 		lastInterval 	= timeNow;

@@ -53,14 +53,13 @@ public class AlertManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		//timeNow 		= Time.realtimeSinceStartup;
+		//print (tScaler.timeSlowed + " : " +mainLight.color);
 
-		//print (mainLight.color + " " + gradientBottomImage.color);
 
 		if (!mainLight) {
 			mainLight = GameObject.Find ("Directional Light").GetComponent<Light> ();
 		}
 
-		//print(alertActive + " : " +alertVolume);
 		mixer.SetFloat("AlertMusicVolume", alertVolume);
 		mixer.SetFloat("NormalMusicVolume", normalVolume);
 		if(Input.GetKeyDown(KeyCode.B))alertActive = !alertActive;
@@ -85,13 +84,18 @@ public class AlertManager : MonoBehaviour {
 		else{
 			if(alertVolume > -80f)alertVolume = alertVolume - 0.5f;
 			if(normalVolume < 0f)normalVolume = normalVolume + 1.0f;
+			//print ("1");
 
 			if(tScaler.timeSlowed){
+				//print ("2");
+
 				mainLight.color = Color.Lerp(mainLight.color, slowColor, Time.deltaTime * lightChangeRate);
 				gradientBottomImage.color  = Color.Lerp(gradientBottomImage.color, slowColor, Time.deltaTime * lightChangeRate);
 
 			}
 			else{ 
+				//print ("3");
+
 				mainLight.color = Color.Lerp(mainLight.color, normalLightColor, Time.deltaTime * lightChangeRate);
 				gradientBottomImage.color  = Color.Lerp(gradientBottomImage.color, normalGradientColor, Time.deltaTime * lightChangeRate);
 			}

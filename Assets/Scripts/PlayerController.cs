@@ -183,19 +183,28 @@ public class PlayerController : MonoBehaviour {
 		}
 
 		if (Physics.Raycast(ray, out cursorRayhit, 100f)){
+
+			print(cursorRayhit.transform.name);
 			switch(cursorRayhit.transform.name){
 			case "Teleporter 1" :		mouseImage.sprite = useCursor;	mouseTransform.sizeDelta = new Vector3(64,64,0);break;
 			case "Teleporter 2" :		mouseImage.sprite = useCursor;	mouseTransform.sizeDelta = new Vector3(64,64,0);break;
 			case "Base" :				mouseImage.sprite = useCursor;		mouseTransform.sizeDelta = new Vector3(64,64,0);break;
 			case "Threshold" :			mouseImage.sprite = useCursor;		mouseTransform.sizeDelta = new Vector3(64,64,0);break;
+			case "Door North" :			mouseImage.sprite = useCursor;		mouseTransform.sizeDelta = new Vector3(64,64,0);break;
+			case "Door South" :			mouseImage.sprite = useCursor;		mouseTransform.sizeDelta = new Vector3(64,64,0);break;
+			case "Door East" :			mouseImage.sprite = useCursor;		mouseTransform.sizeDelta = new Vector3(64,64,0);break;
+			case "Door West" :			mouseImage.sprite = useCursor;		mouseTransform.sizeDelta = new Vector3(64,64,0);break;
+
+
 			}
 
 			switch(cursorRayhit.transform.tag){
+				case "Tile" :				mouseImage.sprite = defaultCursor;	mouseTransform.sizeDelta = new Vector3(32,32,0);break;
 				case "Blend Surface" :		mouseImage.sprite = blendCursor;	mouseTransform.sizeDelta = new Vector3(64,64,0);break;
 				case "Pickup" :				mouseImage.sprite = pickupCursor;	mouseTransform.sizeDelta = new Vector3(64,64,0);break;
 				case "Door" :				mouseImage.sprite = useCursor;		mouseTransform.sizeDelta = new Vector3(64,64,0);break;
 				case "Load Door" :			mouseImage.sprite = useCursor;		mouseTransform.sizeDelta = new Vector3(64,64,0);break;
-				default:					mouseImage.sprite = defaultCursor;	mouseTransform.sizeDelta = new Vector3(32,32,0); break;
+				//default:					mouseImage.sprite = defaultCursor;	mouseTransform.sizeDelta = new Vector3(32,32,0); break;
 			}
 
 

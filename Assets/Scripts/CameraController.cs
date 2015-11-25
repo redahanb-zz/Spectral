@@ -24,10 +24,10 @@ public class CameraController : MonoBehaviour {
 	Vector3 zoomedOutPos;
 	Quaternion zoomedOutRot;
 
-	bool mapCamera = false;
+	public bool mapCamera = false;
 	GameObject mapCamObject;
 
-	bool mapButtonDown = false;
+	public bool mapButtonDown = false;
 
 	public Transform lookAtOtherTarget;
 

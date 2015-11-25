@@ -37,6 +37,7 @@ public class GuardSensing : MonoBehaviour {
 	PlayerController	playerController;
 	GuardAI 			guardAI;
 	GuardBehaviour		gBehaviour;
+	TimeScaler 			tScaler;
 
 	public GameObject[] footsteps;
 	Footfall 			tempFootstep;
@@ -48,6 +49,11 @@ public class GuardSensing : MonoBehaviour {
 		playerController = player.GetComponent<PlayerController>();
 		guardAI = GetComponent<GuardAI> ();
 		gBehaviour = GetComponent<GuardBehaviour> ();
+		tScaler = GameObject.Find ("Time Manager").GetComponent<TimeScaler> ();
+		if (tScaler.GetNoiseDampening ()) 
+		{
+			hearingRange = 2.5f;
+		}
 
 	} // end Start
 	

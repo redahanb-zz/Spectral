@@ -17,6 +17,8 @@ public class PlayerController : MonoBehaviour {
 	TimeScaler 				timeScale;
 	Animator 				playerAnimator;
 	AlertManager 			alert;
+	PauseManager 			pManager;
+	Renderer 				tempChangeRenderer;
 	
 	private NavMeshAgent 	agent;
 	private NavMeshPath		path;
@@ -87,7 +89,7 @@ public class PlayerController : MonoBehaviour {
 		eventSystem		 = GameObject.Find ("EventSystem").GetComponent<EventSystem> ();
 		pHealth 		 = GameObject.Find ("Health Manager").GetComponent<HealthManager>();
 		timeScale 		 = GameObject.Find("Time Manager").GetComponent<TimeScaler>();
-		
+		pManager		 = GameObject.Find ("Pause Manager").GetComponent<PauseManager> ();
 		playerAnimator 	 = GetComponent<Animator>();
 		bodyParts 		 = GetComponent<PlayerBodyparts> ().bodyparts;
 		agent 			 = GetComponent<NavMeshAgent>();
@@ -106,6 +108,7 @@ public class PlayerController : MonoBehaviour {
 	void SetupMouseCursor(){
 		mouseCursorObject = Instantiate(Resources.Load("Mouse Cursor"), Vector3.zero, Quaternion.identity) as GameObject;
 		mouseCursorObject.transform.parent = GameObject.Find("Canvas").transform;
+		mouseCursorObject.name = "Mouse Cursor";
 		mouseTransform = mouseCursorObject.GetComponent<RectTransform>();
 		mouseImage = mouseCursorObject.GetComponent<Image>();
 		
@@ -149,7 +152,13 @@ public class PlayerController : MonoBehaviour {
 		if(!pHealth.playerDead){
 			// change colour of each bodypart in the array
 			foreach (GameObject part in bodyParts) {
-				part.GetComponent<Renderer>().material.color = Color.Lerp(part.GetComponent<Renderer>().material.color, targetcolor, 10*Time.deltaTime);
+				tempChangeRenderer = part.GetComponent<Renderer>();
+				tempChangeRenderer.material.color = Color.Lerp(tempChangeRenderer.material.color, targetcolor, 10*Time.deltaTime);
+				if(!isVisible){
+					tempChangeRenderer.material.SetColor("_OutlineColor", Color.Lerp(tempChangeRenderer.material.color, targetcolor, 10*Time.deltaTime));
+				} else{
+					tempChangeRenderer.material.SetColor("_OutlineColor", Color.Lerp(targetcolor, Color.black, 100*Time.deltaTime));
+				}
 			}
 		}
 	}
@@ -169,6 +178,10 @@ public class PlayerController : MonoBehaviour {
 		mouseTransform.position = Input.mousePosition + new Vector3(mouseTransform.sizeDelta.x/2 , -mouseTransform.sizeDelta.y/2, 0);
 		
 		ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+		if(pManager.gamePaused || pHealth.playerDead){
+			return;
+		}
+
 		if (Physics.Raycast(ray, out cursorRayhit, 100f)){
 			switch(cursorRayhit.transform.name){
 			case "Teleporter 1" :		mouseImage.sprite = useCursor;	mouseTransform.sizeDelta = new Vector3(64,64,0);break;

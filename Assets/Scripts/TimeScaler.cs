@@ -28,7 +28,7 @@ public class TimeScaler : MonoBehaviour {
 	
 	bool canFill = true;
 	
-	//PauseManager pauseManager;
+	public bool 	noiseDampening; // make this public for testing, private eventually for encapsulation
 	
 	float currentStoredTime = 0, maxStoredTime = 12, hourglassYscale;
 	
@@ -160,5 +160,27 @@ public class TimeScaler : MonoBehaviour {
 	void StartFill(){
 		canFill = true;
 	}
+
+	public void SetMaxStoredTime(float f)
+	{
+		maxStoredTime = f;
+	}
+
+	public float GetMaxStoredTime()
+	{
+		return maxStoredTime;
+	}
+
+	public void SetNoiseDampening(bool b)
+	{
+		noiseDampening = b;
+	}
+
+	public bool GetNoiseDampening()
+	{
+		bool temp = noiseDampening;
+		return temp;
+	}
+
 	
 }

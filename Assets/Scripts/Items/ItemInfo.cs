@@ -4,13 +4,13 @@ using UnityEngine.UI;
 
 public class ItemInfo : MonoBehaviour {
 
-	GameObject button;
-	GameObject canvasObject;
-	GameObject player;
+	GameObject 		button;
+	GameObject 		canvasObject;
+	GameObject 		player;
 
-	HealthManager healthManager;
-
-	InventoryItem inventoryItem;
+	HealthManager 	healthManager;
+	InventoryItem 	inventoryItem;
+	PauseManager  	pauseManager;
 
 	// Use this for initialization
 	void Start () 
@@ -19,6 +19,7 @@ public class ItemInfo : MonoBehaviour {
 		inventoryItem = GetComponent<InventoryItem> ();
 		player = GameObject.FindWithTag ("Player");
 		healthManager = GameObject.Find ("Health Manager").GetComponent<HealthManager> ();
+		pauseManager = GameObject.Find ("Pause Manager").GetComponent<PauseManager> ();
 	}
 	
 	// Update is called once per frame
@@ -34,10 +35,9 @@ public class ItemInfo : MonoBehaviour {
 				button.GetComponent<Button>().onClick.AddListener( button.GetComponent<ItemInfoButton>().target.GetComponent<InventoryItem>().pickupAnim );
 				inventoryItem.identifyButton(button);
 			} 
-			else /*if(button.GetComponent<Button>().interactable == false)*/
+			else if(!pauseManager.gamePaused)
 			{
 				button.SetActive(true);
-				//button.GetComponent<Button>().interactable = true;
 			}
 
 		}

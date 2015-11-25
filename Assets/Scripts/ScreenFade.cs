@@ -4,11 +4,13 @@ using System.Collections;
 
 public class ScreenFade : MonoBehaviour {
 
-	public bool fadeToColor = true;
-	GameObject fadeObject;
-	RawImage rImg;
-	RectTransform rTrans;
-	GameObject canvas;
+	public bool 	fadeToColor = true;
+	GameObject 		fadeObject;
+	RawImage 		rImg;
+	RectTransform 	rTrans;
+	GameObject 		canvas;
+	GameObject 		pausePanel;
+	GameObject 		mouseCursor;
 
 	public float lastInterval, timeNow, myTime;
 	//
@@ -24,6 +26,8 @@ public class ScreenFade : MonoBehaviour {
 		inventoryObject = transform.parent.Find("HUD_Inventory");
 		if(transform.parent.Find("Time Button"))
 		timeButtonObject = transform.parent.Find("Time Button");
+		if (GameObject.Find ("Mouse Cursor"))
+		mouseCursor = GameObject.Find ("Mouse Cursor");
 
 		fadeObject = transform.Find("Fade").gameObject;
 		fadeObject.SetActive(true);
@@ -33,6 +37,7 @@ public class ScreenFade : MonoBehaviour {
 		rTrans.sizeDelta = new Vector2(Screen.width, Screen.height);
 		fadeToColor = false;
 		canvas = gameObject.transform.parent.gameObject;
+		pausePanel = GameObject.Find ("Pause Manager").GetComponent<PauseManager>().pauseScreen;
 	}
 
 	public void ToggleCanFade(){
@@ -41,6 +46,9 @@ public class ScreenFade : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		if (!mouseCursor)
+			mouseCursor = GameObject.Find ("Mouse Cursor");
+
 		timeNow = Time.realtimeSinceStartup;
 		myTime = timeNow - lastInterval;
 		lastInterval = timeNow;
@@ -79,6 +87,10 @@ public class ScreenFade : MonoBehaviour {
 	public void ResetParent(){
 		print ("Restting fader in hierarchy!");
 		transform.SetParent (null);
+		pausePanel.GetComponent<RectTransform>().SetParent (null);
+		pausePanel.GetComponent<RectTransform>().SetParent (canvas.transform);
+		mouseCursor.transform.SetParent (null);
+		mouseCursor.transform.SetParent (canvas.transform);
 		transform.SetParent (canvas.transform);
 	}
 }

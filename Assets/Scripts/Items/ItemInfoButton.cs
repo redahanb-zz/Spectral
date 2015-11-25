@@ -4,17 +4,22 @@ using UnityEngine.UI;
 
 public class ItemInfoButton : MonoBehaviour {
 
-	public GameObject target;
+	public GameObject 	target;
 
-	GameObject canvasObject;
-	RectTransform canvasTransform;
-	RectTransform iconTransform;
+	GameObject 			canvasObject;
+	RectTransform 		canvasTransform;
+	RectTransform 		iconTransform;
+	ScreenFade 			sFader;
+	PauseManager 		pManager;
 	
 	// Use this for initialization
 	void Start () {
 		canvasObject = GameObject.Find ("Canvas");
 		canvasTransform = canvasObject.GetComponent<RectTransform> ();
 		iconTransform = GetComponent<RectTransform> ();
+		sFader = GameObject.Find ("Screen Fade").GetComponent<ScreenFade> ();
+		sFader.ResetParent ();
+		pManager = GameObject.Find ("Pause Manager").GetComponent<PauseManager> ();
 	}
 
 	public void setTarget(GameObject t){
@@ -32,6 +37,12 @@ public class ItemInfoButton : MonoBehaviour {
 
 			iconTransform.anchoredPosition = WorldObject_ScreenPosition + new Vector2(0, 30);
 
+		}
+
+		if (pManager.gamePaused) {
+			gameObject.SetActive (false);
+		} else {
+			gameObject.SetActive(true);
 		}
 	}
 

@@ -3,12 +3,13 @@ using System.Collections;
 
 public class Footfall : MonoBehaviour {
 
-	public float fadeSpeed;
-	public float growSpeed;
-	public float startTime;
+	public float 	fadeSpeed;
+	public float 	growSpeed;
+	public float 	startTime;
 
-	Color tempColor;
-	SpriteRenderer sRenderer;
+	Color 			tempColor;
+	SpriteRenderer 	sRenderer;
+	TimeScaler 		tScaler;
 
 	void Awake()
 	{
@@ -20,7 +21,14 @@ public class Footfall : MonoBehaviour {
 	{
 		transform.localScale = new Vector3 (0,0,0);
 		sRenderer = GetComponent<SpriteRenderer> ();
-		Destroy (gameObject, 2.5f);
+		tScaler = GameObject.Find ("Time Manager").GetComponent<TimeScaler> ();
+		if (tScaler.GetNoiseDampening()) {
+			fadeSpeed = 3.0f;
+			Destroy (gameObject, 1.25f);
+		} 
+		else {
+			Destroy (gameObject, 2.5f);
+		}
 	}
 
 	void Update () 

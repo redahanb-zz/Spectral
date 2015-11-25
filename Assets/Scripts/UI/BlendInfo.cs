@@ -4,15 +4,16 @@ using UnityEngine.UI;
 
 public class BlendInfo : MonoBehaviour {
 
-	GameObject button;
-	GameObject canvasObject;
-	GameObject player;
-	PlayerController pController;
-	Renderer rend;
-	HealthManager pHealth;
+	GameObject 			button;
+	GameObject 			canvasObject;
+	GameObject 			player;
+	PlayerController 	pController;
+	Renderer 			rend;
+	HealthManager 		pHealth;
+	PauseManager 		pManager;
 
-	Color playerColor;
-	Color wallColor;
+	Color 				playerColor;
+	Color 				wallColor;
 	
 	//InventoryItem inventoryItem;
 	
@@ -21,9 +22,9 @@ public class BlendInfo : MonoBehaviour {
 		player = GameObject.FindWithTag ("Player");
 		pController = player.GetComponent<PlayerController> ();
 		canvasObject = GameObject.Find ("Canvas");
-		//inventoryItem = GetComponent<InventoryItem> ();
 		rend = GetComponent<Renderer> ();
 		pHealth = GameObject.Find ("Health Manager").GetComponent<HealthManager> ();
+		pManager = GameObject.Find ("Pause Manager").GetComponent<PauseManager> ();
 	}
 	
 	// Update is called once per frame
@@ -33,6 +34,7 @@ public class BlendInfo : MonoBehaviour {
 		//print ("Player: " + pController.targetcolor);
 		playerColor = pController.targetcolor;
 		float colorDistance = Vector3.Distance( new Vector3(wallColor.r, wallColor.b, wallColor.g), new Vector3(playerColor.r,playerColor.b,playerColor.g));
+
 		if(Vector3.Distance(transform.position, player.transform.position) < 3.0f)
 		{
 			if(colorDistance < 0.1f)
@@ -46,7 +48,7 @@ public class BlendInfo : MonoBehaviour {
 						button.transform.SetParent(canvasObject.transform);
 						button.GetComponent<BlendInfoButton>().setTarget(gameObject);
 						button.GetComponent<Button>().onClick.AddListener( GetComponent<BlendInfo>().callPlayertoBlend );
-					} else if(!pHealth.playerDead && pController.isVisible) 
+					} else if(!pHealth.playerDead && pController.isVisible && !pManager.gamePaused) 
 					{
 						button.SetActive(true);
 						if(button.GetComponent<Button>().interactable == false){
@@ -54,8 +56,7 @@ public class BlendInfo : MonoBehaviour {
 						}
 					}
 				} // end check player angle
-			}
-		
+			} // end check colour distance
 		} // end check player in range
 
 		if (Vector3.Distance (transform.position, player.transform.position) > 10.0f || colorDistance > 0.1f) {

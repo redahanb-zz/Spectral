@@ -4,17 +4,18 @@ using UnityEngine.UI;
 
 public class BlendInfoButton : MonoBehaviour {
 
-	public GameObject target;
-	GameObject canvasObject;
-	GameObject player;
-	PlayerController playerController;
-	Image icon;
-	RectTransform canvasTransform;
-	RectTransform iconTransform;
-	HealthManager pHealth;
-	
-	// Use this for initialization
-	void Start () {
+	public GameObject 		target;
+	GameObject 				canvasObject;
+	GameObject 				player;
+	PlayerController 		playerController;
+	Image 					icon;
+	RectTransform 			canvasTransform;
+	RectTransform 			iconTransform;
+	HealthManager 			pHealth;
+	PauseManager 			pManager;
+
+	void Start () 
+	{
 		canvasObject = GameObject.Find ("Canvas");
 		canvasTransform = canvasObject.GetComponent<RectTransform> ();
 		iconTransform = GetComponent<RectTransform> ();
@@ -23,16 +24,17 @@ public class BlendInfoButton : MonoBehaviour {
 		pHealth = GameObject.Find("Health Manager").GetComponent<HealthManager>();
 		icon = transform.GetChild(0).gameObject.GetComponent<Image> ();
 		GameObject.Find ("Screen Fade").GetComponent<ScreenFade> ().ResetParent ();
-		print (GameObject.Find ("Screen Fade"));
+		pManager = GameObject.Find ("Pause Manager").GetComponent<PauseManager> ();
 	}
 	
 	public void setTarget(GameObject t){
+
 		target = t;
 		//setFunction ();
 	}
-	
-	// Update is called once per frame
-	void Update () {
+
+	void Update () 
+	{
 		if (target != null) {
 			
 			Vector2 ViewportPosition = Camera.main.WorldToViewportPoint (target.transform.position);
@@ -44,11 +46,8 @@ public class BlendInfoButton : MonoBehaviour {
 			
 		}
 
-		//print ("Icon color: " + icon.color + ", Player color: " + playerController.targetcolor);
 		Color playerColor = playerController.targetcolor;
-		//playerColor.a = 1;
 		icon.color = Color.Lerp (icon.color, playerColor, 10*Time.deltaTime);
-		//icon.color = playerColor;
 
 		// Hide button when player is out of range
 		if(target.activeSelf == false || Vector3.Distance(target.transform.position, player.transform.position) > 3.0f)
@@ -56,23 +55,36 @@ public class BlendInfoButton : MonoBehaviour {
 			gameObject.SetActive(false);
 		}
 
+		// Hide button when player is hidden
 		if(!playerController.isVisible){
 			gameObject.SetActive(false);
 		}
 
+		// Hide button when player dies
 		if(pHealth.playerDead)
 		{
-			//Destroy(gameObject);
 			gameObject.SetActive(false);
 		}
 
-	}
+		// Hide button when game is paused
+		if (pManager.gamePaused) 
+		{
+			gameObject.SetActive (false);
+		} 
+//		else 
+//		{
+//			gameObject.SetActive(true);
+//		}
+
+	} // end Update
 	
-	public void deactivateButton(){
+	public void deactivateButton()
+	{
 		gameObject.SetActive(false);
 	}
 	
-	public void activateButton(){
+	public void activateButton()
+	{
 		gameObject.SetActive(true);
 	}
 }

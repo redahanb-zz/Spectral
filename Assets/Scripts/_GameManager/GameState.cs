@@ -90,6 +90,10 @@ public class GameState : MonoBehaviour {
 			}
 		}
 
+		// Save time upgrade parameters
+		data.maxStoredTime = pTime.GetMaxStoredTime ();
+		data.noiseDampening = pTime.GetNoiseDampening ();
+
 		// Commit the savedata into the savefile
 		bf.Serialize (file, data);
 		file.Close ();
@@ -113,6 +117,7 @@ public class GameState : MonoBehaviour {
 			pInventory.inventorySize = data.inventorySize;
 			pInventory.playerInventory = new GameObject[pInventory.inventorySize];
 
+			// Compile inventory contents
 			for(int x = 0; x < data.inventorySize; x++){
 				if(data.itemNames[x] != null)
 				{
@@ -140,7 +145,10 @@ public class GameState : MonoBehaviour {
 			invHUD.UpdateAllIcons();
 			healthHUD.buildHealthbarUI(pHealth.maxHealth);
 			healthHUD.healthBarSize = pHealth.maxHealth;
-		} else {
+			pTime.SetMaxStoredTime(data.maxStoredTime);
+			pTime.SetNoiseDampening(data.noiseDampening);
+		} 
+		else {
 			print ("No save file found... Initialising default player stats.");
 			pHealth.maxHealth = 3;
 			pHealth.playerHealth = 3;
@@ -149,7 +157,8 @@ public class GameState : MonoBehaviour {
 			invHUD.buildInventoryUI (4);
 			healthHUD.buildHealthbarUI(3);
 			healthHUD.healthBarSize = 3;
-
+			pTime.SetMaxStoredTime(5.0f);
+			pTime.SetNoiseDampening(false);
 		}
 	} // end LoadGame
 
@@ -167,12 +176,10 @@ public class GameState : MonoBehaviour {
 
 		public string[] 		itemNames;
 		public int[] 			itemValues;
-		//public Vector3[] 		itemColors;
 		public float[][] 		itemColours;
 
-		// Upgrade Data
-		public int 				timeSlowCharge;
-
+		// Time Upgrade Data
+		public float 			maxStoredTime;
 		public bool 			noiseDampening;
 
 	} // end SaveData class

@@ -21,6 +21,10 @@ public class HUD_Healthbar : MonoBehaviour {
 		playerHealth = healthManager.GetComponent<HealthManager> ();
 //		healthBarSize = playerHealth.maxHealth;
 //		buildHealthbarUI (healthBarSize);
+
+		if (Application.loadedLevelName == "Upgrade Screen") {
+			hideHealthHUD = true;
+		}
 	}
 
 	void Update () 

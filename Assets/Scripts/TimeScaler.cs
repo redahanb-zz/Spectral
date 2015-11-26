@@ -30,7 +30,7 @@ public class TimeScaler : MonoBehaviour {
 	
 	public bool 	noiseDampening; // make this public for testing, private eventually for encapsulation
 	
-	float currentStoredTime = 0, maxStoredTime = 12, hourglassYscale;
+	float currentStoredTime = 0, maxStoredTime = 5, hourglassYscale;
 	
 	GameObject buttonObject;
 	
@@ -41,7 +41,7 @@ public class TimeScaler : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		if(Application.loadedLevelName == "Upgrades Screen"){
-			gameObject.SetActive(false);
+			//gameObject.SetActive(false);
 		}
 		else{
 			myTime = 0;
@@ -59,6 +59,7 @@ public class TimeScaler : MonoBehaviour {
 			playerAnimator 	= GameObject.FindGameObjectWithTag("Player").GetComponent<Animator>();
 			myDeltaTime 	= Time.deltaTime;
 			lastInterval 	= Time.realtimeSinceStartup;
+			currentStoredTime = maxStoredTime;
 		}
 	}
 	
@@ -83,7 +84,7 @@ public class TimeScaler : MonoBehaviour {
 	public void ResumeTime(){
 		timeSlowed 		= false;
 		timeStopped = false;
-		Invoke("StartFill", 1);
+		//Invoke("StartFill", 1);
 		
 	}
 	
@@ -95,6 +96,7 @@ public class TimeScaler : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		//print(timeSlowed + " : " + currentScale);
+		//print ("Max Stored time: " + GetMaxStoredTime());
 
 		timeNow 		= Time.realtimeSinceStartup;
 		customDeltaTime = timeNow - lastInterval;
@@ -148,8 +150,8 @@ public class TimeScaler : MonoBehaviour {
 			}
 		}
 		else{
-			if(canFill)currentStoredTime = currentStoredTime + ((customDeltaTime/maxStoredTime) * 50);
-			if(currentStoredTime > maxStoredTime)currentStoredTime = maxStoredTime;
+			//if(canFill)currentStoredTime = currentStoredTime + ((customDeltaTime/maxStoredTime) * 50);
+			//if(currentStoredTime > maxStoredTime)currentStoredTime = maxStoredTime;
 			
 		}
 		hourglassYscale = currentStoredTime * 4;
@@ -162,6 +164,11 @@ public class TimeScaler : MonoBehaviour {
 		canFill = true;
 	}
 
+	public void UpgradeMaxStoredTime()
+	{
+		maxStoredTime += 1.0f;
+	}
+
 	public void SetMaxStoredTime(float f)
 	{
 		maxStoredTime = f;
@@ -170,6 +177,11 @@ public class TimeScaler : MonoBehaviour {
 	public float GetMaxStoredTime()
 	{
 		return maxStoredTime;
+	}
+
+	public void UpgradeNoiseDampening()
+	{
+		noiseDampening = true;
 	}
 
 	public void SetNoiseDampening(bool b)

@@ -66,5 +66,7 @@ public class HealthManager : MonoBehaviour
     public void IncreaseMaxHealth()
     {
         maxHealth = maxHealth + 1;
+		playerHealth = maxHealth;
+		print ("Upgrading health: HM");
     }
 }

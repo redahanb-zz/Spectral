@@ -33,5 +33,5 @@ EditorBuildSettings:
     path: Assets/Levels/_STAGES/Stage 15.unity
   - enabled: 1
     path: Assets/Greenlight Screen.unity
-  - enabled: 0
+  - enabled: 1
     path: Assets/Levels/Upgrades Screen.unity

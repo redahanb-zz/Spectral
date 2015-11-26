@@ -49,10 +49,13 @@ public class GameState : MonoBehaviour {
 		pHealth = GameObject.Find ("Health Manager").GetComponent<HealthManager> ();
 		healthHUD = GameObject.Find ("HUD_Healthbar").GetComponent<HUD_Healthbar> ();
 		pInventory = GameObject.Find ("Inventory Manager").GetComponent<PlayerInventory> ();
-		if(Application.loadedLevelName != "Upgrades Screen"){
-			invHUD = GameObject.Find ("HUD_Inventory").GetComponent<HUD_Inventory> ();
-			pTime = GameObject.Find("Time Manager").GetComponent<TimeScaler>();
-		}
+		invHUD = GameObject.Find ("HUD_Inventory").GetComponent<HUD_Inventory> ();
+		pTime = GameObject.Find("Time Manager").GetComponent<TimeScaler>();
+
+		//if(Application.loadedLevelName != "Upgrades Screen"){
+//			invHUD = GameObject.Find ("HUD_Inventory").GetComponent<HUD_Inventory> ();
+//			pTime = GameObject.Find("Time Manager").GetComponent<TimeScaler>();
+		//}
 
 		LoadGame ();
 	}
@@ -79,7 +82,7 @@ public class GameState : MonoBehaviour {
 		//data.itemColors = new Vector3[pInventory.inventorySize];
 		data.itemColours = new float[pInventory.inventorySize][];
 
-		for(int x = 0; x < pInventory.inventorySize; x++){
+		for(int x = 0; x < pInventory.playerInventory.Length; x++){ //HERE
 			if(pInventory.playerInventory[x] != null){
 				InventoryItem tempInfo = pInventory.playerInventory[x].GetComponent<InventoryItem>();
 				data.itemNames[x] = tempInfo.name;

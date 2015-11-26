@@ -92,6 +92,7 @@ public class UpgradeArea : MonoBehaviour {
 			if(Input.GetKeyDown(KeyCode.Space)){
 				offerItem = true;
 				fade.FadeIn();
+				GameState.gameState.SaveGame();
 				Invoke("OpenUpgradesScreen", 2);
 			}
 		}

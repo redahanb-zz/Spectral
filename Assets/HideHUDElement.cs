@@ -42,11 +42,13 @@ public class HideHUDElement : MonoBehaviour {
 	{
 		rectTran.anchoredPosition = Vector3.Lerp (rectTran.anchoredPosition, showLocation, Time.deltaTime*hideSpeed);
 	}
-	
+
+	// Use this function if it gets called only once
 	public void toggleHide(){
 		hideHUDPiece = !hideHUDPiece;
 	}
 
+	// Use the functions below if they will get called repeatedly in Update
 	public void hide(){
 		hideHUDPiece = true;
 	}

@@ -178,25 +178,26 @@ public class UpgradeTree : MonoBehaviour {
 	}
 
 	public void CloseUpgrades(){
-		print("1");
+		//print("1");
+		GameState.gameState.SaveGame ();
 		StartCoroutine(RTB());
-		print("2");
+		//print("2");
 		//Invoke("ReturnToRestorePoint", 1);
 	}
 
 	public void ReturnToRestorePoint(){
 
-		Application.LoadLevel("Restore Point");
+		Application.LoadLevel("Restore Point - DEMO");
 	}
 
 	IEnumerator RTB(){
-		print("RTB1");
+		//print("RTB1");
 
 		yield return new WaitForSeconds(1.5f);
-		print("RTB2");
+		//print("RTB2");
 
-		Application.LoadLevel("Restore Point");
-		print("RTB3");
+		Application.LoadLevel("Restore Point - DEMO");
+		//print("RTB3");
 
 
 	}

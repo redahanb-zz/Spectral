@@ -24,6 +24,7 @@ public class UpgradeInventorySize : MonoBehaviour {
 	
 	private 		RawImage[] inventoryImages;
 	private 		RectTransform inventoryInfoTransform;
+	private 		PlayerInventory pInventory;
 	
 	
 	Image			inventoryButtonImage;
@@ -35,6 +36,7 @@ public class UpgradeInventorySize : MonoBehaviour {
 		inventoryButtonImage = GameObject.Find("Inventory Button").GetComponent<Image>();
 		buttonTargetColor = Color.white;
 		inventoryInfoTransform = transform.GetComponent<RectTransform>();
+		pInventory = GameObject.Find ("Inventory Manager").GetComponent<PlayerInventory> ();
 		
 		hiddenPos = inventoryInfoTransform.position;
 		visiblePos = inventoryInfoTransform.position + new Vector3(340,0,0);
@@ -122,7 +124,8 @@ public class UpgradeInventorySize : MonoBehaviour {
 			inventoryImages[i].color = inactiveColor;
 	}
 	
-	void IncreaseInventory(){
+	public void IncreaseInventory(){
+		pInventory.UpgradeInventory ();
 		currentInventory = currentInventory + 1;
 	}
 }

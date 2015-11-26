@@ -26,6 +26,10 @@ public class HUD_Inventory : MonoBehaviour {
 	{
 		rectTran = GetComponent<RectTransform> ();
 		playerInventory = GameObject.Find ("Inventory Manager").GetComponent<PlayerInventory> ();
+
+		if (Application.loadedLevelName == "Upgrade Screen") {
+			hideInvHUD = true;
+		}
 	}
 	
 	// Update is called once per frame

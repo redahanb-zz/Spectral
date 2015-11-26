@@ -82,7 +82,7 @@ public class SimpleTutorial : MonoBehaviour {
 		else hideRate = 15;
 		
 		
-		print(count + " : " + showTutorial + " : " +backgroundTransform.sizeDelta);
+		//print(count + " : " + showTutorial + " : " +backgroundTransform.sizeDelta);
 		
 		deltaTime = Time.realtimeSinceStartup - previousFrameTime;
 		count = deltaTime - startTime;

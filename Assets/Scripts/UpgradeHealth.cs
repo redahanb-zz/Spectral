@@ -24,6 +24,7 @@ public class UpgradeHealth : MonoBehaviour {
 
 	private 		RawImage[] heartImages;
 	private 		RectTransform healthInfoTransform;
+	private			HealthManager healthManager;
 
 
 	Image			healthButtonImage;
@@ -35,6 +36,7 @@ public class UpgradeHealth : MonoBehaviour {
 		healthButtonImage = GameObject.Find("Health Button").GetComponent<Image>();
 		buttonTargetColor = Color.white;
 		healthInfoTransform = transform.GetComponent<RectTransform>();
+		healthManager = GameObject.Find ("Health Manager").GetComponent<HealthManager> ();
 
 		hiddenPos = healthInfoTransform.position;
 		visiblePos = healthInfoTransform.position + new Vector3(340,0,0);
@@ -122,7 +124,9 @@ public class UpgradeHealth : MonoBehaviour {
 			heartImages[i].color = inactiveColor;
 	}
 
-	void IncreaseHealth(){
+	public void IncreaseHealth(){
+		print ("Upgrading health: button.");
 		currentHealth = currentHealth + 1;
+		healthManager.IncreaseMaxHealth ();
 	}
 }

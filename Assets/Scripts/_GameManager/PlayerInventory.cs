@@ -80,6 +80,15 @@ public class PlayerInventory : MonoBehaviour {
 	public void UpgradeInventory()
 	{
 		inventorySize++;
+//		GameObject[] tempInv = new GameObject[inventorySize];
+//		for(int i = 0; i < playerInventory.Length; i++)
+//		{
+//			tempInv[i] = playerInventory[i];
+//		}
+//		playerInventory = new GameObject[inventorySize];
+//		for(int x = 0; x < inventorySize; x++){
+//			playerInventory[x] = tempInv[x];
+//		}
 	}
 
 }

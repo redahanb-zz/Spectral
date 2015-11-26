@@ -184,7 +184,7 @@ public class PlayerController : MonoBehaviour {
 
 		if (Physics.Raycast(ray, out cursorRayhit, 100f)){
 
-			print(cursorRayhit.transform.name);
+			//print(cursorRayhit.transform.name);
 			switch(cursorRayhit.transform.name){
 			case "Teleporter 1" :		mouseImage.sprite = useCursor;	mouseTransform.sizeDelta = new Vector3(64,64,0);break;
 			case "Teleporter 2" :		mouseImage.sprite = useCursor;	mouseTransform.sizeDelta = new Vector3(64,64,0);break;

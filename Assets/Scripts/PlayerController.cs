@@ -121,6 +121,10 @@ public class PlayerController : MonoBehaviour {
 		
 		mouseImage.sprite = defaultCursor;
 	}
+
+	void ResetGame(){
+		Application.LoadLevel(0);
+	}
 	
 	
 	
@@ -214,6 +218,9 @@ public class PlayerController : MonoBehaviour {
 	
 	//Get input from the Player
 	void GetInput(){
+
+		if(Input.GetKey(KeyCode.Y))ResetGame();
+
 		ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 		
 		if(Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1)){

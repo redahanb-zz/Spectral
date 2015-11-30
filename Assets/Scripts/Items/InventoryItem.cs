@@ -10,7 +10,7 @@ public class InventoryItem : MonoBehaviour {
 	public string 	itemName;
 	public Color 	itemColor;
 	public Sprite 	itemIcon;
-	public int 		itemValue;
+	public string 	itemValue;
 
 	GameObject 		pickupButton;
 	

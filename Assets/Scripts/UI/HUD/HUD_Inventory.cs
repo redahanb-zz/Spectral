@@ -86,7 +86,8 @@ public class HUD_Inventory : MonoBehaviour {
 			itemIcon.color = iconColor;
 			// set value
 			valueText = inventoryIcons[i].transform.GetComponentInChildren<Text>();
-			valueText.text = playerInventory.playerInventory[i].GetComponent<InventoryItem>().itemValue.ToString();
+			//valueText.text = playerInventory.playerInventory[i].GetComponent<InventoryItem>().itemValue.ToString();
+			valueText.text = playerInventory.playerInventory[i].GetComponent<InventoryItem>().itemValue;
 		} else {
 			// icon is default
 			itemIcon = inventoryIcons[i].transform.GetChild(1).transform.GetComponent<Image>();

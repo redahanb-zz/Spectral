@@ -32,6 +32,12 @@ public class GuardAI : MonoBehaviour {
 		alerted = false;
 		alertSystem = GameObject.Find ("Alert System").GetComponent<AlertManager>();
 		pHealth = GameObject.Find ("Health Manager").GetComponent<HealthManager> ();
+
+		if (patrolling) {
+			behaviour.guardState = GuardBehaviour.GuardState.Patrol;
+		} else {
+			behaviour.guardState = GuardBehaviour.GuardState.Sentry;
+		}
 	} // end Start
 	
 

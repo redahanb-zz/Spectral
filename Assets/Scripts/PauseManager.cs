@@ -22,6 +22,7 @@ public class PauseManager : MonoBehaviour {
 	GameObject 			timeButton;
 	GameObject			pauseButton;
 	GameObject 			alertCountdown;
+	GameState 			gameState;
 
 	bool runOnce = false;
 
@@ -43,7 +44,6 @@ public class PauseManager : MonoBehaviour {
 		timeButton = GameObject.Find("Time Button");
 		pauseButton = GameObject.Find ("PauseButton");
 		alertCountdown = GameObject.Find ("AlertCountdownIcon");
-
 	}
 	
 	// Update is called once per frame
@@ -85,18 +85,17 @@ public class PauseManager : MonoBehaviour {
 
 	public void PauseGame(){
 		// call timeScaler to stop time
-
+		//timeScaler.StopTime ();
 		gamePaused = true;
-		//mainCanvas.SetActive (false);
 		pauseScreen.SetActive (true);
 	}
 
 	public void ResumeGame(){
 		// call timeScaler to resume time
-
+		//timeScaler.ResumeTime ();
 		gamePaused = false;
 		pauseScreen.SetActive (false);
-		//mainCanvas.SetActive (true);
+		print ("Resuming play...");
 	}
 
 	public void RestartLevel(){
@@ -112,6 +111,13 @@ public class PauseManager : MonoBehaviour {
 	public void QuitGame(){
 		// quit the application completely
 		Application.Quit();
+	}
+
+	public void ResetData(){
+		if (!gameState) {
+			gameState = GameObject.Find("GameState").GetComponent<GameState>();
+		}
+		gameState.ResetGame ();
 	}
 
 	void DelayDeathScreen()

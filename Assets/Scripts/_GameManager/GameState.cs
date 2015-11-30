@@ -79,10 +79,11 @@ public class GameState : MonoBehaviour {
 		data.inventorySize = pInventory.inventorySize;
 
 		data.itemNames = new string[pInventory.inventorySize];
-		//data.itemColors = new Vector3[pInventory.inventorySize];
+		data.itemValues = new string[pInventory.inventorySize];
 		data.itemColours = new float[pInventory.inventorySize][];
 
-		for(int x = 0; x < pInventory.playerInventory.Length; x++){ //HERE
+		for(int x = 0; x < pInventory.playerInventory.Length; x++)
+		{ // Store the key parameters for each item in the inventory 
 			if(pInventory.playerInventory[x] != null){
 				InventoryItem tempInfo = pInventory.playerInventory[x].GetComponent<InventoryItem>();
 				data.itemNames[x] = tempInfo.name;
@@ -90,6 +91,7 @@ public class GameState : MonoBehaviour {
 				//data.itemColors[x] = new Vector3(tempColor.r, tempColor.b, tempColor.g);
 				float[] tempArray = new float[3]{tempColor.r, tempColor.b, tempColor.g};
 				data.itemColours[x] = tempArray;
+				data.itemValues[x] = tempInfo.itemValue;
 			}
 		}
 
@@ -130,6 +132,7 @@ public class GameState : MonoBehaviour {
 					// Update item stats
 					invItem.name = data.itemNames[x];
 					invItem.itemName = data.itemNames[x];
+					invItem.itemValue = data.itemValues[x];
 					tempColor = new Color();
 					tempColor.r = data.itemColours[x][0];
 					tempColor.b = data.itemColours[x][1];
@@ -165,6 +168,19 @@ public class GameState : MonoBehaviour {
 		}
 	} // end LoadGame
 
+	public void ResetGame()
+	{
+		print ("Clearing saved data...");
+		pHealth.maxHealth = 3;
+		pHealth.playerHealth = 3;
+		pInventory.inventorySize = 4;
+		pInventory.playerInventory = new GameObject[4];
+		pTime.SetMaxStoredTime(5.0f);
+		pTime.SetNoiseDampening(false);
+		SaveGame ();
+		Application.LoadLevel (0);
+	}
+
 	
 	[Serializable]
 	private class SaveData
@@ -178,7 +194,7 @@ public class GameState : MonoBehaviour {
 		public int 				inventorySize;
 
 		public string[] 		itemNames;
-		public int[] 			itemValues;
+		public string[] 		itemValues;
 		public float[][] 		itemColours;
 
 		// Time Upgrade Data

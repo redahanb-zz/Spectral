@@ -13,6 +13,8 @@ public class UpgradeMoveNoise : MonoBehaviour {
 	private bool 	fadeIn = true;
 	
 	public bool		displayPanel = false;
+
+	public bool dampeningEnabled = false;
 	
 	private Color 	activeColor, 
 	inactiveColor, 
@@ -26,9 +28,16 @@ public class UpgradeMoveNoise : MonoBehaviour {
 	private 		RectTransform noiseInfoTransform;
 	
 	
-	Image			noiseButtonImage;
+	Image		noiseButtonImage;
 	
 	Color		buttonTargetColor = Color.white;
+
+	Text		statusText;
+
+	GameObject upgradeButton;
+
+	TimeScaler tScaler;
+
 	// Use this for initialization
 	void Start () {
 		
@@ -45,19 +54,12 @@ public class UpgradeMoveNoise : MonoBehaviour {
 		
 		nextUpgradeColorVisible 	= new Color(0,1,0,1);
 		nextUpgradeColorTransparent = new Color(0,1,0,0.05f);
-		
-		noiseImages = new RawImage[9];
-		noiseImages[0] = transform.Find("Current Noise").Find("Noise Bar").Find("1").GetComponent<RawImage>();
-		noiseImages[1] = transform.Find("Current Noise").Find("Noise Bar").Find("2").GetComponent<RawImage>();
-		noiseImages[2] = transform.Find("Current Noise").Find("Noise Bar").Find("3").GetComponent<RawImage>();
-		noiseImages[3] = transform.Find("Current Noise").Find("Noise Bar").Find("4").GetComponent<RawImage>();
-		noiseImages[4] = transform.Find("Current Noise").Find("Noise Bar").Find("5").GetComponent<RawImage>();
-		noiseImages[5] = transform.Find("Current Noise").Find("Noise Bar").Find("6").GetComponent<RawImage>();
-		noiseImages[6] = transform.Find("Current Noise").Find("Noise Bar").Find("7").GetComponent<RawImage>();
-		noiseImages[7] = transform.Find("Current Noise").Find("Noise Bar").Find("8").GetComponent<RawImage>();
-		noiseImages[8] = transform.Find("Current Noise").Find("Noise Bar").Find("9").GetComponent<RawImage>();
-		
-		ClearNoise();
+
+		statusText = GameObject.Find("Dampening Status").GetComponent<Text>();
+		upgradeButton = transform.Find("UpgradeButton").gameObject;
+		tScaler = GameObject.Find("Time Manager").GetComponent<TimeScaler>();
+		dampeningEnabled = tScaler.noiseDampening;
+		SetStatusText();
 	}
 	
 	
@@ -68,18 +70,13 @@ public class UpgradeMoveNoise : MonoBehaviour {
 		
 		MovePanel();
 		if(Vector3.Distance(noiseInfoTransform.position,visiblePos) < 5){
-			FillNoise();
+			//FillNoise();
 			noiseVisible = true;
 		}
 		if(Vector3.Distance(noiseInfoTransform.position,visiblePos) > 330){
-			ClearNoise();
+			//ClearNoise();
 			noiseVisible = false;
 		}
-		
-		//Debug Input
-		//if(Input.GetKeyDown(KeyCode.Space))IncreaseHealth();
-		//if(Input.GetKeyDown(KeyCode.N))displayPanel = !displayPanel;
-		
 	}
 	
 	void MovePanel(){
@@ -94,35 +91,23 @@ public class UpgradeMoveNoise : MonoBehaviour {
 		noiseButtonImage.color = Color.Lerp(noiseButtonImage.color,buttonTargetColor, Time.deltaTime * 5);
 	}
 	
-	void FillNoise(){
-		if(noiseImages[currentIndex].color.a < 0.95f){
-			noiseImages[currentIndex].color = Color.Lerp(noiseImages[currentIndex].color, activeColor, 0.2f);
+
+	void SetStatusText(){
+		if(dampeningEnabled){
+			statusText.text = "ENABLED";
+			statusText.color = Color.green;
+			Destroy(upgradeButton);
 		}
 		else{
-			if(currentIndex < (currentNoise))currentIndex = currentIndex + 1;
-			else{
-				nextIndex = currentIndex + 1;
-				if(fadeIn){
-					if(noiseImages[nextIndex].color.a < 0.9f) noiseImages[nextIndex].color = Color.Lerp(noiseImages[nextIndex].color, nextUpgradeColorVisible, 0.07f);
-					else fadeIn = false;
-				}
-				else{
-					if(noiseImages[nextIndex].color.a > 0.1f) noiseImages[nextIndex].color = Color.Lerp(noiseImages[nextIndex].color, nextUpgradeColorTransparent, 0.07f);
-					else fadeIn = true;
-				}
-			}
+			statusText.text = "DISABLED";
+			statusText.color = Color.white;
 		}
 	}
+
 	
-	void ClearNoise(){
-		currentIndex = 0;
-		nextIndex = 0;
-		
-		for(int i = 0; i < 9; i++)
-			noiseImages[i].color = inactiveColor;
-	}
-	
-	void IncreaseNoise(){
+	public void IncreaseNoise(){
+		dampeningEnabled = true;
+		SetStatusText();
 		currentNoise = currentNoise + 1;
 	}
 }

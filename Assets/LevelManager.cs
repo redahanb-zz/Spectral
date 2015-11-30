@@ -69,31 +69,31 @@ public class LevelManager : MonoBehaviour {
 
 		switch(levelIndex){
 			case 1 : print("Loading Stage 1");
+			loadObject.GetComponent<BasicLevelLoader>().SetNextLevel("Gamma 7 rXoji");
+			break;
+
+			case 2 : print("Loading Stage 2");
 			//loadObject.GetComponent<BasicLevelLoader>().SetNextLevel("TUTORIAL - Movement");
 			break;
 
-			case 2 : print("Loading Stage 1");
+			case 3 : print("Loading Stage 3");
 			//loadObject.GetComponent<BasicLevelLoader>().SetNextLevel("TUTORIAL - Movement");
 			break;
 
-			case 3 : print("Loading Stage 1");
+			case 4 : print("Loading Stage 4");
 			//loadObject.GetComponent<BasicLevelLoader>().SetNextLevel("TUTORIAL - Movement");
 			break;
 
-			case 4 : print("Loading Stage 1");
+			case 5 : print("Loading Stage 5");
 			//loadObject.GetComponent<BasicLevelLoader>().SetNextLevel("TUTORIAL - Movement");
 			break;
 
-			case 5 : print("Loading Stage 1");
-			//loadObject.GetComponent<BasicLevelLoader>().SetNextLevel("TUTORIAL - Movement");
+			case 6 : print("Loading Stage 6");
+			loadObject.GetComponent<BasicLevelLoader>().SetNextLevel("A1R Systems");
 			break;
 
-			case 6 : print("Loading Stage 1");
-			//loadObject.GetComponent<BasicLevelLoader>().SetNextLevel("TUTORIAL - Movement");
-			break;
-
-			case 7 : print("Loading Stage 1");
-			loadObject.GetComponent<BasicLevelLoader>().SetNextLevel("Final Level");
+			case 7 : print("Loading Stage 7");
+			loadObject.GetComponent<BasicLevelLoader>().SetNextLevel("[Blue Box] Security");
 			break;
 
 		}

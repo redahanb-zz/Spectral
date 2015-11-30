@@ -9,8 +9,11 @@ public class BasicLevelLoader : MonoBehaviour {
 	bool startLoad = false;
 	bool loading = false;
 	bool loadDone = false;
+	ScreenFade sFade;
 	// Use this for initialization
 	void Start () {
+		sFade = GameObject.Find("Screen Fade").GetComponent<ScreenFade>();
+		sFade.FadeIn();
 		Invoke("StartLoad", 2);}
 	
 	void StartLoad(){
@@ -27,7 +30,7 @@ public class BasicLevelLoader : MonoBehaviour {
 	void Update () {
 		if(startLoad){
 			if(!runOnce){
-				Application.LoadLevel(2);
+				Application.LoadLevel(nextLevelName);
 				runOnce = true;
 			}
 		}
@@ -35,7 +38,7 @@ public class BasicLevelLoader : MonoBehaviour {
 	
 
 	void OpenLoadingScreen(){
-		Application.LoadLevel("Loading Screen");
+		Application.LoadLevel(nextLevelName);
 	}
 	
 }

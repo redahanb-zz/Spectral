@@ -67,9 +67,6 @@ public class PauseManager : MonoBehaviour {
 		}
 
 		if(healthManager.playerDead){
-//			gamePaused = true;
-//			failScreen.SetActive(true);
-
 			if(!gameOver){
 				invHUD.toggleHide();
 				healthHUD.toggleHide();
@@ -78,7 +75,6 @@ public class PauseManager : MonoBehaviour {
 				alertCountdown.GetComponent<HideHUDElement>().toggleHide();
 				gameOver = true;
 			}
-
 			Invoke ("DelayDeathScreen", 2.5f);
 		}
 	}

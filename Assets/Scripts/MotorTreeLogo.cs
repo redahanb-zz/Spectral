@@ -143,7 +143,7 @@ public class MotorTreeLogo : MonoBehaviour {
 	
 
 	IEnumerator AsyncLoadLevel() {
-		async = Application.LoadLevelAsync("Restore Point - NEW");
+		async = Application.LoadLevelAsync("Greenlight Screen");
 		async.allowSceneActivation = false;
 		yield return async;
 		Debug.Log("Loading complete");

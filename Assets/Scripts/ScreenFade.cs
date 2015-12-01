@@ -89,8 +89,10 @@ public class ScreenFade : MonoBehaviour {
 		transform.SetParent (null);
 		pausePanel.GetComponent<RectTransform>().SetParent (null);
 		pausePanel.GetComponent<RectTransform>().SetParent (canvas.transform);
-		mouseCursor.transform.SetParent (null);
-		mouseCursor.transform.SetParent (canvas.transform);
+		if (mouseCursor) {
+			mouseCursor.transform.SetParent (null);
+			mouseCursor.transform.SetParent (canvas.transform);
+		}
 		transform.SetParent (canvas.transform);
 	}
 }

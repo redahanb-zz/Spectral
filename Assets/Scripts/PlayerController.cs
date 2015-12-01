@@ -1,9 +1,11 @@
 ﻿//Name:			PlayerController.cs
 //Author(s)		Conor Hughes, Benjamin Redahan
-//Description:
-//
-//
-//
+//Description:	This script is used to handle the players movement and behaviours.
+//				It performs a raycast on mouse click and assigns an action to the player
+//				which is performed at the end of their movement.
+//				It also calculates the path for the player and tells them when to stop.
+//				The dynamic mouse cursor functionality is also handled here as it depends upon 
+//				the raycasting performed in this script.
 
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,75 +14,78 @@ using UnityEngine.EventSystems;
 
 public class PlayerController : MonoBehaviour {
 	
-	EventSystem 			eventSystem;
-	HealthManager			pHealth;
-	TimeScaler 				timeScale;
-	Animator 				playerAnimator;
-	AlertManager 			alert;
-	PauseManager 			pManager;
-	Renderer 				tempChangeRenderer;
+	EventSystem 			eventSystem;					// event system
+	HealthManager			pHealth;						// health manager instance
+	TimeScaler 				timeScale;						// time scaler instance
+	Animator 				playerAnimator;					// player animator component
+	AlertManager 			alert;							// alert manager instance
+	PauseManager 			pManager;						// pause manager instance
+	Renderer 				tempChangeRenderer;				// renderer for individual body parts (used in loop)
 	
-	private NavMeshAgent 	agent;
-	private NavMeshPath		path;
-	private Ray 			ray;
-	private RaycastHit 		rayHit, cursorRayhit;
-	private Renderer		playerRenderer;
-	private GameObject[]	bodyParts;
-	private GameObject 		pathObject, 
-	destinationObject,
-	buttonBlendObject, 				// gameObject for when a blend order is given using the button
-	mouseCursorObject;
+	private NavMeshAgent 	agent;							// nav mesh agent of the player
+	private NavMeshPath		path;							// path assigned to the nav mesh agent
+	private Ray 			ray;							// ray used for each raycast
+	private RaycastHit 		rayHit, cursorRayhit;			// rayhits for mouse cursor and player input
+	private Renderer		playerRenderer;					// renderer component of the player
+	private GameObject[]	bodyParts;						// array of player bodyparts
+	private GameObject 		pathObject, 					// gameobject used to indicate the players path
+							destinationObject,				// gameobject of the destination indicator
+							buttonBlendObject, 				// gameObject for when a blend order is given using the button
+							mouseCursorObject;				// gameobject of the mouse cursor
+							
+	public 	Color 			targetcolor = Color.grey;		// the target colour of the player (for colour changing)
 	
-	public 	Color 			targetcolor = Color.grey;
-	private Transform 		pickupItemTransform, currentBlendSurface;
+	private Transform 		pickupItemTransform, 			// the transform of the item to be picked up
+							currentBlendSurface;			// used to store the current surface used for hiding when the correct colour
 	
-	public 	enum 			MoveState{ Idle, Sneak, Run, Blend_Stand, Blend_Prone};
-	public 	MoveState 		currentMoveState = MoveState.Idle;
+	public 	enum 			MoveState{ 						//The multiple action states of the player. Each has the player perform a unique behaviour
+								Idle, 						// -The player remains stationary and cancels all actions
+								Sneak, 						// -The player sneaks to their destination(slow, but makes no noise)
+								Run, 						// -The player runs to their destination(fast but makes noise which draws guards attention)
+								Blend_Stand, 				// -The player hides against clicked blend surface if their colour matches it
+	};
 	
-	private int 			currentPathIndex 	= 1;
+	public 	MoveState 		currentMoveState = MoveState.Idle;//the current move state
 	
-	private float 			distance 			= 0f,
-	currentSpeed 		= 0f,
-	turnDistance 		= 100, 
-	targetSpeed 		= 0,
-	runSpeed 			= 3f,
-	walkSpeed 			= 1.1f,
-	sneakSpeed 			= 0.5f,
-	stopSpeed 			= 0.1f,
-	timeSinceLastClick 	= 0,		//calculates time from last click, used to check for double click.
-	verticalDistance 	= 100,		//used to caluclate vertical distance between player and click position.
-	lastInterval, 
-	timeNow, 
-	customDeltaTime,
-	normalLookAtRate 	= 8.5f,
-	slowTimeLookAtRate 	= 40.0f;
-	float colorDistance;
+	private int 			currentPathIndex 	= 1;		//current path index, used to indicate the next corner along the path.
 	
-	private Vector3 		targetPosition;
+	private float 			distance 			= 0f,		//the distance from the destination
+							currentSpeed 		= 0f,		//the current movement speed of the player
+							turnDistance 		= 100, 		//distance to next turn, changes speed based on distance
+							targetSpeed 		= 0,		//stores the current target speed
+							runSpeed 			= 3f,		//target speed for running
+							walkSpeed 			= 1.1f,		//target speed of walking
+							sneakSpeed 			= 0.5f,		//target speed for sneaking
+							stopSpeed 			= 0.1f,		//target speed for stopping
+							timeSinceLastClick 	= 0,		//calculates time from last click, used to check for double click
+							verticalDistance 	= 100,		//used to caluclate vertical distance between player and click position
+							lastInterval, 					//the time of the last frame
+							timeNow, 						//calculates time since last frame
+							customDeltaTime,				//used to create deltatime independent of timescale
+							normalLookAtRate 	= 8.5f,
+							slowTimeLookAtRate 	= 40.0f,
+							colorDistance;
 	
+	private Vector3 		targetPosition;					//the destination position for moving
 	
-	private bool 			
-		hasPath 		 	= false,
-		doubleTap 		 	= false,
-		buttonBlendOrder 	= false, 	//bool for when a blend order is given using the button
-		leftClick   	 	= true;		//used to indicate that a left click event occured.
+	private bool 			buttonBlendOrder 	= false, 	//bool for when a blend order is given using the button
+							leftClick   	 	= true;		//used to indicate that a left click event occured.
 	
-	public 	bool 		isVisible 			= true,		//indicates if the player is visible to guards and hazards.
-	isBlending 			= false,	//indicates if the player is attempting to hide.
-	canMove 		 	= false,
-	performAction 	 	= false;
+	public 	bool 			isVisible 			= true,		//indicates if the player is visible to guards and hazards.
+							isBlending 			= false,	//indicates if the player is attempting to hide.
+							canMove 		 	= false,	//determines if the player is able to move (or be controlled at all)
+							performAction 	 	= false;	//determines whether the player can perform an action at the end of their movement.
 	
+	private Sprite 			defaultCursor,					//The default cursor used for movement.
+							blendCursor,					//Cursor for hiding againts blend surface.
+							pickupCursor,					//Cursor for picking up objects
+							useCursor;						//Cursor for using teleporters.
 	
-	//public 
-	Sprite 				defaultCursor,
-	blendCursor,
-	pickupCursor,
-	useCursor;
+	private Color 			wallColor, 						//The colour of the wall the player is attempting to hide against. 
+							newColor;						//The target colour of the player
 	
-	Color wallColor, newColor;
-	
-	RectTransform mouseTransform;
-	Image mouseImage;
+	RectTransform 			mouseTransform;
+	Image 					mouseImage;
 	
 	
 	// Use this for initialization
@@ -98,13 +103,13 @@ public class PlayerController : MonoBehaviour {
 		
 		SetupMouseCursor();
 		
-		
 		foreach (GameObject part in bodyParts)part.GetComponent<Renderer>().material.color = Color.green;
 		agent.SetDestination(transform.position);
 		playerAnimator.updateMode = AnimatorUpdateMode.UnscaledTime;
 		Invoke("ToggleCanMove", 0.1f);
 	}
 	
+	//loads the cursor object and additional cursor textures from Resources
 	void SetupMouseCursor(){
 		mouseCursorObject = Instantiate(Resources.Load("Mouse Cursor"), Vector3.zero, Quaternion.identity) as GameObject;
 		mouseCursorObject.transform.parent = GameObject.Find("Canvas").transform;
@@ -121,7 +126,8 @@ public class PlayerController : MonoBehaviour {
 		
 		mouseImage.sprite = defaultCursor;
 	}
-
+	
+	//Used to quickly restart the game (for demonstration purposes)
 	void ResetGame(){
 		Application.LoadLevel(0);
 	}
@@ -130,12 +136,10 @@ public class PlayerController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
+		//Used to set a custom delta time independent of timescale(used for movement and lerping when changing main timescale).
 		timeNow 		= Time.realtimeSinceStartup;
 		customDeltaTime = timeNow - lastInterval;
 		lastInterval 	= timeNow;
-		
-		hasPath = agent.hasPath;
 		
 		ContextualMouseCursor();
 		if(canMove){
@@ -148,21 +152,20 @@ public class PlayerController : MonoBehaviour {
 		lastInterval = timeNow;
 	} // end update
 	
+	//Enables/Disables player movement
 	public void ToggleCanMove(){
 		canMove = !canMove;
 	}
 	
+	//Set colour of player to selected object colour.
 	private void SetBodyColour(){
 		if(!pHealth.playerDead){
 			// change colour of each bodypart in the array
 			foreach (GameObject part in bodyParts) {
 				tempChangeRenderer = part.GetComponent<Renderer>();
 				tempChangeRenderer.material.color = Color.Lerp(tempChangeRenderer.material.color, targetcolor, 10*Time.deltaTime);
-				if(!isVisible){
-					tempChangeRenderer.material.SetColor("_OutlineColor", Color.Lerp(tempChangeRenderer.material.color, targetcolor, 10*Time.deltaTime));
-				} else{
-					tempChangeRenderer.material.SetColor("_OutlineColor", Color.Lerp(targetcolor, Color.black, 100*Time.deltaTime));
-				}
+				if(!isVisible) 	tempChangeRenderer.material.SetColor("_OutlineColor", Color.Lerp(tempChangeRenderer.material.color, targetcolor, 10*Time.deltaTime));
+				else 			tempChangeRenderer.material.SetColor("_OutlineColor", Color.Lerp(targetcolor, Color.black, 100*Time.deltaTime));
 			}
 		}
 	}
@@ -178,17 +181,20 @@ public class PlayerController : MonoBehaviour {
 		}
 	}
 	
+	//Function for setting the position and cursor of the in-game mouse.
 	void ContextualMouseCursor(){
+		//Set position of mouse.
 		mouseTransform.position = Input.mousePosition + new Vector3(mouseTransform.sizeDelta.x/2 , -mouseTransform.sizeDelta.y/2, 0);
 		
-		ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+		//Cancel function if game paused or over
 		if(pManager.gamePaused || pHealth.playerDead){
 			return;
 		}
-
+		
+		//Cast mouse ray.
+		ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 		if (Physics.Raycast(ray, out cursorRayhit, 100f)){
-
-			//print(cursorRayhit.transform.name);
+			//Perform action based on name of raycast hit transform
 			switch(cursorRayhit.transform.name){
 			case "Teleporter 1" :		mouseImage.sprite = useCursor;	mouseTransform.sizeDelta = new Vector3(64,64,0);break;
 			case "Teleporter 2" :		mouseImage.sprite = useCursor;	mouseTransform.sizeDelta = new Vector3(64,64,0);break;
@@ -198,53 +204,56 @@ public class PlayerController : MonoBehaviour {
 			case "Door South" :			mouseImage.sprite = useCursor;		mouseTransform.sizeDelta = new Vector3(64,64,0);break;
 			case "Door East" :			mouseImage.sprite = useCursor;		mouseTransform.sizeDelta = new Vector3(64,64,0);break;
 			case "Door West" :			mouseImage.sprite = useCursor;		mouseTransform.sizeDelta = new Vector3(64,64,0);break;
-
-
 			}
-
+			
+			//Perform action based on tag of raycast hit transform (overwirtes name switch)
 			switch(cursorRayhit.transform.tag){
-				case "Tile" :				mouseImage.sprite = defaultCursor;	mouseTransform.sizeDelta = new Vector3(32,32,0);break;
-				case "Blend Surface" :		mouseImage.sprite = blendCursor;	mouseTransform.sizeDelta = new Vector3(64,64,0);break;
-				case "Pickup" :				mouseImage.sprite = pickupCursor;	mouseTransform.sizeDelta = new Vector3(64,64,0);break;
-				case "Door" :				mouseImage.sprite = useCursor;		mouseTransform.sizeDelta = new Vector3(64,64,0);break;
-				case "Load Door" :			mouseImage.sprite = useCursor;		mouseTransform.sizeDelta = new Vector3(64,64,0);break;
-				//default:					mouseImage.sprite = defaultCursor;	mouseTransform.sizeDelta = new Vector3(32,32,0); break;
+			case "Tile" :				mouseImage.sprite = defaultCursor;	mouseTransform.sizeDelta = new Vector3(32,32,0);break;
+			case "Blend Surface" :		mouseImage.sprite = blendCursor;	mouseTransform.sizeDelta = new Vector3(64,64,0);break;
+			case "Pickup" :				mouseImage.sprite = pickupCursor;	mouseTransform.sizeDelta = new Vector3(64,64,0);break;
+			case "Door" :				mouseImage.sprite = useCursor;		mouseTransform.sizeDelta = new Vector3(64,64,0);break;
+			case "Load Door" :			mouseImage.sprite = useCursor;		mouseTransform.sizeDelta = new Vector3(64,64,0);break;
 			}
-
-
 		}
 	}
 	
 	
 	//Get input from the Player
 	void GetInput(){
-
-		if(Input.GetKey(KeyCode.Y))ResetGame();
-
+		if(Input.GetKey(KeyCode.Alpha1) && Input.GetKey(KeyCode.Alpha0))
+			ResetGame();
 		ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 		
 		if(Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1)){
+			//Set left or right mouse click
 			if(Input.GetMouseButtonDown(0))leftClick = true;
 			if(Input.GetMouseButtonDown(1))leftClick = false;
+			
+			//If mouse is over gameobject, raycast
 			if(!eventSystem.IsPointerOverGameObject())
 			if (Physics.Raycast(ray, out rayHit, 100f)){
 				isBlending = false;
 				buttonBlendOrder = false;
 				distance = 1000;
-				//print(rayHit.transform);
 				performAction = false;
+				
 				switch(rayHit.transform.tag){
+					
+					//Move to click location if at floor level
 				case "Tile" : 
+					Vector3 targetDestination;
 					currentBlendSurface = null;
 					verticalDistance = Vector3.Distance(new Vector3(0,transform.position.y,0), new Vector3(0,rayHit.point.y,0));
-					if(verticalDistance > 2){				//Go to idle state if clicking on another floor level.
+					if(verticalDistance > 0.2f){				//Go to idle state if clicking above floor level.
 						currentMoveState = MoveState.Idle;
 						break;
 					}
-					SetMovement(rayHit.transform, rayHit.point);
+					else targetDestination = rayHit.point;
+					SetMovement(rayHit.transform, targetDestination);
 					performAction = false;
 					break;
 					
+					//Hide against blend surface if correct colour
 				case "Blend Surface" :
 					if(rayHit.transform != currentBlendSurface){
 						SetMovement(rayHit.transform, rayHit.transform.position + (-rayHit.transform.forward * 0.3f));
@@ -264,11 +273,9 @@ public class PlayerController : MonoBehaviour {
 							currentMoveState = MoveState.Run;
 						}
 					}
-					else{
-						print("ELSE!!!!!!!!!!!!");
-					}
 					break;
 					
+					//Pick up object
 				case "Pickup" :
 					currentBlendSurface = null;
 					pickupItemTransform = rayHit.transform;
@@ -276,6 +283,7 @@ public class PlayerController : MonoBehaviour {
 					performAction = true;
 					break;
 					
+					//Enter doorway
 				case "Load Door" :
 					currentBlendSurface = null;
 					SetMovement(rayHit.transform, rayHit.transform.position + (-rayHit.transform.forward * 0.5f));
@@ -284,24 +292,28 @@ public class PlayerController : MonoBehaviour {
 				}
 				
 				switch(rayHit.transform.name){
+					//Enter doorway
 				case "Threshold" :
 					currentBlendSurface = null;
 					SetMovement(rayHit.transform, rayHit.transform.position + (-rayHit.transform.forward * 0.5f));
 					performAction = true;
 					break;
 					
+					//Perform Teleport
 				case "Teleporter 1" :
 					currentBlendSurface = null;
 					SetMovement(rayHit.transform, rayHit.transform.position + (-rayHit.transform.forward * 0.5f));
 					performAction = true;
 					break;
 					
+					//Perform Teleport
 				case "Teleporter 2" :
 					currentBlendSurface = null;
 					SetMovement(rayHit.transform, rayHit.transform.position + (-rayHit.transform.forward * 0.5f));
 					performAction = true;
 					break;	
 					
+					//Perform Teleport
 				case "Base" :
 					currentBlendSurface = null;
 					SetMovement(rayHit.transform, rayHit.transform.position + (-rayHit.transform.forward * 0.5f));
@@ -349,7 +361,7 @@ public class PlayerController : MonoBehaviour {
 		SetSneakSpeed();
 		PathIndicator();
 		
-		if(distance < 0.1f){
+		if(distance < 0.4f){
 			if(performAction)
 				PerformAnAction();
 			else currentMoveState = MoveState.Idle;
@@ -366,7 +378,7 @@ public class PlayerController : MonoBehaviour {
 		SetRunSpeed();
 		PathIndicator();
 		
-		if(distance < 0.1f){
+		if(distance < 0.4f){
 			if(performAction)
 				PerformAnAction();
 			else currentMoveState = MoveState.Idle;
@@ -390,9 +402,7 @@ public class PlayerController : MonoBehaviour {
 		
 		//If near a turn, slow agent. Otherwise the agent runs normally.
 		if(turnDistance > 1.2f)targetSpeed = runSpeed;
-		else{ targetSpeed = walkSpeed;   
-			//agent.velocity = new Vector3(1,0,1); 
-		}
+		else targetSpeed = walkSpeed;   
 		
 		//Check the distance between the players direction and the path direction, used to slow player when turning.
 		Quaternion q = Quaternion.LookRotation(head);
@@ -441,12 +451,17 @@ public class PlayerController : MonoBehaviour {
 	
 	void SmoothLookAt(Vector3 targetPosition){
 		
-		float lookAtRate = normalLookAtRate;
-		if(timeScale.timeSlowed)lookAtRate = slowTimeLookAtRate;
-		else lookAtRate = normalLookAtRate;
-		
-		Quaternion rotation = Quaternion.LookRotation(targetPosition - transform.position);
-		transform.rotation = Quaternion.Slerp(transform.rotation, rotation, customDeltaTime * lookAtRate);
+		if (agent.velocity != Vector3.zero) {
+			
+			float lookAtRate = normalLookAtRate;
+			if (timeScale.timeSlowed)
+				lookAtRate = slowTimeLookAtRate;
+			else
+				lookAtRate = normalLookAtRate;
+			
+			Quaternion rotation = Quaternion.LookRotation (targetPosition - transform.position);
+			transform.rotation = Quaternion.Slerp (transform.rotation, rotation, customDeltaTime * lookAtRate);
+		}
 	}
 	
 	public void StopMoving(){
@@ -528,7 +543,7 @@ public class PlayerController : MonoBehaviour {
 	
 	//Blend button behaviour that triggers blend state
 	public void blendButton(GameObject blendObject, Transform t, Vector3 v){
-		SetMovement(t, t.position + (-t.forward * 0.2f));
+		SetMovement(t, t.position + (-t.forward * 0.3f));
 		performAction = true;
 		buttonBlendOrder = true;
 		buttonBlendObject = blendObject;

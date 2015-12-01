@@ -106,7 +106,6 @@ public class GuardSensing : MonoBehaviour {
 				}
 			}
 		}
-
 	} // end CheckSight
 
 //	void CheckHearing()
@@ -146,7 +145,7 @@ public class GuardSensing : MonoBehaviour {
 
 	void CheckHearing2()
 	{
-		// update data on player
+		// Update distance data on player
 		distanceToPlayer = Vector3.Distance (transform.position, player.transform.position);
 
 		// Play footstep visualisation if player is in range
@@ -161,14 +160,18 @@ public class GuardSensing : MonoBehaviour {
 			print ("Player outside hearing range!");
 		}
 
-		// record all footsteps in range, use position of most recent one as position to investigate
+		// Record all footsteps in range, use position of most recent one as position to investigate
 		footsteps = GameObject.FindGameObjectsWithTag ("Footstep");
 		float spawnOrder = 0.0f;
 		footstepInRange = false;
+
+		// Loop through all footsteps in the scene 
 		foreach (GameObject echo in footsteps) {
 			tempFootstep = echo.GetComponent<Footfall>();
-			if(Vector3.Distance(echo.transform.position, transform.position) <= hearingRange)
+
+			if(Vector3.Distance(echo.transform.position, transform.position) <= hearingRange && (Mathf.Abs(transform.position.y - tempFootstep.transform.position.y) < 0.5f) )
 			{	
+				// Find most recently instantiated footstep noise, set that as the location to investigate
 				if(spawnOrder == 0.0f)
 				{
 					spawnOrder = tempFootstep.startTime;
@@ -182,17 +185,16 @@ public class GuardSensing : MonoBehaviour {
 			}
 		}
 
-		// record the player as 'heard' if in range and not in sight, and not in a soundproofed room
+		// Record the player as 'heard' if in range and not in sight, and guard is not in a soundproofed room
 		if(!soundProofed)
 		{
 			if(!playerInSight)
 			{
-				if(footstepInRange && (Mathf.Abs(player.transform.position.y - transform.position.y) < 0.05))
+				if(footstepInRange && (Mathf.Abs(player.transform.position.y - transform.position.y) < 0.05f))
 				{
 					print ("Playerheard!!");
 					playerHeard = true;
 					gBehaviour.waitCount = 0.0f;
-					
 				} 
 			}
 		}

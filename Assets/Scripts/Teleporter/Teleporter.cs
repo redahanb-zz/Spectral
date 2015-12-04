@@ -13,6 +13,8 @@ public class Teleporter : MonoBehaviour {
 
 	PlayerController pController;
 
+	bool destroyOnce = false;
+
 	GameObject indicatorObject;
 
 	// Use this for initialization
@@ -32,10 +34,17 @@ public class Teleporter : MonoBehaviour {
 
 		if(playerDistance < 2){
 			if(!GameObject.Find("Teleporter Destination Indicator")){
+				destroyOnce = false;
 				indicatorObject = Instantiate(Resources.Load("Teleport Destination Indicator"), pairedTeleporter.transform.position + new Vector3(0,0.2f,0), Quaternion.identity) as GameObject;
 				indicatorObject.name = "Teleporter Destination Indicator";
 			}
 			teleportButtonObject.GetComponent<TeleportButton>().SetCurrentTeleporter(gameObject);
+		}
+		else{
+			if(!destroyOnce){
+				Destroy(indicatorObject);
+				destroyOnce = true;
+			}
 		}
 
 		tick = Time.deltaTime/scaleDuration;

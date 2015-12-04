@@ -30,6 +30,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Level Structure/Levels/Red Lotus Cryptography.unity
   - enabled: 1
-    path: Assets/Level Structure/Levels/Unused/A1R Systems.unity
+    path: Assets/Level Structure/Levels/A1R Systems.unity
   - enabled: 1
     path: Assets/Level Structure/Levels/[Blue Box] Security.unity
+  - enabled: 0
+    path: Assets/Level Structure/Levels/Unused/A1R Systems.unity

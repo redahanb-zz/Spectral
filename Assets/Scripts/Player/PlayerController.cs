@@ -326,7 +326,7 @@ public class PlayerController : MonoBehaviour {
 	
 	
 	void SetMovement(Transform t, Vector3 v){
-		if(Vector3.Distance(transform.position, new Vector3(v.x, transform.position.y, v.z)) > 0){
+		if(Vector3.Distance(transform.position, new Vector3(v.x, transform.position.y, v.z)) > 0.5f){
 			ClearPath();
 			targetPosition 		= new Vector3(v.x, transform.position.y, v.z);
 			if(!leftClick) 
@@ -344,6 +344,7 @@ public class PlayerController : MonoBehaviour {
 	
 	void BlendWhileStanding(){
 		if(isBlending){
+			transform.position = Vector3.MoveTowards(transform.position, currentBlendSurface.position, Time.deltaTime);
 			newColor = bodyParts[0].GetComponent<Renderer>().material.color;
 			if(rayHit.transform.tag == "Blend Surface")wallColor = rayHit.transform.GetComponent<Renderer>().material.color;
 			if(buttonBlendOrder)wallColor = buttonBlendObject.GetComponent<Renderer>().material.color;
@@ -513,7 +514,7 @@ public class PlayerController : MonoBehaviour {
 		}
 		else if(rayHit.transform.name == "Threshold"){
 			transform.forward = -rayHit.transform.forward;
-			rayHit.transform.parent.GetComponent<Door>().StartNewTeleport();
+			rayHit.transform.parent.Find("Door Trigger").GetComponent<Door>().StartNewTeleport();
 			currentMoveState = MoveState.Idle;
 		}
 		else if(rayHit.transform.name == "Door North" || rayHit.transform.name == "Door South" || rayHit.transform.name == "Door East" || rayHit.transform.name == "Door West"){

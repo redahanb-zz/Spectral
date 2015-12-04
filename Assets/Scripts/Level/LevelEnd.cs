@@ -68,7 +68,7 @@ public class LevelEnd : MonoBehaviour {
 	//Function that ends the level, saves the game, fades screen to black and creates a GameObject that hides the title screen
 	public void EndLevel(){
 		GameObject loadObject = Instantiate(Resources.Load("Basic Level Loader")) as GameObject;
-		
+		print("Ending Level");
 		//Save the game
 		if (!gameState)gameState = GameObject.Find("GameState").GetComponent<GameState>();
 		gameState.SaveGame ();
@@ -84,7 +84,7 @@ public class LevelEnd : MonoBehaviour {
 			
 			//Load the Restore Point
 			loadObject.GetComponent<BasicLevelLoader>().SetNextLevel("Restore Point");
-			Destroy(endButtonTransform.gameObject);
+			//Destroy(endButtonTransform.gameObject);
 		}
 	}
 	

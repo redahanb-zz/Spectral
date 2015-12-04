@@ -71,16 +71,16 @@ public class TutorialLevelManager : MonoBehaviour {
 		gameState.SaveGame ();
 		
 		if(moveTutorial){
-			print("Loading Movement Tutorial");
-			loadObject.GetComponent<BasicLevelLoader>().SetNextLevel("TUTORIAL - Movement");
+			print("Basic Training");
+			loadObject.GetComponent<BasicLevelLoader>().SetNextLevel("Basic Training");
 		}
 		else if(teleportTutorial){
-			print("Loading Teleport Tutorial");
-			loadObject.GetComponent<BasicLevelLoader>().SetNextLevel("TUTORIAL - Teleporter");
+			print("Teleporter Training");
+			loadObject.GetComponent<BasicLevelLoader>().SetNextLevel("Teleporter Training");
 		}
 		else if(sensorTutorial){
-			print("Loading Sensor Tutorial");
-			loadObject.GetComponent<BasicLevelLoader>().SetNextLevel("Sensor TUT ");
+			print("Sensor Training");
+			loadObject.GetComponent<BasicLevelLoader>().SetNextLevel("Sensor Training");
 		}
 	}
 }

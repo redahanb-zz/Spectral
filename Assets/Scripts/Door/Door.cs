@@ -309,6 +309,7 @@ public class Door : MonoBehaviour {
 		playerObject.transform.position = new Vector3(destinationDoorObject.transform.position.x,destinationDoorObject.transform.position.y + 0.5f,destinationDoorObject.transform.position.z); 
 		Camera.main.transform.position = playerObject.transform.position + new Vector3(0,30,0);
 		playerObject.SetActive(true);
+		playerObject.GetComponent<CapsuleCollider> ().enabled = true; // re-enable collider after teleport
 		sFade.fadeToColor = false;
 		currentRoom.gameObject.SetActive(false);
 		level.DisableAllOtherRooms();
@@ -317,6 +318,7 @@ public class Door : MonoBehaviour {
 	}
 
 	public void StartNewTeleport(){
+		playerObject.GetComponent<CapsuleCollider> ().enabled = false; // disable collider to prevent detection during teleport
 		level.EnableCurrentRoom();
 		currentTime = timeNow;
 		targetTime = currentTime + timedAmount;

@@ -143,7 +143,7 @@ public class GameState : MonoBehaviour {
 					// Hide and disable, and add to player inventory
 					pInventory.playerInventory[x] = tempItem;
 					//pInventory.addItem(tempItem);
-					tempItem.SetActive(false);
+					//tempItem.SetActive(false);
 					//invHUD.updateIcon(x);
 					}
 			}

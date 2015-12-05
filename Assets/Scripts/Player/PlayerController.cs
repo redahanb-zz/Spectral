@@ -548,6 +548,7 @@ public class PlayerController : MonoBehaviour {
 		performAction = true;
 		buttonBlendOrder = true;
 		buttonBlendObject = blendObject;
+		currentBlendSurface = blendObject.transform;
 	}
 	
 	//Sets a new path

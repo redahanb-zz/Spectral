@@ -187,7 +187,7 @@ public class UpgradeTree : MonoBehaviour {
 
 	public void ReturnToRestorePoint(){
 
-		Application.LoadLevel("Restore Point - DEMO");
+		Application.LoadLevel("Restore Point");
 	}
 
 	IEnumerator RTB(){
@@ -196,7 +196,7 @@ public class UpgradeTree : MonoBehaviour {
 		yield return new WaitForSeconds(1.5f);
 		//print("RTB2");
 
-		Application.LoadLevel("Restore Point - DEMO");
+		Application.LoadLevel("Restore Point");
 		//print("RTB3");
 
 

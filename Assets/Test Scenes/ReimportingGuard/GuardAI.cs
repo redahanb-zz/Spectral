@@ -11,33 +11,33 @@ using System.Collections;
 public class GuardAI : MonoBehaviour {
 
 	// public variables
-	public bool 			patrolling;
-	public bool 			alerted;
-	public bool				aggro;
-	public bool 			curious;
-	public Vector3 			lastSighting;
+	public 		bool 			patrolling;
+	public 		bool 			alerted;
+	public 		bool			aggro;
+	public 		bool 			curious;
+	public 		Vector3 		lastSighting;
 
 	// cache references
-	private GuardSensing 	sensing;
-	private GuardBehaviour 	behaviour;
-	private HealthManager	pHealth;
-	public AlertManager 	alertSystem;
-	//private EnemySight 		vision;  // from old version
+	private 	GuardSensing 	sensing;
+	private 	GuardBehaviour 	behaviour;
+	private 	HealthManager	pHealth;
+	public 		AlertManager 	alertSystem;
 	
 	void Start () 
 	{
-		//vision = gameObject.GetComponent<EnemySight>(); // from old version
-		sensing = GetComponent<GuardSensing> ();
-		behaviour = GetComponent<GuardBehaviour> ();
-		alerted = false;
-		alertSystem = GameObject.Find ("Alert System").GetComponent<AlertManager>();
-		pHealth = GameObject.Find ("Health Manager").GetComponent<HealthManager> ();
+		sensing 		= 		GetComponent<GuardSensing> ();
+		behaviour 		= 		GetComponent<GuardBehaviour> ();
+		alerted 		= 		false;
+		alertSystem 	= 		GameObject.Find ("Alert System").GetComponent<AlertManager>();
+		pHealth 		= 		GameObject.Find ("Health Manager").GetComponent<HealthManager> ();
 
-		if (patrolling) {
+		if (patrolling) 
+		{
 			behaviour.guardState = GuardBehaviour.GuardState.Patrol;
 		} else {
 			behaviour.guardState = GuardBehaviour.GuardState.Sentry;
 		}
+
 	} // end Start
 	
 
@@ -50,6 +50,8 @@ public class GuardAI : MonoBehaviour {
 			aggro = true;
 			alertSystem.TriggerAlert();
 			sensing.playerDetected = false;
+			curious = false;
+			sensing.playerHeard = false;
 		}
 
 		if (sensing.playerHeard && !alerted) {
@@ -59,6 +61,7 @@ public class GuardAI : MonoBehaviour {
 
 		if (alertSystem.alertActive) {
 			alerted = true;
+			curious = false;
 		} else {
 			alerted = false;
 			sensing.playerDetected = false;

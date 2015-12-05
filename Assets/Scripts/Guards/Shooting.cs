@@ -5,8 +5,7 @@ public class Shooting : MonoBehaviour {
 
 	public int 			shotDmg;
 	public float 		reloadTime;
-	
-	EnemySight 			enemySight;
+
 	GuardSensing		sensing;
 	Animator 			anim;
 	GameObject 			player;
@@ -19,13 +18,11 @@ public class Shooting : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		enemySight = GetComponent<EnemySight> ();
 		sensing = GetComponent<GuardSensing> ();
 		player = GameObject.FindWithTag("Player");
 		torso = GameObject.Find ("ppl_chest");
 		anim = GetComponent<Animator> ();
 		pHealth = GameObject.Find ("Health Manager").GetComponent<HealthManager> ();
-		//gunBarrel = transform.Find("GunBarrel").gameObject;
 	}
 	
 	// Update is called once per frame
@@ -34,10 +31,15 @@ public class Shooting : MonoBehaviour {
 			player = GameObject.FindWithTag ("Player");
 		}
 
-		if(enemySight.alerted || sensing.playerInSight){
+		if(sensing.playerInSight){
 			if(counter >= 0){
 				counter -= Time.deltaTime;
 			}
+		}
+
+		if(pHealth.playerDead) {
+			anim.SetBool("InSight", false);
+			anim.SetFloat("Aim Weight", 0.0f);
 		}
 	}
 
@@ -49,9 +51,11 @@ public class Shooting : MonoBehaviour {
 		if (player) {
 			anim.SetIKPosition (AvatarIKGoal.RightHand, torso.transform.position);
 			anim.SetIKPositionWeight (AvatarIKGoal.RightHand, aimWeight);
+		} else if(pHealth.playerDead) {
+			anim.SetBool("InSight", false);
+			anim.SetFloat("Aim Weight", 0.0f);
 		}
 
-		//print ("Aim weight = " + aimWeight);
 	}
 
 

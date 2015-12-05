@@ -19,7 +19,7 @@ public class FootstepFX : MonoBehaviour {
 	public void playEcho() {
 		drawLoc = transform.position;
 		drawLoc.y += 0.23f;
-		if(enemyInRange || !enemyInRange){
+		if(enemyInRange /*|| !enemyInRange*/){
 			Instantiate (Resources.Load("FootfallFX"), drawLoc, Quaternion.Euler(90,0,0));
 		}
 	}

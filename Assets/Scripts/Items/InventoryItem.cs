@@ -64,19 +64,19 @@ public class InventoryItem : MonoBehaviour {
 	}
 
 
-	public IEnumerator pickupONCE (string paramname)
+	public IEnumerator pickupONCE (string paramName)
 	{
-		anim.SetBool (paramname, true);
+		anim.SetBool (paramName, true);
 		yield return null;
-		anim.SetBool (paramname, false);
+		anim.SetBool (paramName, false);
 	}
 
 
-	public IEnumerator dropONCE (string paramname)
+	public IEnumerator dropONCE (string paramName)
 	{
-		anim.SetBool (paramname, true);
+		anim.SetBool (paramName, true);
 		yield return null;
-		anim.SetBool (paramname, false);
+		anim.SetBool (paramName, false);
 	}
 
 

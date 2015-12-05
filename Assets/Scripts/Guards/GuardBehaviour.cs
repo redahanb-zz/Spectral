@@ -11,26 +11,27 @@ using System.Collections;
 public class GuardBehaviour : MonoBehaviour {
 
 	// public variables
-	public GameObject 			sentryPoint;
-	public GameObject 			waypoint1;
-	public GameObject 			waypoint2;
-	public GameObject 			waypoint3;
-	public GameObject 			alertWaypoint1;
-	public GameObject 			alertWaypoint2;
-	public GameObject 			alertWaypoint3;
-	public float 				waitTime;
+	public 		GameObject 			sentryPoint;
+	public 		GameObject 			waypoint1;
+	public 		GameObject 			waypoint2;
+	public 		GameObject 			waypoint3;
+	public 		GameObject 			alertWaypoint1;
+	public 		GameObject 			alertWaypoint2;
+	public 		GameObject 			alertWaypoint3;
+	public 		float 				waitTime;
+	public 		float 				waitCount;
 
 	// private variables
-	private bool 				walking;
-	private Vector3[] 			patrolRoute;
-	private int 				patrolIndex = 0;
-	private Vector3[] 			alertRoute;
-	private int 				alertIndex = 0;
-	public float 				waitCount;
-	private float 				listenCount; // timer for Investigate behaviour
-	private Quaternion 			lookRotation;
-	private Vector3 			lastPlayerSighting;
-	private Color				transpColor;
+	private 	bool 				walking;
+	private 	Vector3[] 			patrolRoute;
+	private 	int 				patrolIndex = 0;
+	private 	Vector3[] 			alertRoute;
+	private 	int 				alertIndex = 0;
+
+	private 	float 				listenCount; // timer for Investigate behaviour
+	private 	Quaternion 			lookRotation;
+	private 	Vector3 			lastPlayerSighting;
+	private 	Color				transpColor;
 
 	public enum GuardState 
 	{
@@ -42,18 +43,19 @@ public class GuardBehaviour : MonoBehaviour {
 		Search,
 		Investigate
 	}
-	public GuardState 		guardState;
+	public 		GuardState 			guardState;
 
 	// script references
-	private GameObject 			player;
-	private NavMeshAgent 		navMeshAgent;
-	private GuardSensing 		guardSensing;
-	private GuardAI				guardAI;
-	private Shooting 			guardShooting;
-	private Animator			anim;
-	private HealthManager		pHealth;
-	private GuardSelfDestruct 	guardBodyParts;
-	private GameObject 			visionCone;
+	private 	GameObject 			player;
+	private 	NavMeshAgent 		navMeshAgent;
+	private 	GuardSensing 		guardSensing;
+	private 	GuardAI				guardAI;
+	private 	Shooting 			guardShooting;
+	private 	Animator			anim;
+	private 	HealthManager		pHealth;
+	private 	GuardSelfDestruct 	guardBodyParts;
+	private 	GameObject 			visionCone;
+	private 	GameObject 			hearingRing;
 
 
 	void Start () 
@@ -67,6 +69,7 @@ public class GuardBehaviour : MonoBehaviour {
 		pHealth = GameObject.Find("Health Manager").GetComponent<HealthManager> ();
 		guardBodyParts = GetComponent<GuardSelfDestruct> ();
 		visionCone = transform.Find ("VisionCone").gameObject;
+		hearingRing = transform.Find ("HearingRing").gameObject;
 
 		// compile patrol and alert routes
 		patrolRoute = new Vector3[4]
@@ -156,6 +159,7 @@ public class GuardBehaviour : MonoBehaviour {
 		updateColour (Color.blue);
 	} // end Idle
 
+
 	void Sentry()
 	// function to set the guard stationary at a specific point, watching for the player
 	{
@@ -169,6 +173,7 @@ public class GuardBehaviour : MonoBehaviour {
 		}
 		updateColour (Color.gray);
 	} // end Sentry
+
 
 	void Patrol()
 	// patrol routine for the guard, cycles through waypoints pause briefly at each one
@@ -192,6 +197,7 @@ public class GuardBehaviour : MonoBehaviour {
 		updateColour (Color.gray);
 	} // end Patrol
 
+
 	void nextPatrolPoint()
 	// support function for the Patrol routine, updates the guard's target waypoint
 	{
@@ -206,6 +212,7 @@ public class GuardBehaviour : MonoBehaviour {
 		anim.SetFloat("Speed", 1.0f);
 
 	} // end nextPatrolPoint
+
 
 	void AlertPatrol()
 	// secondary patrol routine for the guard, patrols at a faster pace to a different array of waypoints
@@ -229,6 +236,7 @@ public class GuardBehaviour : MonoBehaviour {
 		updateColour (Color.red);
 	} // end AlertPatrol
 
+
 	void nextAlertPoint()
 	// support function for the AlertPatrol routine, updates the guard's target waypoint
 	{
@@ -244,11 +252,12 @@ public class GuardBehaviour : MonoBehaviour {
 		
 	} // end nextPatrolPoint
 
+
 	void Search()
 	// function for when the guards loses sight of the player, sends the guard to the target location after the player
 	{
 		lastPlayerSighting = guardSensing.lastPlayerSighting;
-		if (Vector3.Distance (transform.position, lastPlayerSighting) > 1.5f) {
+		if (Vector3.Distance (transform.position, lastPlayerSighting) > 2.5f) {
 			navMeshAgent.Resume ();
 			navMeshAgent.SetDestination (lastPlayerSighting);
 			anim.SetBool ("InSight", false);
@@ -265,6 +274,7 @@ public class GuardBehaviour : MonoBehaviour {
 		}
 		updateColour (Color.red);
 	} // end Search
+
 
 	void Investigate()
 	// function for when the guard hears a noise, sends the guard to investigate the sources of the noise
@@ -300,6 +310,7 @@ public class GuardBehaviour : MonoBehaviour {
 		updateColour (Color.yellow);
 	} // end Investigate
 
+
 	void Attack()
 	// function to make the guard stop and draw its weapon on the player, and fire at intervals
 	{
@@ -327,19 +338,18 @@ public class GuardBehaviour : MonoBehaviour {
 		updateColour (Color.red);
 	} // end Attack
 
+
 	void updateColour(Color targetColor){
 		transpColor = targetColor;
 		transpColor.a = visionCone.GetComponent<Renderer> ().material.color.a;
 		visionCone.GetComponent<Renderer>().material.color = Color.Lerp(visionCone.GetComponent<Renderer>().material.color,transpColor, Time.deltaTime * 5.0f);
-//		Renderer rend = guardBodyParts.colorParts[4].GetComponent<Renderer> ();
-//		print (guardBodyParts.colorParts [4]);
-//		//transform.Find("pg1_arrowhead_R").gameObject
-//		rend.material.color = Color.Lerp(rend.material.color, targetColor, Time.deltaTime * 5.0f);
+		hearingRing.GetComponent<Renderer>().material.color = Color.Lerp(hearingRing.GetComponent<Renderer>().material.color,transpColor, Time.deltaTime * 5.0f);
+
 		foreach(GameObject bodypart in guardBodyParts.colorParts){
 			bodypart.GetComponent<Renderer>().materials[0].color = Color.Lerp(bodypart.GetComponent<Renderer>().materials[0].color,targetColor, Time.deltaTime * 5.0f);
 			if(bodypart.GetComponent<Renderer>().materials.Length > 1){
 				bodypart.GetComponent<Renderer>().materials[1].color = Color.Lerp(bodypart.GetComponent<Renderer>().materials[1].color,targetColor, Time.deltaTime * 5.0f);
 			}
 		}
-	}
+	} // end UpdateColour
 }

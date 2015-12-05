@@ -12,37 +12,39 @@ using System.Collections.Generic;
 public class GuardSensing : MonoBehaviour {
 
 	// public variables
-	public float 		sightRange;
-	public float		hearingRange;
-	public float		fieldOfView;
-	public Vector3		lastPlayerSighting;
-	public Vector3 		investigationLocation;
-	public bool 		playerInSight;
-	public bool 		playerDetected;
-	public bool 		playerHeard;
-	public bool 		soundProofed;
-	public AudioClip 	guardAlertRoar;
+	public 		float 				sightRange;
+	public 		float				hearingRange;
+	public 		float				fieldOfView;
+	public 		Vector3				lastPlayerSighting;
+	public 		Vector3 			investigationLocation;
+	public 		bool 				playerInSight;
+	public 		bool 				playerDetected;
+	public 		bool 				playerHeard;
+	public 		bool 				soundProofed;
+	public 		AudioClip 			guardAlertRoar;
 
 	// private variables
-	private float 		distanceToPlayer;
-	private float 		angleToPlayer;
-	private Vector3 	directionToPlayer;
-	private RaycastHit 	rayHit;
-	private float 		timeInSight;
-	private bool 		canRoar = true;
-	private bool		footstepInRange;
+	private 	float 				distanceToPlayer;
+	private 	float 				angleToPlayer;
+	private 	Vector3 			directionToPlayer;
+	private 	RaycastHit 			rayHit;
+	private 	float 				timeInSight;
+	private 	bool 				canRoar = true;
+	private 	bool				footstepInRange;
 	
 	// script references
-	GameObject 			player;
-	PlayerController	playerController;
-	GuardAI 			guardAI;
-	GuardBehaviour		gBehaviour;
-	TimeScaler 			tScaler;
+	private 	GameObject 			player;
+	private 	PlayerController	playerController;
+	private 	GuardAI 			guardAI;
+	private 	GuardBehaviour		gBehaviour;
+	private 	TimeScaler 			tScaler;
 
-	public GameObject[] footsteps;
-	Footfall 			tempFootstep;
-	//List<GameObject> 	footsteps;
-	
+	// temp variables for CheckHearing loop
+	public 		GameObject[] 		footsteps;
+	private 	Footfall 			tempFootstep;
+	public 		GameObject 			marker;
+
+
 	void Start () 
 	{
 		player = GameObject.FindWithTag ("Player");
@@ -145,6 +147,8 @@ public class GuardSensing : MonoBehaviour {
 
 	void CheckHearing2()
 	{
+		// set playerHeard to false at start
+		playerHeard = false;
 		// Update distance data on player
 		distanceToPlayer = Vector3.Distance (transform.position, player.transform.position);
 
@@ -168,7 +172,7 @@ public class GuardSensing : MonoBehaviour {
 		// Loop through all footsteps in the scene 
 		foreach (GameObject echo in footsteps) {
 			tempFootstep = echo.GetComponent<Footfall>();
-
+			// only get footsteps that are in range
 			if(Vector3.Distance(echo.transform.position, transform.position) <= hearingRange && (Mathf.Abs(transform.position.y - tempFootstep.transform.position.y) < 0.5f) )
 			{	
 				// Find most recently instantiated footstep noise, set that as the location to investigate
@@ -181,6 +185,9 @@ public class GuardSensing : MonoBehaviour {
 				{
 					spawnOrder = tempFootstep.startTime;
 					investigationLocation = echo.transform.position;
+					if(marker){
+						marker.transform.position = investigationLocation;
+					}
 				}
 			}
 		}
@@ -199,24 +206,7 @@ public class GuardSensing : MonoBehaviour {
 			}
 		}
 	}
-
-//	void OnTriggerStay()
-//	{
-//		footsteps = GameObject.FindGameObjectsWithTag ("Footstep");
-//		float spawnOrder = 0.0f;
-//		foreach (GameObject echo in footsteps) {
-//			tempFootstep = echo.GetComponent<Footfall>();
-//			if(spawnOrder == 0.0f){
-//				spawnOrder = tempFootstep.startTime;
-//			}
-//			else if(tempFootstep.startTime > spawnOrder){
-//				spawnOrder = tempFootstep.startTime;
-//				investigationLocation = echo.transform.position;
-//			}
-//		}
-//
-//	}
-
+		
 	void ResetCanRoar()
 	{
 		canRoar = true;

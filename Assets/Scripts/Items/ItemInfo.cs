@@ -25,6 +25,10 @@ public class ItemInfo : MonoBehaviour {
 	// Update is called once per frame
 	void Update () 
 	{
+		if (!player) {
+			player = GameObject.FindWithTag ("Player");
+		}
+
 		if(Vector3.Distance(transform.position, player.transform.position) < 2.0f)
 		{
 			if(!button)

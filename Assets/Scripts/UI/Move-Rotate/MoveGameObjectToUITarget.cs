@@ -1,14 +1,20 @@
-﻿using UnityEngine;
+//Name:			MoveGameObjectToUITarget.cs
+//Project:		Spectral: The Silicon Domain
+//Author(s)		Conor Hughes - conormpkhughes@yahoo.com
+//Description:	This positions a UI element over a target gameobject.
+
+
+using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 
 public class MoveGameObjectToUITarget : MonoBehaviour {
 
-	public Vector3 objectPosition, targetObjectPosition, uiElementPosition;
+	public Vector3 			uiElementPosition;	//position of ui element
 
-	public GameObject targetUIElement;
+	public GameObject 		targetUIElement;	//the target ui element
 
-	RectTransform rtransform;
+	private RectTransform 	rtransform;			//the recttransform component of target element
 
 	// Use this for initialization
 	void Start () {

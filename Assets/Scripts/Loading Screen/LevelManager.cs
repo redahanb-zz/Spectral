@@ -1,21 +1,29 @@
-﻿using UnityEngine;
+﻿//Name:			LevelManager.cs
+//Project:		Spectral: The Silicon Domain
+//Author(s)		Conor Hughes - conormpkhughes@yahoo.com
+//Description:	Loads a selected level based on the level door and button press.
+
+
+using UnityEngine;
 using System.Collections;
 
 public class LevelManager : MonoBehaviour {
 
-	bool displayButton;
-	Transform player;
+	private bool 			displayButton;				//determines if button visible
+	private Transform 		player;						//the player transform
 	
-	RectTransform buttonTransform, canvasTransform;
+	private RectTransform 	buttonTransform, 			//button transform
+							canvasTransform;			//canvas transform
 	
-	Vector2 ViewportPosition, WorldObject_ScreenPosition;
+	private Vector2 		ViewportPosition, 			//the screen position of the door
+							WorldObject_ScreenPosition;	//the target button position
 	
-	ScreenFade sFade;
+	private ScreenFade 		sFade;						//screen fade instance
 	
-	GameState gameState;
+	private GameState 		gameState;					//gamestate instance
 	
-	public int levelIndex;
-	Transform currentDoor;
+	public 	int 			levelIndex;					//the selected level index
+	private Transform 		currentDoor;				//the current door transform
 	
 	// Use this for initialization
 	void Start () {
@@ -27,18 +35,19 @@ public class LevelManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
 		if(levelIndex > 0)displayButton = true;
 		else displayButton = false;
 		
 		ScaleButton();
 		PositionButton();
 	}
-	
+
+	//Sets the current level door
 	public void SetCurrentDoor(Transform t){
 		currentDoor = t;
 	}
-	
+
+	//SHows/Hides the button
 	void ScaleButton(){
 		if(displayButton){
 			buttonTransform.localScale = Vector3.Lerp(buttonTransform.localScale, new Vector3(0.8f, 0.8f, 0.8f), Time.deltaTime * 22);
@@ -47,7 +56,8 @@ public class LevelManager : MonoBehaviour {
 			buttonTransform.localScale = Vector3.Lerp(buttonTransform.localScale, new Vector3(0, 0, 0), Time.deltaTime * 22);
 		}
 	}
-	
+
+	//Sets button screen position
 	void PositionButton(){
 		if(displayButton){
 			ViewportPosition=Camera.main.WorldToViewportPoint(currentDoor.position);
@@ -58,7 +68,8 @@ public class LevelManager : MonoBehaviour {
 			buttonTransform.anchoredPosition=WorldObject_ScreenPosition;
 		}
 	}
-	
+
+	//Instantiates level loader object and selects next level
 	public void EndLevel(){
 		GameObject loadObject = Instantiate(Resources.Load("Basic Level Loader")) as GameObject;
 		

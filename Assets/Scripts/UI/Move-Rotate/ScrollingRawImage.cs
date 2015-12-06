@@ -1,14 +1,20 @@
-﻿using UnityEngine;
+﻿//Name:			ScrollingRawImage.cs
+//Project:		Spectral: The Silicon Domain
+//Author(s)		Conor Hughes - conormpkhughes@yahoo.com
+//Description:	Simple script that scrolls a repeating raw image texture.
+
+using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 
 public class ScrollingRawImage : MonoBehaviour {
 
-	RawImage rImage;
-	public Vector2 scrollDirection;
+	private RawImage 	rImage;				//rawimage component of transform
+	public 	Vector2 	scrollDirection;	//the scroll direction
+
 	// Use this for initialization
 	void Start () {
-		rImage = GetComponent<RawImage>();
+		rImage = GetComponent<RawImage>();	
 	}
 	
 	// Update is called once per frame

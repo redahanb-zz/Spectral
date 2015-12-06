@@ -1,28 +1,50 @@
-﻿using UnityEngine;
+﻿//Name:			TitleScreen.cs
+//Project:		Spectral: The Silicon Domain
+//Author(s)		Conor Hughes - conormpkhughes@yahoo.com
+//Description:	This script controls the display of the title screen, used in the Restore Point scene.
+
+
+using UnityEngine;
 using UnityEngine.UI;
 using UnityStandardAssets.ImageEffects;
 using System.Collections;
 
 public class TitleScreen : MonoBehaviour {
-	public GameObject healthObject, inventoryObject, timeButtonObject, mapButtonObject, playerObject, gameManagerObject, playerCameraObject, alertSystemObject, roomInfoObject;
 
-	Level lvl;
-	public RawImage logoImage;
-	public Text continueText;
+	public GameObject 				healthObject, 		//health bar gameobject
+									inventoryObject, 	//inventory bar gameobject
+									timeButtonObject, 	//time buttonprivate 
+									mapButtonObject, 	//map button gameobject
+									playerObject, 		//player gameobject
+									gameManagerObject, 	//game manager gameobject
+									playerCameraObject, //player camera gameobject
+									alertSystemObject, 	//alert system gameobject
+									roomInfoObject;		//next room info gameobject
 
-	Light directionalLight;
+	private Level 					lvl;				//instance of level script
+	public 	RawImage 				logoImage;			//the logo image
+	public 	Text 					continueText;		//'Press space to contine' text component
 
-	CameraController cController;
-	DepthOfFieldDeprecated dof;
-	BloomOptimized bloom;
+	private Light 					directionalLight;	//the main directional light
 
-	public Transform dofTarget, targetCamera, lookAtTarget;
+	private CameraController 		cController;		//instance of CameraController
+	private DepthOfFieldDeprecated 	dof;				//used to control cameras depth of field
 
-	RawImage gradientImage;
+	public 	Transform 				dofTarget, 			//the depth of field target object
+									targetCamera, 		//the title screen target camera (used for position and rotation)
+									lookAtTarget;		//the title screen look at target for the camera
 
-	Color restorePointLightColor, titleScreenLightColor;
+	private RawImage 				gradientImage;		//the gradient overlay iamge
 
-	bool showTitleScreen = true, canInput = false;
+	private Color 					restorePointLightColor, //the normal level lighting color
+									titleScreenLightColor;	//the title screen lighting color
+
+	public bool 					showTitleScreen = true, //determines if title screen can be displayed
+									canInput = false;		//determines if the player can input
+
+	HUD_Inventory 					invHUD;					//instance of inventory
+	HUD_Healthbar					healthHUD;				//instance of healthbar
+	HideHUDElement					hidePause, hideTime;	//instances of hide hud element
 
 	// Use this for initialization
 	void Start () {
@@ -39,7 +61,6 @@ public class TitleScreen : MonoBehaviour {
 		cController = playerCameraObject.GetComponent<CameraController>();
 		cController.lookAtOtherTarget = lookAtTarget;
 
-		bloom = playerCameraObject.GetComponent<BloomOptimized>();
 		dof = playerCameraObject.GetComponent<DepthOfFieldDeprecated>();
 		dof.objectFocus = lookAtTarget.transform;
 
@@ -47,12 +68,7 @@ public class TitleScreen : MonoBehaviour {
 
 		healthObject.GetComponent<HUD_Healthbar>().enabled = false;
 		inventoryObject.GetComponent<HUD_Inventory>().enabled = false;
-		//timeButtonObject.SetActive(false);
-		//mapButtonObject.SetActive(false);
-
-		//gameManagerObject.SetActive(false);
 		playerObject.SetActive(false);
-		//alertSystemObject.SetActive(false);
 
 		lvl = GameObject.Find("Level").GetComponent<Level>();
 		lvl.enabled = false;
@@ -60,6 +76,14 @@ public class TitleScreen : MonoBehaviour {
 		logoImage.color = new Color(0,0,0,0);
 		continueText.color = new Color(0,0,0,0);
 
+
+
+		if(!invHUD){
+			invHUD = GameObject.Find("HUD_Inventory").GetComponent<HUD_Inventory>();
+			healthHUD = GameObject.Find("HUD_Healthbar").GetComponent<HUD_Healthbar>();
+			hidePause = GameObject.Find("PauseButton").GetComponent<HideHUDElement>();
+			hideTime = GameObject.Find("Time Button").GetComponent<HideHUDElement>();
+		}
 
 		if(GameObject.Find("HideTitleObject")){
 			showTitleScreen = false;
@@ -69,33 +93,15 @@ public class TitleScreen : MonoBehaviour {
 			Destroy(gameObject);
 		}
 	}
-
-
-
-
-
-
-
+	
 	// Update is called once per frame
 	void Update () {
-
-
-
-		//print(lookAtTarget + " : " +cController.lookAtOtherTarget);
 		GetInput();
 		ChangeColors();
-
-		if(!showTitleScreen){
-			playerCameraObject.transform.position = Vector3.Lerp(playerCameraObject.transform.position, targetCamera.position, Time.deltaTime * Vector3.Distance(playerCameraObject.transform.position, targetCamera.transform.position)/30);
-			//playerCameraObject.transform.LookAt(playerObject.transform.position);
-
-		}
-		else{
-			//playerCameraObject.transform.LookAt(dofTarget.position);
-
-		}
+		if(!showTitleScreen)playerCameraObject.transform.position = Vector3.Lerp(playerCameraObject.transform.position, targetCamera.position, Time.deltaTime * Vector3.Distance(playerCameraObject.transform.position, targetCamera.transform.position)/30);
 	}
-
+	
+	//Function used to set all colours
 	void ChangeColors(){
 		LightColor();
 		TitleColor();
@@ -103,16 +109,18 @@ public class TitleScreen : MonoBehaviour {
 		GradientColor();
 	}
 
+	//Sets gradient color
 	void GradientColor(){
 		if(!showTitleScreen) gradientImage.color = Color.Lerp(gradientImage.color, new Color(1,1,1,0), Time.deltaTime * 3);
 	}
 
+	//Sets light colour
 	void LightColor(){
 		if(showTitleScreen) directionalLight.color = Color.Lerp(directionalLight.color, titleScreenLightColor, Time.deltaTime * 10f);
 		else 				directionalLight.color = Color.Lerp(directionalLight.color, restorePointLightColor, Time.deltaTime);
-
 	}
 
+	//Sets title logo colour
 	void TitleColor(){
 		if(showTitleScreen){
 			logoImage.color = Color.Lerp(logoImage.color, new Color(1,1,1,1), Time.deltaTime * 3);
@@ -125,32 +133,28 @@ public class TitleScreen : MonoBehaviour {
 		}
 	}
 
+	//Sets text colour
 	void ContinueColor(){
 		if(canInput)continueText.color = Color.Lerp(continueText.color, new Color(0,0,0,1), Time.deltaTime * 3);
 		else continueText.color = Color.Lerp(continueText.color, new Color(0,0,0,0), Time.deltaTime * 3);
 	}
 
+	//Enables input
 	void EnableInput(){
 		canInput = true;
 	}
 
+	//Reads Spacebar input
 	void GetInput(){
 		if(Input.GetKeyDown(KeyCode.Space) && canInput){
 			canInput = false;
 
 			showTitleScreen = false;
-			//normalCanvasObject.SetActive(true);
-//			playerObject.SetActive(true);
-//
-//			dof.objectFocus = playerObject.transform;
 			Invoke("EnableHudAndControls", 1);
 		}
 	}
 
-	void CameraTargetPlayer(){
-		//cController.lookAtOtherTarget = null;
-	}
-
+	//Restores in-game hud and controls
 	void EnableHudAndControls(){
 		healthObject.GetComponent<HUD_Healthbar>().enabled = true;
 		inventoryObject.GetComponent<HUD_Inventory>().enabled = true;
@@ -168,8 +172,6 @@ public class TitleScreen : MonoBehaviour {
 		playerObject.SetActive(true);
 		dof.objectFocus = playerObject.transform;
 
-
 		Destroy(this.gameObject);
-
 	}
 }

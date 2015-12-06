@@ -1,22 +1,31 @@
-﻿using UnityEngine;
+﻿//Name:			SimpleTutorial.cs
+//Project:		Spectral: The Silicon Domain
+//Author(s)		Conor Hughes - conormpkhughes@yahoo.com
+//Description:	Displays a tutorial box for five seconds before hiding again.
+
+
+using UnityEngine;
 using System.Collections;
 
 public class TutorialDoor : MonoBehaviour {
 
-	bool displayTutorialButton;
-	Transform player;
-	float playerDistance = 100;
+	private bool 			displayTutorialButton,		//determines if tutorial button is visible
+							moveTutorial = false, 		//
+							sensorTutorial = false, 	//
+							teleportTutorial = false;	//
+	private Transform 		player;						//transform of player
+	private float 			playerDistance = 100;		//distance between door and player
 	
-	RectTransform tutorialButtonTransform, canvasTransform;
+	private RectTransform 	tutorialButtonTransform,	//the tutorial button transform
+							canvasTransform;			//the canvas transform
 	
-	Vector2 ViewportPosition, WorldObject_ScreenPosition;
+	private Vector2 		ViewportPosition, 			//world pos of object
+							WorldObject_ScreenPosition;	//target pos of ui
 	
-	ScreenFade sFade;
+	private ScreenFade 		sFade;						//instance of screen fade
 	
-	GameState gameState;
+	private GameState 		gameState;					//instance of game state
 
-	bool moveTutorial = false, sensorTutorial = false, teleportTutorial = false;
-	
 	// Use this for initialization
 	void Start () {
 		player = GameObject.FindGameObjectWithTag("Player").transform;
@@ -35,17 +44,18 @@ public class TutorialDoor : MonoBehaviour {
 		ScaleButton();
 		PositionButton();
 	}
-	
+
+	//Shows/Hides the button
 	void ScaleButton(){
 		if(displayTutorialButton){
 			tutorialButtonTransform.localScale = Vector3.Lerp(tutorialButtonTransform.localScale, new Vector3(0.8f, 0.8f, 0.8f), Time.deltaTime * 22);
-			
 		}
 		else{
 			tutorialButtonTransform.localScale = Vector3.Lerp(tutorialButtonTransform.localScale, new Vector3(0, 0, 0), Time.deltaTime * 22);
 		}
 	}
-	
+
+	//Move the button over the door
 	void PositionButton(){
 		if(displayTutorialButton){
 			ViewportPosition=Camera.main.WorldToViewportPoint(transform.position);
@@ -56,10 +66,9 @@ public class TutorialDoor : MonoBehaviour {
 			tutorialButtonTransform.anchoredPosition=WorldObject_ScreenPosition;
 		}
 	}
-	
+
+	//Start the tutorial level based on next door
 	public void StartTutorialLevel(){
-		//sFade.FadeOut();
-		
 		GameObject loadObject = Instantiate(Resources.Load("Basic Level Loader")) as GameObject;
 		
 		if (!gameState) {

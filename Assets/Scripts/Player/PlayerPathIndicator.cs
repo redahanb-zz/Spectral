@@ -1,55 +1,48 @@
+//Name:			TimeScaler.cs
+//Project:		Spectral: The Silicon Domain
+//Author(s)		Conor Hughes - conormpkhughes@yahoo.com
+//Description:	This script manages the in-game timescale, which affects everything but the player.
+
 using UnityEngine;
 using System.Collections;
 
 public class PlayerPathIndicator : MonoBehaviour {
 
-	public Vector3 targetPosition = Vector3.zero;
-	NavMeshAgent agent;
-	TimeScaler tt;
+	public 	Vector3 		targetPosition = Vector3.zero;	//target destination of the indicator
+	private NavMeshAgent 	agent;							//agent component of indicator
+	private	TimeScaler 		tt;								//instance of the timescaler
 
-	LineRenderer line;
+	LineRenderer line;										//line renderer component used to debug path
 
-	bool runOnce = false, pathDrawn = false;
-
-	float lineWidth = 0f, targetWidth = 0.05f;
-
-
-	bool pingInProgress = false;
-
-	GameObject pingObject, playerObject;
-	PathPing pPing;
+	private bool 			runOnce = false, 				//indicates path once
+							pathDrawn = false,				//indicates if path is on
+	 						pingInProgress = false;			//shows if indicator is active
 
 
-	// Use this for initialization
-	void Start () {
-		//Invoke("DestroySelf", 5);
+	private float 			lineWidth = 0f, 				//width of line renderer
+							targetWidth = 0.05f;			//width of line start
 
-		//tt = GameObject.Find("TimeManager").GetComponent<TimeScaler>();
-	}
+	private GameObject 		pingObject, 					//the ping gameobject
+							playerObject;					//the player object
 
+	PathPing 				pPing;							//instance of path ping script
+
+	//Sets the player gameobject
 	public void SetPlayer(GameObject g){
 		playerObject = g;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		//print(pathDrawn + " : " +lineWidth);
-
-
 		if(targetPosition != Vector3.zero){
 			if(runOnce == false){
 				line = GetComponent<LineRenderer>();
 				line.SetWidth(lineWidth, lineWidth);
 				agent = GetComponent<NavMeshAgent>();
 				GetPath ();
-				//runOnce = true;
-
-
 			}
 		}
-
-
-
+		
 		if(pathDrawn){
 			lineWidth = Mathf.Lerp(lineWidth, targetWidth, 0.05f);
 			line.SetWidth(lineWidth,lineWidth);
@@ -63,10 +56,12 @@ public class PlayerPathIndicator : MonoBehaviour {
 		}
 	}
 
+	//Self destruct the gameobject
 	void DestroySelf(){
 		Destroy(gameObject);
 	}
 
+	//Gets the current path
 	void GetPath(){
 		line.SetPosition(0, transform.position);
 		agent.SetDestination(targetPosition);
@@ -76,6 +71,7 @@ public class PlayerPathIndicator : MonoBehaviour {
 
 	}
 
+	//Draws the current path
 	void DrawPath(NavMeshPath path){
 		if(path.corners.Length < 2) return;
 		line.SetVertexCount(path.corners.Length);

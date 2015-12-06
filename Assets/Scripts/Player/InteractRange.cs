@@ -1,10 +1,15 @@
-﻿using UnityEngine;
+﻿//Name:			InteractRange.cs
+//Project:		Spectral: The Silicon Domain
+//Author(s)		Conor Hughes - conormpkhughes@yahoo.com
+//Description:	Rotates and positions the range indicator to the players position.
+
+using UnityEngine;
 using System.Collections;
 
 public class InteractRange : MonoBehaviour {
 
-	Transform player;
-	Renderer rangeRenderer;
+	private Transform player;			//The player transform
+	private Renderer rangeRenderer;		//The rangle indicator renderer component
 
 	// Use this for initialization
 	void Start () {

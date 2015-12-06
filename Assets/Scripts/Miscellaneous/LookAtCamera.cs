@@ -1,9 +1,15 @@
-﻿using UnityEngine;
+﻿//Name:			LookAtCamera.cs
+//Project:		Spectral: The Silicon Domain
+//Author(s)		Conor Hughes - conormpkhughes@yahoo.com
+//Description:	Forces GameObject to look at main camera.
+
+
+using UnityEngine;
 using System.Collections;
 
 public class LookAtCamera : MonoBehaviour {
 
-	GameObject mainCamera;
+	private GameObject mainCamera; //the main camera gameobject
 
 	// Use this for initialization
 	void Start () {

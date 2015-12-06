@@ -1,5 +1,5 @@
 ﻿//Name:			LevelEnd.cs
-//Author(s)		Conor Hughes
+//Author(s)		Conor Hughes - conormpkhughes@yahoo.com
 //Description:	This script is used to display the level end button when the player is near the end door.
 //				It scales the button to show and hide it. The end button calls the end level function in this script
 //				to save data and return to the title screen. The button is dynamically positioned so it always appears
@@ -14,16 +14,12 @@ public class LevelEnd : MonoBehaviour {
 	private bool 			displayEndButton;						//determines whether the end button is displayed
 	private	Transform 		player;									//transform of the player
 	private	float 			playerDistance = 100;					//distance between door and player
-	
 	private RectTransform 	endButtonTransform, 					//RectTransform component of end button
-	canvasTransform;						//RectTransform component of canvas
-	
+							canvasTransform;						//RectTransform component of canvas
 	private Vector2 		ViewportPosition, 						//the screen position of the button
-	WorldObject_ScreenPosition;				//the world position the button needs to match
-	
+							WorldObject_ScreenPosition;				//the world position the button needs to match
 	private ScreenFade 		sFade;									//instance of the screen fader
-	
-	private GameState		gameState;
+	private GameState		gameState;								//instance of GameState
 	
 	// Use this for initialization
 	void Start () {

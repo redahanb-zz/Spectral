@@ -22,6 +22,7 @@ public class SteamGreenlightLogo : MonoBehaviour {
 		faderImage.color = new Color(0,0,0,1);
 	}
 	
+	//Show/Hide Logo
 	void ToggleLogo(){
 		showLogo = !showLogo;
 	}
@@ -36,6 +37,7 @@ public class SteamGreenlightLogo : MonoBehaviour {
 		}
 	}
 	
+	//Loads the Restore Point Level (which includes title screen)
 	void LoadTitle(){
 		Application.LoadLevel("Restore Point");
 	}

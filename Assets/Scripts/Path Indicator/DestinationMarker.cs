@@ -1,13 +1,18 @@
-﻿using UnityEngine;
+﻿//Name:			DestinationMarker.cs
+//Project:		Spectral: The Silicon Domain
+//Author(s)		Conor Hughes - conormpkhughes@yahoo.com
+//Description:	Places and shows/hides the path destination marker.
+
+using UnityEngine;
 using System.Collections;
 
 public class DestinationMarker : MonoBehaviour {
 
-	Renderer r;
-	Vector3 visibleScale, hiddenScale;
-	bool markerVisible = true;
-
-	float scaleSpeed = 2;
+	private Renderer 	r;						//the renderer component
+	private Vector3 	visibleScale, 			//visible vector3 scale
+						hiddenScale;			//hidden vector3 scale
+	private bool		markerVisible = true;	//if true, marker is visible
+	private float 		scaleSpeed = 2;			//the rate at which the maker scales
 
 	// Use this for initialization
 	void Start () {
@@ -16,7 +21,6 @@ public class DestinationMarker : MonoBehaviour {
 		transform.localScale = hiddenScale;
 
 		r = GetComponent<Renderer>();
-		//r.material.color = new Color(r.material.color.a, r.material.color.g, r.material.color.b, 0);
 	}
 	
 	// Update is called once per frame
@@ -25,15 +29,13 @@ public class DestinationMarker : MonoBehaviour {
 			transform.localScale = Vector3.Lerp(transform.localScale, visibleScale, Time.deltaTime * scaleSpeed);
 		}
 		else{
-			//print("Hide: " +transform.localScale.x);
 			transform.localScale = Vector3.Lerp(transform.localScale, hiddenScale, Time.deltaTime * scaleSpeed * 1.6f);
 			if(transform.localScale.x < 0.01f)			Destroy(gameObject);
 
 		}
-
-		//r.material.color = Color.Lerp(r.material.color, new Color(r.material.color.a, r.material.color.g, r.material.color.b, 1), 0.06f);
 	}
 
+	//forces the DestinationMarker to hide
 	public void RemoveMarker(){
 		markerVisible = false;
 	}

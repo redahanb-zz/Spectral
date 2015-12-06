@@ -1,23 +1,26 @@
-﻿using UnityEngine;
+﻿//Name:			PathArrow.cs
+//Project:		Spectral: The Silicon Domain
+//Author(s)		Conor Hughes - conormpkhughes@yahoo.com
+//Description:	This fades in and out an arrow object that is used to indicate the current path.
+
+using UnityEngine;
 using System.Collections;
 
 public class PathArrow : MonoBehaviour {
-	Renderer arrowRenderer;
-	bool visible = false;
-	Ray ray;
-	RaycastHit hit;
-	bool ready = false;
+	private Renderer 	arrowRenderer;		//renderer component of arrow
+	private bool 		visible = false, 	//indicates arrow is visible
+						ready = false;		//indicates arrow is ready to fade
+	private Ray 		ray;				//Raycast ray
+	private RaycastHit 	hit;				//Raycast hit
 
 	// Use this for initialization
 	void Start () {
-
 		arrowRenderer = GetComponent<Renderer>();
 		arrowRenderer.material.color = new Color(0.5f,0.5f,0.5f,0);
-		//Invoke("CheckIfVisible", 0.04f);
 		CheckIfVisible();
-		//arrowRenderer.material = Resources.Load("Chevron Visible") as Material;
 	}
 
+	//Checks if the arrow has become visible
 	void CheckIfVisible(){
 		ray = Camera.main.ScreenPointToRay(transform.position);
 
@@ -25,20 +28,9 @@ public class PathArrow : MonoBehaviour {
 		float distance = heading.magnitude;
 		Vector3 direction = heading / distance; 
 
-
 		if (Physics.Raycast(Camera.main.transform.position, direction, out hit, 100.0F)){
-			//print(hit.transform.name +" : " + transform.name);
-			//print(hit.transform);
-			if(hit.transform.name == transform.name){
-				//Arrow is visible
-				//print("VISIBLE");
-				arrowRenderer.material = Resources.Load("Chevron Visible") as Material;
-			}
-			else{
-				//Arrow is hidden
-				//print("HIDDEN");
-				arrowRenderer.material = Resources.Load("Chevron Visible") as Material;
-			}
+			if(hit.transform.name == transform.name) arrowRenderer.material = Resources.Load("Chevron Visible") as Material;
+			else arrowRenderer.material = Resources.Load("Chevron Visible") as Material;
 		}
 		ready = true;
 	}
@@ -46,7 +38,6 @@ public class PathArrow : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if(ready){
-			//Debug.DrawRay(Camera.main.transform.position, hit.point, Color.yellow);
 			if(visible){
 				arrowRenderer.material.color = Color.Lerp(arrowRenderer.material.color, new Color(0.5f,0.5f,0.5f,0), 0.05f);
 				if(arrowRenderer.material.color.a < 0.1f)Destroy(gameObject);

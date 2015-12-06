@@ -1,21 +1,32 @@
-﻿using UnityEngine;
+﻿//Name:			Teleporter.cs
+//Project:		Spectral: The Silicon Domain
+//Author(s)		Conor Hughes - conormpkhughes@yahoo.com
+//Description:	This script manages the behaviour between a teleporter pair, choosing to teleport the player based on which
+//				Teleporter object the player is standing beside. It scales down and moves the player on a new Teleport.
+
+using UnityEngine;
 using System.Collections;
 
 public class Teleporter : MonoBehaviour {
 
-	public bool canTeleport = true, scaleUp = false, scaleDown = false;
-	Transform pairedTeleporter, player;
-	float teleportDuration = 1, scaleDuration = 0.2f, tick;
-	float playerDistance = 100;
-	GameObject teleportButtonObject;
+	public bool 				canTeleport = true, 	//determines if the player can teleport
+								scaleUp = false, 		//scales the player to normal size if true
+								scaleDown = false;		//scales the player down until invisible if false
+	private Transform 			pairedTeleporter, 		//transform of paired teleporter object
+								player;					//transform of the player
+	private float 				teleportDuration = 1,   //how long player is inactive during teleport
+								scaleDuration = 0.2f,   //duration for scaling the player
+								tick;					//rate used to scale the player
+	private float 				playerDistance = 100;	//distance player is from teleporter
+	private GameObject 			teleportButtonObject;	//teleport button gameobject
 
-	PauseManager pManager;
+	private PauseManager 		pManager;				//instance of pause manager
 
-	PlayerController pController;
+	private PlayerController 	pController;			//instance of player controller
 
-	bool destroyOnce = false;
+	private bool 				destroyOnce = false;	//used to destroy one instance of the teleport destination indicator
 
-	GameObject indicatorObject;
+	private GameObject 			indicatorObject;		//gameobject used to indicate teleport destination
 
 	// Use this for initialization
 	void Start () {
@@ -48,17 +59,18 @@ public class Teleporter : MonoBehaviour {
 		}
 
 		tick = Time.deltaTime/scaleDuration;
-		//if(Input.GetKeyDown(KeyCode.T))if(canTeleport)Teleport();
 		if(scaleUp)ScalePlayerUp();
 		if(scaleDown)ScalePlayerDown();
 	}
 
-	void ScalePlayerUp(){
+	//Function that scales the player up until visible
+	private void ScalePlayerUp(){
 		player.transform.position = Vector3.MoveTowards(player.transform.position, transform.position, Time.deltaTime);
 		player.localScale = Vector3.Lerp(player.localScale, new Vector3(0.001f, 0.001f, 0.001f), tick);
 	}
 
-	void TeleportPlayer(){
+	//Repositions the player during teleport
+	private void TeleportPlayer(){
 		Destroy(indicatorObject);
 
 		player.gameObject.SetActive(false);
@@ -66,26 +78,27 @@ public class Teleporter : MonoBehaviour {
 		player.gameObject.SetActive(true);
 	}
 
-	void DisablePlayerMovement(){
+	//Disables player controls
+	private void DisablePlayerMovement(){
 		pController.canMove = false;
 	}
 
-	void EnablePlayerMovement(){
+	//Enables player controls
+	private void EnablePlayerMovement(){
 		pController.canMove = true;
 	}
 
-	void ScalePlayerDown(){
+	//Function that scales the player down until invisible
+	private void ScalePlayerDown(){
 		player.localScale = Vector3.Lerp(player.localScale, new Vector3(1, 1, 1), tick);
 	}
 
+	//Function thatis a series of invokes that times the teleport behaviour
 	public void Teleport(){
 		if(!pController.isBlending){
-			//print("Teleporting to " +pairedTeleporter);
 			canTeleport = false;
 			if(pController.canMove)DisablePlayerMovement();
 			Invoke("EnablePlayerMovement", 1.5f);
-
-			//teleportButtonObject.GetComponent<TeleportButton>().SetCurrentTeleporter(null);
 			Invoke("ToggleScaleUp", 	0.2f);
 			Invoke("ToggleScaleUp", 	1f);
 			Invoke("TeleportPlayer", 	1f);
@@ -95,7 +108,10 @@ public class Teleporter : MonoBehaviour {
 		}
 	}
 
-	void ToggleScaleUp(){scaleUp 		= !scaleUp;}
-	void ToggleScaleDown(){scaleDown 	= !scaleDown;}
+	//Toggles scale up
+	public void ToggleScaleUp(){scaleUp 		= !scaleUp;}
+
+	//Toggles scale down
+	public void ToggleScaleDown(){scaleDown 	= !scaleDown;}
 
 }

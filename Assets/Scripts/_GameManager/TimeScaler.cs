@@ -1,42 +1,43 @@
-﻿using UnityEngine;
+﻿//Name:			TimeScaler.cs
+//Project:		Spectral: The Silicon Domain
+//Author(s)		Conor Hughes - conormpkhughes@yahoo.com
+//Description:	This script manages the in-game timescale, which affects everything but the player.
+
+
+using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 
 public class TimeScaler : MonoBehaviour {
 	
-	private Text 	timeText;
+	private Text 				timeText;					//text component of time button
+	public 	bool 				timeSlowed  	= false,	//determines if time is slowed
+								timeStopped 	= false;	//determines if time is stopped
+	public 	float 				slowScale 		= 0.1f,		//slower timescale
+								stopScale		= 0.01f,	//stopped timescale
+								normalScale 	= 1f, 		//normal timescale
+								currentScale 	= 0.1f,		//the current timescale
+								customDeltaTime;			//custom deltatime
+	private float 				changeSpeed 	= 0.8f;		//timescale change rate
+	private Animator 			playerAnimator;				//player animator component
+	public 	float 				lastInterval, 				//time of last frame
+								timeNow; 					//time of current frame
+
+	private 		 			RectTransform fillTransform;//Rect transform component of the hourglass fill
 	
-	public 	bool 	timeSlowed  = false,
-	timeStopped = false;
+	private bool 				canFill = true;				//determines if hourglass can refill
 	
-	public 	float 	myDeltaTime, 
-	slowScale 		= 0.1f,
-	stopScale		= 0.01f,
-	normalScale 	= 1f, 
-	currentScale 	= 0.1f,
-	customDeltaTime;
+	public bool 				noiseDampening;				// make this public for testing, private eventually for encapsulation
 	
-	float 			changeSpeed 	= 0.8f;
+	private float 				currentStoredTime = 0, 		//current amount of stored time
+								maxStoredTime = 5, 			//maximum amount of stored time
+								hourglassYscale;			//scale of the hourglass determined by max stored time.
 	
-	Animator 		playerAnimator;
+	private GameObject 			buttonObject;				//the time button object
+
+	private UIRotateOverTime 	rotateComponent;			//component used to rotate hourglass
 	
-	public 	float 	lastInterval, 
-	timeNow, 
-	myTime;
-	
-	RectTransform fillTransform;
-	
-	bool canFill = true;
-	
-	public bool 	noiseDampening; // make this public for testing, private eventually for encapsulation
-	
-	float currentStoredTime = 0, maxStoredTime = 5, hourglassYscale;
-	
-	GameObject buttonObject;
-	
-	UIRotateOverTime rotateComponent;
-	
-	bool hasHourglass = false;
+	private bool 				hasHourglass = false;		//checks if hourglass detected
 	
 	// Use this for initialization
 	void Start () {
@@ -44,7 +45,6 @@ public class TimeScaler : MonoBehaviour {
 			//gameObject.SetActive(false);
 		}
 		else{
-			myTime = 0;
 			timeNow = 0;
 			lastInterval = 0;
 			
@@ -57,37 +57,38 @@ public class TimeScaler : MonoBehaviour {
 				fillTransform = GameObject.Find("Hourglass").transform.Find("Fill").GetComponent<RectTransform>();
 			}
 			playerAnimator 	= GameObject.FindGameObjectWithTag("Player").GetComponent<Animator>();
-			myDeltaTime 	= Time.deltaTime;
 			lastInterval 	= Time.realtimeSinceStartup;
 			currentStoredTime = maxStoredTime;
 		}
 	}
-	
+
+	//Enable/Disable SlowTime
 	public void ToggleTime(){
 		timeSlowed = !timeSlowed;
 	}
-	
+
+	//Enable/Disable StopTime
 	public void StopTime(){
 		timeStopped = true;
 	}
-	
+
+	//SlowTime if stored time is greater than 0
 	public void SlowTime(){
 		if(currentStoredTime > 0.01f){
 			timeSlowed 		= true;
 			timeStopped = false;
 		}
-		else{
-			ResumeTime();
-		}
+		else ResumeTime();
+		
 	}
-	
+
+	//Resume normal time
 	public void ResumeTime(){
 		timeSlowed 		= false;
 		timeStopped = false;
-		//Invoke("StartFill", 1);
-		
 	}
-	
+
+	//Input for slowing/resuming time
 	void KeyInput(){
 		if(Input.GetKey(KeyCode.T))SlowTime();
 		else if(Input.GetKeyUp(KeyCode.T))ResumeTime();
@@ -95,9 +96,6 @@ public class TimeScaler : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		//print(timeSlowed + " : " + currentScale);
-		//print ("Max Stored time: " + GetMaxStoredTime());
-
 		timeNow 		= Time.realtimeSinceStartup;
 		customDeltaTime = timeNow - lastInterval;
 		lastInterval 	= timeNow;
@@ -108,31 +106,17 @@ public class TimeScaler : MonoBehaviour {
 		timeNow 		= Time.realtimeSinceStartup;
 		if(timeText) timeText.text 	= ""+(int)currentStoredTime;
 		
-		if (timeSlowed)			
-			currentScale = Mathf.MoveTowards(currentScale, slowScale,   0.02f);
-		//currentScale = slowScale;
-		else if (timeStopped)	
-			currentScale = Mathf.MoveTowards(currentScale, stopScale,   0.02f);
-		//currentScale = stopScale;
-		else 					
-			currentScale = Mathf.MoveTowards(currentScale, normalScale, 0.02f);
-		//currentScale = normalScale;
-		
-		//if(playerAnimator) playerAnimator.SetFloat ("animationSpeed", currentScale);
-		
+		if (timeSlowed)currentScale = Mathf.MoveTowards(currentScale, slowScale,   0.02f);
+		else if (timeStopped)currentScale = Mathf.MoveTowards(currentScale, stopScale,   0.02f);
+		else currentScale = Mathf.MoveTowards(currentScale, normalScale, 0.02f);
+
 		Time.timeScale 		= currentScale;
 		Time.fixedDeltaTime = currentScale * 0.02f;
-		
-		
-		//		print (pauseManager.gamePaused == true);
-		//		if(pauseManager.gamePaused){
-		//			Time.timeScale = 0.0f;
-		//			print ("TIME STOPPED");
-		//		}
 		lastInterval 	= timeNow;
 		
 	}
-	
+
+	//Drains hourglass icon if time is slowed. Rotates icon if it is full.
 	void Hourglass(){
 		if(currentStoredTime == maxStoredTime){
 			rotateComponent.enabled = true;
@@ -149,48 +133,40 @@ public class TimeScaler : MonoBehaviour {
 				ResumeTime();
 			}
 		}
-		else{
-			//if(canFill)currentStoredTime = currentStoredTime + ((customDeltaTime/maxStoredTime) * 50);
-			//if(currentStoredTime > maxStoredTime)currentStoredTime = maxStoredTime;
-			
-		}
+
 		hourglassYscale = currentStoredTime * 4;
 		hourglassYscale = currentStoredTime/maxStoredTime;
 		hourglassYscale = hourglassYscale * (40/1);
 		fillTransform.sizeDelta = new Vector2(fillTransform.sizeDelta.x, hourglassYscale);
 	}
-	
+
+	//Start filling the hourglass
 	void StartFill(){
 		canFill = true;
 	}
 
-	public void UpgradeMaxStoredTime()
-	{
+	//The following functions are relevant to the Upgrades Screen, used to increase slow time duration and noise dampening
+	public void UpgradeMaxStoredTime(){
 		maxStoredTime += 1.0f;
 	}
 
-	public void SetMaxStoredTime(float f)
-	{
+	public void SetMaxStoredTime(float f){
 		maxStoredTime = f;
 	}
 
-	public float GetMaxStoredTime()
-	{
+	public float GetMaxStoredTime(){
 		return maxStoredTime;
 	}
 
-	public void UpgradeNoiseDampening()
-	{
+	public void UpgradeNoiseDampening(){
 		noiseDampening = true;
 	}
 
-	public void SetNoiseDampening(bool b)
-	{
+	public void SetNoiseDampening(bool b){
 		noiseDampening = b;
 	}
 
-	public bool GetNoiseDampening()
-	{
+	public bool GetNoiseDampening(){
 		bool temp = noiseDampening;
 		return temp;
 	}

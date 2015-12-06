@@ -1,29 +1,38 @@
-﻿using UnityEngine;
+﻿//Name:			NextRoomInfo.cs
+//Project:		Spectral: The Silicon Domain
+//Author(s)		Conor Hughes - conormpkhughes@yahoo.com
+//Description:	This script displays information relating to the current room.
+
+
+using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 
 public class NextRoomInfo : MonoBehaviour {
 
-	RawImage backgroundImage;
-	RectTransform backgroundTransform;
-	float sizeDifference = 1000;
-	float backgroundHeight;
-	bool showInfo = true, runOnce = false;
+	private RawImage 		backgroundImage;			//the background image of the info panel
+	private RectTransform 	backgroundTransform;		//the transform of the background
+	private float 			sizeDifference = 1000,		//used to calculate how close the panel is to its full size
+							backgroundHeight, 			//the y scale of the background
+							frameTimer;					//amount of frames the panel is visible for
 
-	public bool playerBesideDoor = false;
+	private bool 			showInfo = true, 			//determines if info is displayed
+							runOnce = false;			//displays info once
+	public bool 			playerBesideDoor = false;	//indicates that player is beside door
 
-	RawImage[] colorIcons;
+	private RawImage[] 		colorIcons;					//array of coloured icons on panel
+	private Text 			levelText, 					//level name text
+							roomText;					//room name text
 
-	float frameTimer;
+	private Vector3 		hiddenSize, 				//panel invisible size
+							visibleSize;				//panel visible size
 
-	Text levelText, roomText;
+	private Color 			hiddenColor, 				//panel hidden color
+							visibleColor, 				//panel visible color
+							disabledColor,				//panel disabled color
+							newColor;					//temporary color value used in array
 
-	Vector3 hiddenSize, visibleSize;
-
-	Color hiddenColor, visibleColor, disabledColor;
-
-	Level lvl;
-	Color newColor;
+	private Level 			lvl;						//instance of level script
 
 
 	// Use this for initialization
@@ -46,13 +55,10 @@ public class NextRoomInfo : MonoBehaviour {
 		visibleColor = new Color(1,1,1,1);
 		hiddenColor = new Color(1,1,1,0);
 
-
-
 		roomText.color = hiddenColor;
 		levelText.color = hiddenColor;
 
 		colorIcons = new RawImage[5];
-
 		colorIcons[0] = transform.Find("Colors").Find("1").GetComponent<RawImage>();
 		colorIcons[1] = transform.Find("Colors").Find("2").GetComponent<RawImage>();
 		colorIcons[2] = transform.Find("Colors").Find("3").GetComponent<RawImage>();
@@ -64,11 +70,10 @@ public class NextRoomInfo : MonoBehaviour {
 		for(int i = 0; i < colorIcons.Length; i++){
 			colorIcons[i].color = new Color(colorIcons[i].color.r, colorIcons[i].color.g, colorIcons[i].color.b, 0);
 		}
-
 		DisplayNewRoomInfo(GameObject.Find("[0,0]").GetComponent<Room>().roomName, Application.loadedLevelName);
-
 	}
 
+	//Refreshes the current room colors
 	void RefreshCurrentRoomColors(){
 		print(lvl.transform.Find("Rooms").Find("["+lvl.currentX+","+lvl.currentZ+"]"));
 		for(int i = 0; i < colorIcons.Length; i++){
@@ -79,8 +84,6 @@ public class NextRoomInfo : MonoBehaviour {
 	
 	// Update is called once per frame
 	void FixedUpdate () {
-		//RefreshCurrentRoomColors();
-		//print(showInfo);
 		if(showInfo){
 			sizeDifference = Vector3.Distance(backgroundTransform.sizeDelta, visibleSize);
 
@@ -91,21 +94,15 @@ public class NextRoomInfo : MonoBehaviour {
 
 				for(int i = 0; i < colorIcons.Length; i++){
 					newColor = lvl.transform.Find("Rooms").Find("["+lvl.currentX+","+lvl.currentZ+"]").GetComponent<Room>().roomColors[i];
-
-					if(newColor != disabledColor)
-						colorIcons[i].color = Color.Lerp(colorIcons[i].color, new Color(newColor.r, newColor.g, newColor.b, 1), 0.05f);
+					if(newColor != disabledColor)colorIcons[i].color = Color.Lerp(colorIcons[i].color, new Color(newColor.r, newColor.g, newColor.b, 1), 0.05f);
 				}
 			}
 
 			if(sizeDifference < 0.1f){
-				if(playerBesideDoor){
-					frameTimer = 0;
-				}
+				if(playerBesideDoor)frameTimer = 0;
 				else{
 					frameTimer += Time.deltaTime;
-					if(frameTimer > 3){
-						HideRoomInfo();
-					}
+					if(frameTimer > 3)HideRoomInfo();
 				}
 			}
 		}
@@ -115,7 +112,7 @@ public class NextRoomInfo : MonoBehaviour {
 
 			sizeDifference = Vector3.Distance(backgroundTransform.sizeDelta, hiddenSize);
 			backgroundTransform.sizeDelta = Vector3.Lerp(backgroundTransform.sizeDelta, hiddenSize, 0.1f);
-			//print(lvl.transform.Find("Rooms").Find("["+lvl.currentX+","+lvl.currentZ+"]").GetComponent<Room>().roomColors[0]);
+
 			for(int i = 0; i < colorIcons.Length; i++){
 				newColor = lvl.transform.Find("Rooms").Find("["+lvl.currentX+","+lvl.currentZ+"]").GetComponent<Room>().roomColors[i];
 				if(newColor != disabledColor)
@@ -124,22 +121,25 @@ public class NextRoomInfo : MonoBehaviour {
 		}
 	}
 
+	//Sets the room info and displays it
 	public void DisplayNewRoomInfo(string roomName, string levelName){
 		roomText.text = roomName;
 		levelText.text = levelName;
 		showInfo = true;
 	}
 
+	//Displays room info
 	public void ShowRoomInfo(){
 		showInfo = true;
 	}
 
+	//Sets name of room
 	public void SetRoomName(string roomName){
 		roomText.text = roomName;
 	}
 
+	//Hides room info
 	public void HideRoomInfo(){
-		//print("HideRoomInfo");
 		showInfo = false;
 		frameTimer = 0;
 	}

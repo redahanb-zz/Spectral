@@ -1,4 +1,11 @@
-﻿using UnityEngine;
+﻿//Name:			RoomEditor.cs
+//Project:		Spectral: The Silicon Domain
+//Author(s)		Conor Hughes - conormpkhughes@yahoo.com
+//Description:	The room editor unity extension used to create levels faster. Creates rooms in separate cells. In each room,
+//				you can create individual floor tiles and wall pieces and can also place hiding spots and hazards.
+
+
+using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEditor;
@@ -7,29 +14,22 @@ using System.Linq;
 
 public class RoomEditor : EditorWindow {
 	
-	GameObject 	newLevelObject,newRoomObject, newWallPillarObject, newWallSectionObject, newFloorTileObject, exteriorObject, boundaryObject,
-	roomGroupObject, navMeshPlaneObject;
-	
-	
-	private int roomX, roomZ, roomTemplateIndex = 0;
-	
-	//public string[] roomTemplateOptions = new string[] {"Normal", "Small", "Large", "Wide", "Long"};
-	public enum RoomTemplateOptions { 
-		Normal = 0, 
-		Small = 1, 
-		Large = 2,
-		Wide = 3, 
-		Long = 4
-	}
-	
-	
-	Room roomScript;
-	
-	public RoomTemplateOptions selectedRoomTemplate;
-	
-	bool moveCam = false;
-	
-	
+	private GameObject 			newLevelObject,			//level gameobject
+								newRoomObject, 			//new room gameobject
+								newWallPillarObject, 	//new pillar gameobject
+								newWallSectionObject, 	//new wall section gameobject
+								newFloorTileObject, 	//new floor tile gameobject
+								exteriorObject, 		//exterior object for level
+								boundaryObject,			//boundary object for room (disabled in final game)
+								roomGroupObject, 		//gameobject used to group all room objects
+								navMeshPlaneObject;		//old object used for larger navmesh
+
+	private int 				roomX, 					//room x coordinate
+								roomZ; 					//room z coordinate
+
+	private Room 				roomScript;				//current instance of the room script
+
+	//Initialises the window
 	[MenuItem ("Window/Level Editor/Room Editor")]
 	static void Init () {
 		RoomEditor window = (RoomEditor)EditorWindow.GetWindow (typeof (RoomEditor));
@@ -39,7 +39,7 @@ public class RoomEditor : EditorWindow {
 		window.Show();
 	}
 
-
+	//Debugs the current key input
 	private void OnSceneGUI() {
 		Event e = Event.current;
 		Debug.Log(e.type);
@@ -50,20 +50,8 @@ public class RoomEditor : EditorWindow {
 
 	}
 
+	//Displays different menus based on what is currently selected in the Unity Editor (inspector).
 	void OnGUI(){
-
-
-//			Debug.Log("[EDITOR] Moving Selected Camera to Editor Viewpoint");
-//			Selection.activeTransform.rotation = SceneView.lastActiveSceneView.rotation;
-//			Selection.activeTransform.position = SceneView.lastActiveSceneView.pivot;
-//		}
-
-		//Debug.Log(Application.loadedLevelName);
-
-		//if(Selection.activeTransform.name == "CameraPosRot"){
-			//if(Input.GetKeyDown(KeyCode.KeypadEnter)){
-
-
 		SetEditorColor();
 		if(Selection.activeGameObject){
 			if(Selection.activeGameObject.GetComponent<Room>())CreateNewRoomMenu();
@@ -75,7 +63,8 @@ public class RoomEditor : EditorWindow {
 		else CreateLevelMenu();
 		Repaint();
 	}
-	
+
+	//Changes the colour of the window.
 	void SetEditorColor(){
 		GUI.color = new Color(0.6f,0.6f,0.8f);
 		Texture2D windowTexture = new Texture2D(1, 1, TextureFormat.RGBA32, false);
@@ -161,7 +150,7 @@ public class RoomEditor : EditorWindow {
 		}
 	}
 	
-	
+	//Used to instantiate a load door which is used to connect rooms
 	void LoadDoorMenu(){
 		GUI.Label (new Rect(0, 0, 300, 20), "Change Door:", EditorStyles.whiteBoldLabel);
 		if (GUI.Button(new Rect(125, 80, 50, 50), "North")){
@@ -213,83 +202,6 @@ public class RoomEditor : EditorWindow {
 			}
 		}
 
-
-		//		GUI.Label (new Rect(0, 0, 300, 30), "", EditorStyles.helpBox);
-		//		selectedRoomTemplate = (RoomTemplateOptions) EditorGUILayout.EnumPopup("Replace room:", selectedRoomTemplate);
-		//		GUI.Label (new Rect(0, 0, 300, 20), "Replace Room:", EditorStyles.whiteBoldLabel);
-		//
-		//
-		//		if (GUI.Button(new Rect(0, 30, 300, 20), "Replace")){
-		//			Debug.Log("[LEVEL EDITOR] Replacing selected Room.");
-		//			switch(selectedRoomTemplate){
-		//				case RoomTemplateOptions.Normal : newRoomObject = Instantiate(Resources.Load("_Room Editor/Default Rooms/Room Normal"), Selection.activeGameObject.transform.position, Quaternion.identity) as GameObject; break;
-		//				case RoomTemplateOptions.Small : newRoomObject = Instantiate(Resources.Load("_Room Editor/Default Rooms/Room Small"), Selection.activeGameObject.transform.position, Quaternion.identity) as GameObject; break;
-		//				case RoomTemplateOptions.Large : newRoomObject = Instantiate(Resources.Load("_Room Editor/Default Rooms/Room Large"), Selection.activeGameObject.transform.position, Quaternion.identity) as GameObject; break;
-		//				case RoomTemplateOptions.Wide : newRoomObject = Instantiate(Resources.Load("_Room Editor/Default Rooms/Room Wide"), Selection.activeGameObject.transform.position, Quaternion.identity) as GameObject; break;
-		//				case RoomTemplateOptions.Long : newRoomObject = Instantiate(Resources.Load("_Room Editor/Default Rooms/Room Long"), Selection.activeGameObject.transform.position, Quaternion.identity) as GameObject; break;
-		//			}
-		//
-		//			boundaryObject = Instantiate(Resources.Load("_Room Editor/Components/Room Boundary"), newRoomObject.transform.position, Quaternion.identity) as GameObject;
-		//			boundaryObject.transform.parent = newRoomObject.transform;
-		//			boundaryObject.name = "Boundary";
-		//
-		//			navMeshPlaneObject = Instantiate(Resources.Load("_Room Editor/Components/Nav Mesh Floor"), newRoomObject.transform.position + new Vector3(0,0.06f,0), Quaternion.identity) as GameObject; 
-		//			navMeshPlaneObject.transform.parent = newRoomObject.transform;
-		//			navMeshPlaneObject.transform.eulerAngles = new Vector3(90,0,0);
-		//			navMeshPlaneObject.name = "Nav Mesh Floor";
-		//
-		//			roomScript = newRoomObject.GetComponent<Room>();
-		//			roomScript.xIndex = Selection.activeTransform.GetComponent<Room>().xIndex;
-		//			roomScript.zIndex = Selection.activeTransform.GetComponent<Room>().zIndex;
-		//
-		//			newRoomObject.name = "["+roomScript.xIndex+","+roomScript.zIndex+"]";
-		//
-		//			DestroyImmediate(Selection.activeGameObject);
-		//			Selection.activeGameObject = newRoomObject;
-		//		}
-		
-		//		if (GUI.Button(new Rect(0, 0, 300, 30), "Create Navmesh for Floor")){
-		//			GameObject navMeshObject = new GameObject();
-		//			navMeshObject.name = "New Mesh Object";
-		//			navMeshObject.AddComponent<MeshFilter>();
-		//			navMeshObject.AddComponent<MeshRenderer>();
-		//
-		//			
-		//			foreach(Transform t in Selection.transforms){
-		//				t.parent =  selectedMeshGroup.transform;
-		//			}
-		//			
-		//			selectedMeshGroup.transform.position = Vector3.zero;
-		//			selectedMeshGroup.transform.rotation = Quaternion.identity;
-		//			
-		//			MeshFilter[] meshFilters = Selection.activeTransform.GetComponentsInChildren<MeshFilter>();
-		//			
-		//			CombineInstance[] combine = new CombineInstance[meshFilters.Length-1];
-		//			int index = 0;
-		//			for (var i = 0; i < meshFilters.Length; i++){
-		//				if(mesh
-		//				if (meshFilters[i].sharedMesh == null) continue;
-		//				combine[index].mesh = meshFilters[i].sharedMesh;
-		//				combine[index++].transform = meshFilters[i].transform.localToWorldMatrix;
-		//				meshFilters[i].transform.GetComponent<Renderer>().enabled = false;
-		//			}
-		//			
-		//			selectedMeshGroup.GetComponent<MeshFilter>().sharedMesh = new Mesh();
-		//			selectedMeshGroup.GetComponent<MeshFilter>().sharedMesh.CombineMeshes (combine);
-		//			selectedMeshGroup.GetComponent<Renderer>().material = meshFilters[1].GetComponent<Renderer>().sharedMaterial;
-		//			
-		//			while(selectedMeshGroup.transform.childCount != 0){
-		//				DestroyImmediate(selectedMeshGroup.transform.GetChild(0).gameObject);
-		//			}
-		//			
-		//			selectedMeshGroup.name = newMeshName;
-		//			Selection.activeGameObject = selectedMeshGroup;
-		//			
-		//			DestroyImmediate(meshObject);
-		//
-		//
-		//		}
-		
 		GUI.Label (new Rect(0, 60, 300, 20), "Create Room:", EditorStyles.whiteBoldLabel);
 		if (GUI.Button(new Rect(125, 80, 50, 50), "North")){
 			CreateRoom(0,1);
@@ -311,7 +223,8 @@ public class RoomEditor : EditorWindow {
 		}
 		}
 	}
-	
+
+	//Creates a new room and positions it relative to the current room
 	void CreateRoom(int xModifier, int zModifier){
 		Debug.Log("[LEVEL EDITOR] Creating new Room.");
 		int newRoomX = 0, newRoomZ = 0;
@@ -323,8 +236,6 @@ public class RoomEditor : EditorWindow {
 			newRoomZ = roomScript.zIndex + zModifier;
 		}
 		
-		//if((newRoomX == 0) && (newRoomZ == 0))Debug.Log("[LEVEL EDITOR] A room already exists in that location.");
-		//else{
 		if(GameObject.Find("["+newRoomX+","+newRoomZ+"]"))
 			Debug.Log("[LEVEL EDITOR] A room already exists in that location.");
 		
@@ -382,7 +293,8 @@ public class RoomEditor : EditorWindow {
 		}
 		//}
 	}
-	
+
+	//Removes all unused assets in a room
 	void CleanRoom(){
 		Debug.Log("[LEVEL EDITOR] Cleaning selected Room.");
 		Transform[] childObjects =  Selection.activeTransform.GetComponentsInChildren<Transform>();
@@ -407,13 +319,10 @@ public class RoomEditor : EditorWindow {
 				}
 			}
 		}
-		//Remove unused walls
-		
-		
 	}
 	
 	
-	
+	//Creates a combined mesh of all wall and floor objects in each room (used to improve game performance)
 	void CreateRoomMesh(){
 		Debug.Log(Application.loadedLevelName);
 		AssetDatabase.CreateFolder("Assets/Meshes/Rooms", Application.loadedLevelName);
@@ -470,11 +379,11 @@ public class RoomEditor : EditorWindow {
 		}
 		UpdateNavmesh();
 	}
-	
+
+	//Saves the combined mesh into the assets folder
 	void SaveMeshToAssets(string name){
 		//Create Mesh Folder
 
-		
 		//Save Mesh
 		Mesh newMesh = Selection.activeGameObject.GetComponent<MeshFilter>().sharedMesh;
 		//AssetDatabase.CreateFolder("Assets/Meshes/Rooms", Application.loadedLevelName);
@@ -484,7 +393,7 @@ public class RoomEditor : EditorWindow {
 		AssetDatabase.SaveAssets();
 	}
 
-
+	//Automatically refreshed the level navmesh
 	void UpdateNavmesh(){
 		foreach(Transform room in GameObject.Find("Level").transform.Find("Rooms")){
 			Debug.Log("Updating NavMesh for " +room);
@@ -606,7 +515,7 @@ public class RoomEditor : EditorWindow {
 	}
 	
 	
-	
+	//Menu for creating, replacing and positioning wall pillar objects (and by extension wall sections)
 	void EditWallPillarMenu(){
 		GUI.Label (new Rect(0, 0, 300, 20), "Replace Pillar Component", EditorStyles.whiteBoldLabel);
 		if (GUI.Button(new Rect(0, 20, 300, 30), "Next Pillar Object")){
@@ -659,7 +568,8 @@ public class RoomEditor : EditorWindow {
 		}
 		
 	}
-	
+
+	//Used to cycle through mutliple pillar objects to replace the selected pillar
 	void TogglePillarObject(){
 		//Debug.Log("[LEVEL EDITOR] Replacing wall section with Wall.");
 		foreach(Transform wallPillar in Selection.transforms){
@@ -679,7 +589,8 @@ public class RoomEditor : EditorWindow {
 			}
 		}
 	}
-	
+
+	//Used to cycle through mutliplewall section objects to replace the selected wall
 	void EditWallSectionMenu(){
 		GUI.Label (new Rect(0, 0, 300, 20), "Replace Wall Section", EditorStyles.whiteBoldLabel);
 		if (GUI.Button(new Rect(0,  20, 100, 50), "Wall")){

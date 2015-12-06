@@ -31,6 +31,7 @@ public class GuardAI : MonoBehaviour {
 		alertSystem 	= 		GameObject.Find ("Alert System").GetComponent<AlertManager>();
 		pHealth 		= 		GameObject.Find ("Health Manager").GetComponent<HealthManager> ();
 
+		// Set default state: patrol or sentry (stationary)
 		if (patrolling) 
 		{
 			behaviour.guardState = GuardBehaviour.GuardState.Patrol;
@@ -43,7 +44,7 @@ public class GuardAI : MonoBehaviour {
 
 	void Update () 
 	{
-
+		// if the guard sees the player, trigger the alert and aggro the guard
 		if(sensing.playerDetected)
 		{
 			alerted = true;
@@ -54,11 +55,13 @@ public class GuardAI : MonoBehaviour {
 			sensing.playerHeard = false;
 		}
 
+		// if the guard is not alerted and hears the player, set curious state
 		if (sensing.playerHeard && !alerted) {
 			curious = true;
 			sensing.playerHeard = false;
 		}
 
+		// if the alert system is active, go into alert patrol
 		if (alertSystem.alertActive) {
 			alerted = true;
 			curious = false;
@@ -70,7 +73,7 @@ public class GuardAI : MonoBehaviour {
 
 		/// State machine
 		if (alerted) {
-			if (sensing.playerInSight) {
+			if (sensing.playerInSight && sensing.freeShot) {
 				behaviour.guardState = GuardBehaviour.GuardState.Attack;
 			} else {
 				if (aggro) {
@@ -88,10 +91,12 @@ public class GuardAI : MonoBehaviour {
 			}
 		}
 
+		// if there is not alert but the guard hears a noise, investigate the location of the noise
 		if(curious && !alerted && !aggro){
 			behaviour.guardState = GuardBehaviour.GuardState.Investigate;
 		}
 
+		// switch to idle state if the player is killed
 		if(pHealth.playerDead){
 			behaviour.guardState = GuardBehaviour.GuardState.Idle;
 		}

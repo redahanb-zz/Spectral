@@ -257,7 +257,7 @@ public class GuardBehaviour : MonoBehaviour {
 	// function for when the guards loses sight of the player, sends the guard to the target location after the player
 	{
 		lastPlayerSighting = guardSensing.lastPlayerSighting;
-		if (Vector3.Distance (transform.position, lastPlayerSighting) > 2.5f) {
+		if (Vector3.Distance (transform.position, lastPlayerSighting) > 2.0f) {
 			navMeshAgent.Resume ();
 			navMeshAgent.SetDestination (lastPlayerSighting);
 			anim.SetBool ("InSight", false);

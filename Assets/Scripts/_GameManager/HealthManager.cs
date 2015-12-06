@@ -4,31 +4,24 @@ using System.Collections;
 public class HealthManager : MonoBehaviour
 {
 
-    public int maxHealth;
-    public int playerHealth;
-    public bool playerDead = false;
+    public 		int 			maxHealth;
+    public 		int 			playerHealth;
+    public 		bool 			playerDead 		= 		false;
 
-    PlayerBodyparts bodyParts;
-    HUD_Healthbar healthUI;
+    private 	PlayerBodyparts bodyParts;
+    private 	HUD_Healthbar 	healthUI;
 
-    GameState gState;
+    private		GameState 		gState;
 
-    UpgradeHealth upgradeInfo;
+    private 	UpgradeHealth 	upgradeInfo;
 
-    // Use this for initialization
+
     void Start()
     {
-
-
-        // Pull health data from GameState object
-        // maxHealth = GameState.data.maxHealth;
-        // playerHealth = GameState.data.currentHealth;
-
+		// Set up references, unnecessary for use in the Upgrade Screen
         if (Application.loadedLevelName != "Upgrades Screen")
         {
             healthUI = GameObject.Find("HUD_Healthbar").GetComponent<HUD_Healthbar>();
-            //healthUI.buildHealthbarUI(maxHealth);
-            //healthUI.healthBarSize = maxHealth;
             bodyParts = GameObject.FindWithTag("Player").GetComponent<PlayerBodyparts>();
         }
         else
@@ -36,11 +29,9 @@ public class HealthManager : MonoBehaviour
             upgradeInfo = GameObject.Find("Health Upgrade Info").GetComponent<UpgradeHealth>();
             upgradeInfo.currentHealth = maxHealth;
         }
-
-
     }
 
-    // Update is called once per frame
+
     void Update()
     {
         if (playerHealth <= 0)
@@ -63,10 +54,10 @@ public class HealthManager : MonoBehaviour
         }
     }
 
+	// Upgrade Health function
     public void IncreaseMaxHealth()
     {
         maxHealth = maxHealth + 1;
 		playerHealth = maxHealth;
-		print ("Upgrading health: HM");
     }
 }

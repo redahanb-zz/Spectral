@@ -1,4 +1,8 @@
-﻿using UnityEngine;
+﻿/// <summary>
+/// Item info - Script to spawn a button for the player to pick up the item
+/// </summary>
+
+using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
 
@@ -12,7 +16,7 @@ public class ItemInfo : MonoBehaviour {
 	InventoryItem 	inventoryItem;
 	PauseManager  	pauseManager;
 
-	// Use this for initialization
+
 	void Start () 
 	{
 		canvasObject = GameObject.Find ("Canvas");
@@ -22,15 +26,17 @@ public class ItemInfo : MonoBehaviour {
 		pauseManager = GameObject.Find ("Pause Manager").GetComponent<PauseManager> ();
 	}
 	
-	// Update is called once per frame
+
 	void Update () 
 	{
 		if (!player) {
 			player = GameObject.FindWithTag ("Player");
 		}
 
+		// track player position, when in range, spawn a pickup button
 		if(Vector3.Distance(transform.position, player.transform.position) < 2.0f)
 		{
+			// only spawn a button if one does not already exist
 			if(!button)
 			{
 				button = Instantiate(Resources.Load("Pickup Info"), canvasObject.transform.position, Quaternion.identity) as GameObject;
@@ -46,6 +52,7 @@ public class ItemInfo : MonoBehaviour {
 
 		}
 
+		// if the player goes out of range, switch of the button
 		if (Vector3.Distance (transform.position, player.transform.position) > 10.0f)
 		{
 			if(button)
@@ -61,6 +68,7 @@ public class ItemInfo : MonoBehaviour {
 			}
 		}
 
+		// if the player is dead, switch off the button
 		if (healthManager.playerDead) {
 			if(button){
 				button.SetActive(false);

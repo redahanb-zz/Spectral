@@ -1,29 +1,36 @@
-﻿using UnityEngine;
+﻿/// <summary>
+/// Pause menu button - script for HUD pause button
+/// </summary>
+
+using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
 
 public class PauseMenuButton : MonoBehaviour {
 
-	bool paused;
-	public Vector2 targetLocation;
+	private 		bool 			paused;
+	public 			Vector2 		targetLocation;
 
-	float moveSpeed = 13;
-	RectTransform buttonTransform;
-	Vector2 startlocation;
-	Vector2 aimAtLocation;
-	PauseManager pauseManager;
+	private			float 			moveSpeed = 13;
+	private			RectTransform 	buttonTransform;
+	private			Vector2 		startlocation;
+	private			Vector2 		aimAtLocation;
+	private			PauseManager 	pauseManager;
 
-	float moveTime;
+	private			float 			moveTime;
 
-	// Use this for initialization
-	void Start () {
+
+	void Start () 
+	{
 		buttonTransform = GetComponent<RectTransform>();
 		startlocation = buttonTransform.anchoredPosition;
 		pauseManager = GameObject.Find ("Pause Manager").GetComponent<PauseManager>();
 	}
 	
-	// Update is called once per frame
-	void Update () {
+
+	void Update () 
+	{
+
 		if(pauseManager.gamePaused != paused){
 			moveTime = 0;
 			paused = pauseManager.gamePaused;
@@ -40,6 +47,5 @@ public class PauseMenuButton : MonoBehaviour {
 		}
 
 		buttonTransform.anchoredPosition = Vector2.Lerp (buttonTransform.anchoredPosition, aimAtLocation, moveSpeed*Time.deltaTime);
-		//moveTime += Time.deltaTime;
-	}
+	} // Update
 }

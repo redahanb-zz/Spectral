@@ -83,7 +83,6 @@ public class ScreenFade : MonoBehaviour {
 	
 	//Move the fader to the bottom of the hierarchy so no other UI elements appear in front of it.
 	public void ResetParent(){
-		print ("Restting fader in hierarchy!");
 		transform.SetParent (null);
 		pausePanel.GetComponent<RectTransform>().SetParent (null);
 		pausePanel.GetComponent<RectTransform>().SetParent (canvas.transform);

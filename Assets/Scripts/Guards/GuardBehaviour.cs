@@ -2,7 +2,7 @@
 /// 2015
 /// Ben Redahan, redahanb@gmail.com
 /// Project: Spectral - The Silicon Domain (Unity)
-/// Guard behaviour: actions and abilities, handles animations
+/// Guard behaviour: actions and abilities, handles animations & IK
 /// </summary>
 
 using UnityEngine;
@@ -35,13 +35,13 @@ public class GuardBehaviour : MonoBehaviour {
 
 	public enum GuardState 
 	{
-		Idle,
-		Sentry,
-		Patrol,
-		AlertPatrol,
-		Attack,
-		Search,
-		Investigate
+		Idle,						// when player is dead
+		Sentry,						// guard a single point
+		Patrol,						// patrol a set of three points, pausing at each
+		AlertPatrol,				// patrol a set of 3 different point, covering more area, moving faster 
+		Attack,						// when player is in sight and not hidden
+		Search,						// look for player when alerted but player is not in sight
+		Investigate					// search the origin of a noise made by the player
 	}
 	public 		GuardState 			guardState;
 
@@ -60,16 +60,16 @@ public class GuardBehaviour : MonoBehaviour {
 
 	void Start () 
 	{
-		player = GameObject.FindWithTag ("Player");
-		navMeshAgent = GetComponent<NavMeshAgent> ();
-		guardSensing = GetComponent<GuardSensing> ();
-		guardAI = GetComponent<GuardAI> ();
-		guardShooting = GetComponent<Shooting> ();
-		anim = GetComponent<Animator> ();
-		pHealth = GameObject.Find("Health Manager").GetComponent<HealthManager> ();
-		guardBodyParts = GetComponent<GuardSelfDestruct> ();
-		visionCone = transform.Find ("VisionCone").gameObject;
-		hearingRing = transform.Find ("HearingRing").gameObject;
+		player 			= 		GameObject.FindWithTag ("Player");
+		navMeshAgent 	= 		GetComponent<NavMeshAgent> ();
+		guardSensing 	= 		GetComponent<GuardSensing> ();
+		guardAI 		= 		GetComponent<GuardAI> ();
+		guardShooting 	= 		GetComponent<Shooting> ();
+		anim 			= 		GetComponent<Animator> ();
+		pHealth 		= 		GameObject.Find("Health Manager").GetComponent<HealthManager> ();
+		guardBodyParts 	= 		GetComponent<GuardSelfDestruct> ();
+		visionCone 		= 		transform.Find ("VisionCone").gameObject;
+		hearingRing 	= 		transform.Find ("HearingRing").gameObject;
 
 		// compile patrol and alert routes
 		patrolRoute = new Vector3[4]
@@ -146,16 +146,19 @@ public class GuardBehaviour : MonoBehaviour {
 	// function to deactivate the guard, for example when the player is dead
 	{
 		if (Vector3.Distance (transform.position, sentryPoint.transform.position) > 0.5f) {
+			// if the guard is away from its sentry point, walk there
 			navMeshAgent.Resume();
 			navMeshAgent.SetDestination (sentryPoint.transform.position);
 			anim.SetFloat("Speed", 1.0f);
 		} 
 		else 
 		{
+			// if the guard is at the sentry point, stop moving
 			navMeshAgent.Stop ();
 			anim.SetFloat("Speed", 0.0f);
 			guardSensing.enabled = false;
 		}
+		// set colour to blur to indicate idle mode
 		updateColour (Color.blue);
 	} // end Idle
 
@@ -164,13 +167,16 @@ public class GuardBehaviour : MonoBehaviour {
 	// function to set the guard stationary at a specific point, watching for the player
 	{
 		if (Vector3.Distance (transform.position, sentryPoint.transform.position) > 0.5f) {
+			// if the guard is away from its sentry position, return to the sentry position
 			navMeshAgent.Resume();
 			navMeshAgent.SetDestination (sentryPoint.transform.position);
 			anim.SetFloat("Speed", 1.0f);
 		} else {
+			// stop moving when at the sentry point
 			navMeshAgent.Stop ();
 			anim.SetFloat("Speed", 0.0f);
 		}
+		// set colour to grey to indicate neutral patrol
 		updateColour (Color.gray);
 	} // end Sentry
 
@@ -181,10 +187,13 @@ public class GuardBehaviour : MonoBehaviour {
 		navMeshAgent.Resume();
 
 		if (Vector3.Distance (transform.position, patrolRoute [patrolIndex]) >= 0.5f) {
+			// if guard is not at next waypoint, set destination to the waypoint
 			navMeshAgent.SetDestination (patrolRoute [patrolIndex]);
+			// set animation to walking speed
 			anim.SetFloat ("Speed", 1.0f);
 		}
 		else {
+			// stop at waypoint for the specified time, then set the next patrol point
 			if(waitCount <= waitTime){
 				anim.SetFloat("Speed", 0.0f);
 				waitCount += Time.deltaTime;
@@ -193,7 +202,8 @@ public class GuardBehaviour : MonoBehaviour {
 				nextPatrolPoint();
 				waitCount = 0.0f;
 			}
-		} 
+		}
+		// set colour to grey to indicate neutral patrol
 		updateColour (Color.gray);
 	} // end Patrol
 
@@ -208,6 +218,7 @@ public class GuardBehaviour : MonoBehaviour {
 		} else {
 			patrolIndex++;
 		}
+		// set destination to next patrol point, at walking speed animation
 		navMeshAgent.SetDestination (patrolRoute [patrolIndex]);
 		anim.SetFloat("Speed", 1.0f);
 
@@ -217,22 +228,26 @@ public class GuardBehaviour : MonoBehaviour {
 	void AlertPatrol()
 	// secondary patrol routine for the guard, patrols at a faster pace to a different array of waypoints
 	{
+		// lower weapon, start moving
 		anim.SetBool ("InSight", false);
 		navMeshAgent.Resume();
 		
 		if (Vector3.Distance (transform.position, alertRoute [alertIndex]) >= 0.5f) {
+			// if out of range or waypoint, set destination there at 150% walk speed
 			navMeshAgent.SetDestination(alertRoute[alertIndex]);
 			anim.SetFloat("Speed", 1.5f);
 		} else {
+			// if in range of waypoint, stop moving and start a timer
 			if(waitCount <= waitTime){
 				anim.SetFloat("Speed", 0.0f);
 				waitCount += Time.deltaTime;
-				
 			} else{
+				// when timer expires, move on
 				nextAlertPoint();
 				waitCount = 0.0f;
 			}
 		}
+		// set colour to red to indicate alert patrol
 		updateColour (Color.red);
 	} // end AlertPatrol
 
@@ -247,6 +262,7 @@ public class GuardBehaviour : MonoBehaviour {
 		} else {
 			alertIndex++;
 		}
+		// set destination to next alert point, at fast walking speed animation
 		navMeshAgent.SetDestination (alertRoute [alertIndex]);
 		anim.SetFloat("Speed", 1.5f);
 		
@@ -256,22 +272,27 @@ public class GuardBehaviour : MonoBehaviour {
 	void Search()
 	// function for when the guards loses sight of the player, sends the guard to the target location after the player
 	{
+		// set search location
 		lastPlayerSighting = guardSensing.lastPlayerSighting;
 		if (Vector3.Distance (transform.position, lastPlayerSighting) > 2.0f) {
+			// if out of range of search location, run towards location
 			navMeshAgent.Resume ();
 			navMeshAgent.SetDestination (lastPlayerSighting);
 			anim.SetBool ("InSight", false);
 			anim.SetFloat ("Speed", 2.0f);
 		} else {
+			// if at the location of the search point, stop and start a timer 
 			anim.SetFloat("Speed", 0.0f);
 			if(waitCount == 0.0f){
 				waitCount = Time.time;
 			}
 			if(Time.time - waitCount >= 3.0f){
+				// if time reaches +3 seconds, de-aggro guard, reset timer
 				guardAI.aggro = false;
 				waitCount = 0.0f;
 			}
 		}
+		// update colour to red to indicate hostility
 		updateColour (Color.red);
 	} // end Search
 
@@ -317,15 +338,17 @@ public class GuardBehaviour : MonoBehaviour {
 		// turn the guard to face the player
 		lookRotation = Quaternion.LookRotation(player.transform.position - transform.position);
 		transform.rotation = Quaternion.RotateTowards (transform.rotation, lookRotation, navMeshAgent.angularSpeed * Time.deltaTime);
-		// play the 'weapon up animation
+		// play the 'weapon up' animation
 		anim.SetBool("InSight", true);
 
 		if (Vector3.Distance (transform.position, player.transform.position) > 5.0f) {
+			// if player is out of range, lower weapon and run closer
 			navMeshAgent.Resume();
 			navMeshAgent.SetDestination(player.transform.position);
 			anim.SetBool("InSight", false);
 			anim.SetFloat("Speed", 2.0f);
 		} else {
+			// if in range, stop running and fire at player
 			navMeshAgent.Stop();
 			anim.SetFloat("Speed", 0.0f);
 			walking = false;
@@ -335,16 +358,20 @@ public class GuardBehaviour : MonoBehaviour {
 				anim.SetBool("InSight", false);
 			}
 		}
+		// update colour to red to indicate hostile status
 		updateColour (Color.red);
 	} // end Attack
 
 
+	// function to change the guard body parts and sense visualisation to indicate its alert status
 	void updateColour(Color targetColor){
+		// set target colour, set target colour alpha
 		transpColor = targetColor;
 		transpColor.a = visionCone.GetComponent<Renderer> ().material.color.a;
+		// update senses visualisation colour
 		visionCone.GetComponent<Renderer>().material.color = Color.Lerp(visionCone.GetComponent<Renderer>().material.color,transpColor, Time.deltaTime * 5.0f);
 		hearingRing.GetComponent<Renderer>().material.color = Color.Lerp(hearingRing.GetComponent<Renderer>().material.color,transpColor, Time.deltaTime * 5.0f);
-
+		// loop through all coloured bodyparts and update their colour
 		foreach(GameObject bodypart in guardBodyParts.colorParts){
 			bodypart.GetComponent<Renderer>().materials[0].color = Color.Lerp(bodypart.GetComponent<Renderer>().materials[0].color,targetColor, Time.deltaTime * 5.0f);
 			if(bodypart.GetComponent<Renderer>().materials.Length > 1){

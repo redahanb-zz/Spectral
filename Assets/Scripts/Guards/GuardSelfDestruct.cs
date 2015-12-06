@@ -1,24 +1,31 @@
-﻿using UnityEngine;
+﻿/// <summary>
+/// Guard self destruct - script for the destruction of a guard that can alert other guards (unused in final build, apart from colour parts)
+/// </summary>
+
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
 public class GuardSelfDestruct : MonoBehaviour {
 
-	public GameObject[] bodyparts = new GameObject[29];
-	public GameObject[] colorParts = new GameObject[8];
-	//List<GameObject> bodyparts = new List<GameObject>();
+	// two arrays of guard body parts, one complete, the other a smaller array of coloured body parts
+	public 		GameObject[] 	bodyparts 	= 	new		GameObject[29];
+	public 		GameObject[] 	colorParts 	= 	new 	GameObject[8];
 
-	// Use this for initialization
-	void Start () {
-		//Invoke ("selfDestruct", 0.2f);
-	}
-	
-	// Update is called once per frame
-	void Update () {
+	void Start () 
+	{
 
 	}
 
-	public void selfDestruct(){
+	void Update () 
+	{
+
+	}
+
+	// death function for guard, get all body parts and send them flying around, destroy the guard
+	public void selfDestruct()
+	{
+		// get all bodypart, unparent them, add rigidbody and impulse force, set them to destroy themselves after a random delay
 		foreach(GameObject part in bodyparts){
 			part.transform.parent = null;
 			part.AddComponent<Rigidbody>();
@@ -28,6 +35,7 @@ public class GuardSelfDestruct : MonoBehaviour {
 			Destroy (part, Random.Range(0.5f,1.5f));
 		}
 
+		// locate all other guards, if they are within 10m, call them to investigate the location
 		GameObject[] otherGuards = GameObject.FindGameObjectsWithTag ("Guard"); 
 		foreach (GameObject guard in otherGuards) {
 			if(Vector3.Distance(transform.position, guard.transform.position) < 10.0f){
@@ -35,6 +43,7 @@ public class GuardSelfDestruct : MonoBehaviour {
 			}
 		}
 
+		// destroy the guard and the parent object (containing waypoints)
 		Destroy (this.gameObject);
 		Destroy (this.transform.parent.gameObject);
 	}

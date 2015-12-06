@@ -1,4 +1,8 @@
-﻿using UnityEngine;
+﻿/// <summary>
+/// Blend info - script for a blend wall to spawn a blend button when the player is in range
+/// </summary>
+
+using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
 
@@ -15,40 +19,42 @@ public class BlendInfo : MonoBehaviour {
 	Color 				playerColor;
 	Color 				wallColor;
 	
-	//InventoryItem inventoryItem;
-	
-	// Use this for initialization
+
 	void Start () {
-		player = GameObject.FindWithTag ("Player");
-		pController = player.GetComponent<PlayerController> ();
-		canvasObject = GameObject.Find ("Canvas");
-		rend = GetComponent<Renderer> ();
-		pHealth = GameObject.Find ("Health Manager").GetComponent<HealthManager> ();
-		pManager = GameObject.Find ("Pause Manager").GetComponent<PauseManager> ();
+		player 			= 		GameObject.FindWithTag ("Player");
+		pController 	= 		player.GetComponent<PlayerController> ();
+		canvasObject 	= 		GameObject.Find ("Canvas");
+		rend 			= 		GetComponent<Renderer> ();
+		pHealth 		= 		GameObject.Find ("Health Manager").GetComponent<HealthManager> ();
+		pManager 		= 		GameObject.Find ("Pause Manager").GetComponent<PauseManager> ();
 	}
 	
-	// Update is called once per frame
+
 	void Update () {
-		//print ("Wall: " + rend.material.color);
+		// calculate the difference in colour between the player and the wall itself
 		wallColor = rend.material.color;
-		//print ("Player: " + pController.targetcolor);
 		playerColor = pController.targetcolor;
 		float colorDistance = Vector3.Distance( new Vector3(wallColor.r, wallColor.b, wallColor.g), new Vector3(playerColor.r,playerColor.b,playerColor.g));
 
+		// if the player is in range of the wall
 		if(Vector3.Distance(transform.position, player.transform.position) < 3.0f)
 		{
+			// if the colour distance is close enough
 			if(colorDistance < 0.1f)
 			{
-			// check angle to player to stop the button appearing through walls
+				// check angle to player to stop the button appearing through walls
 				Vector3 direction = player.transform.position - transform.position;
 				float angle = Vector3.Angle(direction, -transform.forward); 
 				if(angle <= 90.0f){
+					// if there is no button yet, create one
 					if(!button && !pHealth.playerDead){
 						button = Instantiate(Resources.Load("UI/Worldspace Buttons/Blend Info"), canvasObject.transform.position, Quaternion.identity) as GameObject;
 						button.transform.SetParent(canvasObject.transform);
 						button.GetComponent<BlendInfoButton>().setTarget(gameObject);
 						button.GetComponent<Button>().onClick.AddListener( GetComponent<BlendInfo>().callPlayertoBlend );
-					} else if(!pHealth.playerDead && pController.isVisible && !pManager.gamePaused) 
+					} 
+					// otherwise, set it visible and interactable
+					else if(!pHealth.playerDead && pController.isVisible && !pManager.gamePaused) 
 					{
 						button.SetActive(true);
 						if(button.GetComponent<Button>().interactable == false){
@@ -59,6 +65,8 @@ public class BlendInfo : MonoBehaviour {
 			} // end check colour distance
 		} // end check player in range
 
+
+		// if the player is in range and the player is the correct colour, show the button, otherwise hide it
 		if (Vector3.Distance (transform.position, player.transform.position) > 10.0f || colorDistance > 0.1f) {
 			if(button){
 				button.SetActive(false);
@@ -69,12 +77,16 @@ public class BlendInfo : MonoBehaviour {
 			}
 		}
 
-	}
-		
+	} // end Update
+
+
+	// function to tell the player to blend with this wall
 	void callPlayertoBlend(){
 		player.GetComponent<PlayerController> ().blendButton (this.gameObject, this.transform, transform.position);
 	}
-	
+
+
+	// hide the button when the player leaves the trigger (legacy from older implementation)
 	void OnTriggerExit(Collider col){
 		if (col.tag == "Player") {
 			button.GetComponent<Button>().interactable = false;

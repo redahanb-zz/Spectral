@@ -14,37 +14,33 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 public class GameState : MonoBehaviour {
 
-	public static GameState 	gameState;
+	public	static 		GameState 			gameState;
 
-	private HealthManager 		pHealth;
-	private HUD_Healthbar		healthHUD;
-	private PlayerInventory		pInventory;
-	private InventoryItem 		invItem;
-	private HUD_Inventory 		invHUD;
-	private TimeScaler 			pTime;
-	private Color 				tempColor;
+	private 			HealthManager 		pHealth;
+	private 			HUD_Healthbar		healthHUD;
+	private 			PlayerInventory		pInventory;
+	private 			InventoryItem 		invItem;
+	private 			HUD_Inventory 		invHUD;
+	private 			TimeScaler 			pTime;
+	private 			Color 				tempColor;
 	
 	// Singleton design pattern - there can only be one GameState Object: the one from the first scene loaded
 	void Awake () 
 	{
-		//print ("GameState awake!");
 		if (gameState == null) {
 			// If this is the first scene loaded, set this as the GameState object
 			DontDestroyOnLoad (gameObject);
 			gameState = this;
 		} else {
-			// If a GameState object already exists, destroy this object
+			// If a GameState object already exists, destroy this object, leaving the pre-existing GameState in the scene
 			if(gameState != gameObject){
 				Destroy(gameObject);
 			}
 		}
-
-//		LoadGame ();
 	}
 	
 	void Start()
 	{
-		//print ("GameState start!");
 		// Cache references to scripts that utilise GameState variables
 		pHealth = GameObject.Find ("Health Manager").GetComponent<HealthManager> ();
 		healthHUD = GameObject.Find ("HUD_Healthbar").GetComponent<HUD_Healthbar> ();
@@ -52,11 +48,7 @@ public class GameState : MonoBehaviour {
 		invHUD = GameObject.Find ("HUD_Inventory").GetComponent<HUD_Inventory> ();
 		pTime = GameObject.Find("Time Manager").GetComponent<TimeScaler>();
 
-		//if(Application.loadedLevelName != "Upgrades Screen"){
-//			invHUD = GameObject.Find ("HUD_Inventory").GetComponent<HUD_Inventory> ();
-//			pTime = GameObject.Find("Time Manager").GetComponent<TimeScaler>();
-		//}
-
+		// Load game at the start of every scene
 		LoadGame ();
 	}
 
@@ -67,7 +59,7 @@ public class GameState : MonoBehaviour {
 
 	public void SaveGame()
 	{
-		// Create a save file and empty savedata object
+		// Create a biary formatter, save file and empty savedata object
 		BinaryFormatter bf = new BinaryFormatter ();
 		FileStream file = File.Create (Application.persistentDataPath + "/playerInfo.dat");
 		SaveData data = new SaveData ();
@@ -78,6 +70,7 @@ public class GameState : MonoBehaviour {
 
 		data.inventorySize = pInventory.inventorySize;
 
+		// Inventory contents have to be stored as primitive values: can't use binary formatter on GameObjects or prefabs
 		data.itemNames = new string[pInventory.inventorySize];
 		data.itemValues = new string[pInventory.inventorySize];
 		data.itemColours = new float[pInventory.inventorySize][];
@@ -99,7 +92,7 @@ public class GameState : MonoBehaviour {
 		data.maxStoredTime = pTime.GetMaxStoredTime ();
 		data.noiseDampening = pTime.GetNoiseDampening ();
 
-		// Commit the savedata into the savefile
+		// Serialize and commit the savedata into the savefile
 		bf.Serialize (file, data);
 		file.Close ();
 		print ("Saving Game...");
@@ -140,29 +133,40 @@ public class GameState : MonoBehaviour {
 					tempColor.a = 1.0f;
 					invItem.itemColor = tempColor;
 
-					// Hide and disable, and add to player inventory
+					// Hide and disable the item, and add to player inventory
 					pInventory.playerInventory[x] = tempItem;
-					//pInventory.addItem(tempItem);
-					//tempItem.SetActive(false);
-					//invHUD.updateIcon(x);
 					}
 			}
+
+			// Build inventory HUD and update the icons
 			invHUD.buildInventoryUI (pInventory.inventorySize);
 			invHUD.UpdateAllIcons();
+
+			// Build the health HUD, set health to full
 			healthHUD.buildHealthbarUI(pHealth.maxHealth);
 			healthHUD.healthBarSize = pHealth.maxHealth;
+
+			// Set time upgrade data
 			pTime.SetMaxStoredTime(data.maxStoredTime);
 			pTime.SetNoiseDampening(data.noiseDampening);
 		} 
 		else {
+			// If no save file, use the default settings
 			print ("No save file found... Initialising default player stats.");
+			// Default health
 			pHealth.maxHealth = 3;
 			pHealth.playerHealth = 3;
+
+			// Default inventory
 			pInventory.inventorySize = 4;
 			pInventory.playerInventory = new GameObject[4];
+
+			// Build default HUD
 			invHUD.buildInventoryUI (4);
 			healthHUD.buildHealthbarUI(3);
 			healthHUD.healthBarSize = 3;
+
+			// Default time upgrades
 			pTime.SetMaxStoredTime(5.0f);
 			pTime.SetNoiseDampening(false);
 		}
@@ -170,18 +174,29 @@ public class GameState : MonoBehaviour {
 
 	public void ResetGame()
 	{
+		// Function for use in the Restore Point, clear all data in the save file, restart the game
 		print ("Clearing saved data...");
+
+		// Default health
 		pHealth.maxHealth = 3;
 		pHealth.playerHealth = 3;
+
+		// Default inventory
 		pInventory.inventorySize = 4;
 		pInventory.playerInventory = new GameObject[4];
+
+		// Default time upgrades
 		pTime.SetMaxStoredTime(5.0f);
 		pTime.SetNoiseDampening(false);
+
+		// Save data to the save file
 		SaveGame ();
+
+		// Restart the game from scene 0 (splash screen)
 		Application.LoadLevel (0);
 	}
 
-	
+	/// SAVE FILE DATA MODEL ///
 	[Serializable]
 	private class SaveData
 	// Private class to serve as a container for all relevant data to be saved

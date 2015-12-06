@@ -1,34 +1,41 @@
-﻿using UnityEngine;
+﻿/// <summary>
+/// Soundproof space - script for soundproof room to block guard hearing
+/// </summary>
+
+using UnityEngine;
 using System.Collections;
 
 public class SoundproofSpace : MonoBehaviour {
 
-
-
-	// Use this for initialization
-	void Start () {
+	void Start () 
+	{
 		GetComponent<MeshRenderer> ().enabled = false;
 	}
-	
-	// Update is called once per frame
-	void Update () {
+
+	void Update () 
+	{
 	
 	}
 
-	void OnTriggerEnter(Collider coll){
+	// block guard hearing when they enter the trigger
+	void OnTriggerEnter(Collider coll)
+	{
 		if (coll.tag == "Guard") {
 			coll.transform.GetComponent<GuardSensing>().soundProofed = true;
 		}
 	}
 
-	void OnTriggerStay(Collider coll){
+	// block guard heearing while they are inside the trigger
+	void OnTriggerStay(Collider coll)
+	{
 		if (coll.tag == "Guard") {
-			//print (coll.name);
 			coll.transform.GetComponent<GuardSensing>().soundProofed = true;
 		}
 	}
 
-	void OnTriggerExit(Collider coll){
+	// reactivate guard hearing as they leave the trigger
+	void OnTriggerExit(Collider coll)
+	{
 		if (coll.tag == "Guard") {
 			coll.transform.GetComponent<GuardSensing>().soundProofed = false;
 		}

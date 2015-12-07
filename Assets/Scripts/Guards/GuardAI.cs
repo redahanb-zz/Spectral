@@ -73,7 +73,7 @@ public class GuardAI : MonoBehaviour {
 
 		/// State machine
 		if (alerted) {
-			if (sensing.playerInSight && sensing.freeShot) {
+			if (sensing.playerInSight) {
 				behaviour.guardState = GuardBehaviour.GuardState.Attack;
 			} else {
 				if (aggro) {

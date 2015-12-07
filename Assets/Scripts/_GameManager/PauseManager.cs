@@ -25,6 +25,7 @@ public class PauseManager : MonoBehaviour {
 	private		HUD_Healthbar	healthHUD;
 	private		GameObject 		timeButton;
 	private		GameObject		pauseButton;
+	private 	GameObject 		mapButton;
 	private		GameObject 		alertCountdown;
 	private		GameState 		gameState;
 	
@@ -45,11 +46,19 @@ public class PauseManager : MonoBehaviour {
 		healthHUD = GameObject.Find("HUD_Healthbar").GetComponent<HUD_Healthbar>();
 		timeButton = GameObject.Find("Time Button");
 		pauseButton = GameObject.Find ("PauseButton");
+		mapButton = GameObject.Find ("Map Button");
 		alertCountdown = GameObject.Find ("AlertCountdownIcon");
 	}
 	
 	// Update is called once per frame
 	void Update () {
+		// keyboard control for pausing the game
+		if (Input.GetKeyDown (KeyCode.Escape)) 
+		{
+			TogglePause();
+			pauseScreen.SetActive(!pauseScreen.activeInHierarchy);
+		}
+
 		// when game is paused, blur camera and stop time, and vice versa
 		if (gamePaused) {
 			blurFX.enabled = true;
@@ -79,12 +88,18 @@ public class PauseManager : MonoBehaviour {
 				timeButton.GetComponent<HideHUDElement>().toggleHide();
 				pauseButton.GetComponent<HideHUDElement>().toggleHide();
 				alertCountdown.GetComponent<HideHUDElement>().toggleHide();
+				mapButton.GetComponent<HideHUDElement>().toggleHide();
 				gameOver = true;
 			}
 			// Show death screen menu after a delay
 			Invoke ("DelayDeathScreen", 2.5f);
 		}
 	} // end Update
+
+	void TogglePause()
+	{
+		gamePaused = !gamePaused;
+	}
 
 	// set the game as 'Paused', activate pause menu
 	public void PauseGame()

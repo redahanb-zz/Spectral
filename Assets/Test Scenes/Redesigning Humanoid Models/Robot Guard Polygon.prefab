@@ -2015,7 +2015,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &193228
 GameObject:
   m_ObjectHideFlags: 1
@@ -3943,7 +3943,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 115936}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 9.5326395, y: .227500021, z: -4.61615562}
+  m_LocalPosition: {x: .500301719, y: .226265371, z: .501953244}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 473136}
@@ -6864,9 +6864,9 @@ MonoBehaviour:
   playerDetected: 0
   playerHeard: 0
   soundProofed: 0
+  freeShot: 0
   guardAlertRoar: {fileID: 8300000, guid: e5b865a8646c541f2baac4da95468dae, type: 3}
   footsteps: []
-  marker: {fileID: 0}
 --- !u!135 &13510920
 SphereCollider:
   m_ObjectHideFlags: 1

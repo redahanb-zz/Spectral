@@ -40,8 +40,11 @@ public class CameraController : MonoBehaviour {
 	HUD_Inventory 		invHUD;					//instance of inventory
 	HUD_Healthbar		healthHUD;				//instance of healthbar
 	HideHUDElement		hidePause, hideTime;	//instances of hide hud element
+	HideHUDElement		hideMap;	//instances of hide hud element
 
 	TitleScreen tScreen;
+	private PauseManager pManager;
+	private HealthManager hManager;
 
 
 	// Use this for initialization
@@ -55,6 +58,10 @@ public class CameraController : MonoBehaviour {
 		healthHUD = GameObject.Find("HUD_Healthbar").GetComponent<HUD_Healthbar>();
 		hidePause = GameObject.Find("PauseButton").GetComponent<HideHUDElement>();
 		hideTime = GameObject.Find("Time Button").GetComponent<HideHUDElement>();
+		hideMap = GameObject.Find ("Map Button").GetComponent<HideHUDElement> ();
+
+		pManager = GameObject.Find ("Pause Manager").GetComponent<PauseManager> ();
+		hManager = GameObject.Find ("Health Manager").GetComponent<HealthManager> ();
 
 		if(Application.loadedLevelName == "Restore Point"){
 			tScreen = GameObject.Find("Title Screen Canvas").GetComponent<TitleScreen>();
@@ -91,6 +98,10 @@ public class CameraController : MonoBehaviour {
 	public void MapView(){
 		transform.position = Vector3.Lerp(transform.position, zoomedOutPos, myTime * moveSpeed);
 		transform.rotation = Quaternion.Lerp(transform.rotation, zoomedOutRot, myTime * rotateSpeed);
+		invHUD.hide();
+		healthHUD.hide();
+		hidePause.hide();
+		hideTime.hide();
 	}
 
 	// Update is called once per frame
@@ -136,31 +147,15 @@ public class CameraController : MonoBehaviour {
 				}
 			}
 			else if(Input.GetKeyUp(KeyCode.C)){
-				if(Application.loadedLevelName == "Restore Point"){
-					if(tScreen.showTitleScreen){
-						mapButtonDown = false;
-						invHUD.hide();
-						healthHUD.hide ();
-						hidePause.hide();
-						hideTime.hide();
-					}
-					else{
-						mapButtonDown = false;
-						invHUD.show();
-						healthHUD.show ();
-						hidePause.show();
-						hideTime.show();
-					}
-				}
-				else{
 					if(invHUD){
-						mapButtonDown = false;
-						invHUD.show();
-						healthHUD.show ();
-						hidePause.show();
-						hideTime.show();
+						if(!hManager.playerDead && !pManager.gamePaused){
+							mapButtonDown = false;
+							invHUD.show();
+							healthHUD.show ();
+							hidePause.show();
+							hideTime.show();
+						}
 					}
-				}
 			}
 
 			if(mapButtonDown){
@@ -170,6 +165,13 @@ public class CameraController : MonoBehaviour {
 			}
 
 			else{
+				if(!hManager.playerDead && !pManager.gamePaused){
+					invHUD.show();
+					healthHUD.show ();
+					hidePause.show();
+					hideTime.show();
+				}
+
 				if(targetCamera){
 					
 					distance = Vector3.Distance(transform.position, targetCamera.position);

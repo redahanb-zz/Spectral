@@ -69,7 +69,6 @@ public class GuardBehaviour : MonoBehaviour {
 		pHealth 		= 		GameObject.Find("Health Manager").GetComponent<HealthManager> ();
 		guardBodyParts 	= 		GetComponent<GuardSelfDestruct> ();
 		visionCone 		= 		transform.Find ("VisionCone").gameObject;
-		hearingRing 	= 		transform.Find ("HearingRing").gameObject;
 
 		// compile patrol and alert routes
 		patrolRoute = new Vector3[4]
@@ -286,7 +285,7 @@ public class GuardBehaviour : MonoBehaviour {
 			if(waitCount == 0.0f){
 				waitCount = Time.time;
 			}
-			if(Time.time - waitCount >= 3.0f){
+			if(Time.time - waitCount >= 2.5f){
 				// if time reaches +3 seconds, de-aggro guard, reset timer
 				guardAI.aggro = false;
 				waitCount = 0.0f;
@@ -306,8 +305,8 @@ public class GuardBehaviour : MonoBehaviour {
 			listenCount = Time.time;
 			anim.SetFloat("Speed", 0.0f);
 		}
-		// once a 1 second pause has elapsed, start the guard investigating the noise
-		if(Time.time - listenCount >= 1.0f){
+		// once a 2 second pause has elapsed, start the guard investigating the noise
+		if(Time.time - listenCount >= 2.0f){
 			if (Vector3.Distance (transform.position, lastPlayerSighting) > 1.0f) {
 				// if guard is more than 1m from source of noise, head towards the noise
 				navMeshAgent.Resume ();
@@ -328,6 +327,7 @@ public class GuardBehaviour : MonoBehaviour {
 				}
 			}
 		}
+		// change colour to yellow to indicate suspicion
 		updateColour (Color.yellow);
 	} // end Investigate
 
@@ -370,7 +370,6 @@ public class GuardBehaviour : MonoBehaviour {
 		transpColor.a = visionCone.GetComponent<Renderer> ().material.color.a;
 		// update senses visualisation colour
 		visionCone.GetComponent<Renderer>().material.color = Color.Lerp(visionCone.GetComponent<Renderer>().material.color,transpColor, Time.deltaTime * 5.0f);
-		hearingRing.GetComponent<Renderer>().material.color = Color.Lerp(hearingRing.GetComponent<Renderer>().material.color,transpColor, Time.deltaTime * 5.0f);
 		// loop through all coloured bodyparts and update their colour
 		foreach(GameObject bodypart in guardBodyParts.colorParts){
 			bodypart.GetComponent<Renderer>().materials[0].color = Color.Lerp(bodypart.GetComponent<Renderer>().materials[0].color,targetColor, Time.deltaTime * 5.0f);

@@ -1,4 +1,8 @@
-﻿using UnityEngine;
+﻿/// <summary>
+/// Footfall - script to decribe the behaviour of a footfall, the visualisation of a noisy footstep
+/// </summary>
+
+using UnityEngine;
 using System.Collections;
 
 public class Footfall : MonoBehaviour {

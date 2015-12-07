@@ -2,23 +2,25 @@
 using System.Collections;
 
 public class PlayerBodyparts : MonoBehaviour {
-
+	
 	public GameObject[] bodyparts = new GameObject[38];
 	Animator anim;
 	Vector3 impulse;
 	Vector3 worldPos;
-
+	PlayerController pController;
+	
 	// Use this for initialization
 	void Start () {
 		anim = GetComponent<Animator> ();
+		pController = GameObject.FindGameObjectWithTag ("Player").GetComponent<PlayerController> ();
 		//Invoke ("selfDestruct", 0.55f);
 	}
 	
 	// Update is called once per frame
 	void Update () {
-	
+		
 	}
-
+	
 	public void selfDestruct(){
 		anim.enabled = false;
 		foreach(GameObject part in bodyparts){
@@ -32,11 +34,12 @@ public class PlayerBodyparts : MonoBehaviour {
 			//part.GetComponent<Rigidbody>().useGravity = false;
 			//Destroy (part, Random.Range(1.0f,2.0f));
 		}
-		Invoke ("delayDestruct", 1); // destroy player object
+		Invoke ("delayDestruct", 0.2f); // destroy player object
 	}
-
+	
 	void delayDestruct(){
 		//Destroy (this.gameObject);
-		gameObject.SetActive (false);
+		//gameObject.SetActive (false);
+		pController.canMove = false;
 	}
 }

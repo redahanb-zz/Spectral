@@ -32,7 +32,7 @@ public class PlayerController : MonoBehaviour {
 							destinationObject,				// gameobject of the destination indicator
 							buttonBlendObject, 				// gameObject for when a blend order is given using the button
 							mouseCursorObject;				// gameobject of the mouse cursor
-							
+	
 	public 	Color 			targetcolor = Color.grey;		// the target colour of the player (for colour changing)
 	
 	private Transform 		pickupItemTransform, 			// the transform of the item to be picked up
@@ -62,9 +62,9 @@ public class PlayerController : MonoBehaviour {
 							lastInterval, 					//the time of the last frame
 							timeNow, 						//calculates time since last frame
 							customDeltaTime,				//used to create deltatime independent of timescale
-							normalLookAtRate 	= 8.5f,
-							slowTimeLookAtRate 	= 40.0f,
-							colorDistance;
+	normalLookAtRate 	= 8.5f,
+	slowTimeLookAtRate 	= 40.0f,
+	colorDistance;
 	
 	private Vector3 		targetPosition;					//the destination position for moving
 	
@@ -136,6 +136,8 @@ public class PlayerController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		//print (distance);
+		
 		//Used to set a custom delta time independent of timescale(used for movement and lerping when changing main timescale).
 		timeNow 		= Time.realtimeSinceStartup;
 		customDeltaTime = timeNow - lastInterval;
@@ -188,7 +190,7 @@ public class PlayerController : MonoBehaviour {
 		
 		//Cancel function if game paused or over
 		if(pManager.gamePaused || pHealth.playerDead){
-			return;
+			//return;
 		}
 		
 		//Cast mouse ray.
@@ -205,6 +207,7 @@ public class PlayerController : MonoBehaviour {
 			case "Door East" :			mouseImage.sprite = useCursor;		mouseTransform.sizeDelta = new Vector3(64,64,0);break;
 			case "Door West" :			mouseImage.sprite = useCursor;		mouseTransform.sizeDelta = new Vector3(64,64,0);break;
 			}
+			
 			
 			//Perform action based on tag of raycast hit transform (overwirtes name switch)
 			switch(cursorRayhit.transform.tag){
@@ -225,6 +228,8 @@ public class PlayerController : MonoBehaviour {
 		ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 		
 		if(Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1)){
+			if(!isBlending)currentBlendSurface = null;
+			
 			//Set left or right mouse click
 			if(Input.GetMouseButtonDown(0))leftClick = true;
 			if(Input.GetMouseButtonDown(1))leftClick = false;
@@ -234,7 +239,8 @@ public class PlayerController : MonoBehaviour {
 			if (Physics.Raycast(ray, out rayHit, 100f)){
 				isBlending = false;
 				buttonBlendOrder = false;
-				distance = 1000;
+				distance = Vector3.Distance(transform.position, rayHit.point);
+				//distance = 1000;
 				performAction = false;
 				
 				switch(rayHit.transform.tag){
@@ -245,22 +251,30 @@ public class PlayerController : MonoBehaviour {
 					currentBlendSurface = null;
 					verticalDistance = Vector3.Distance(new Vector3(0,transform.position.y,0), new Vector3(0,rayHit.point.y,0));
 					if(verticalDistance > 0.2f){				//Go to idle state if clicking above floor level.
-						currentMoveState = MoveState.Idle;
-						break;
+						//currentMoveState = MoveState.Idle;
+						//break;
 					}
-					else targetDestination = rayHit.point;
-					SetMovement(rayHit.transform, targetDestination);
-					performAction = false;
+					else{
+						currentBlendSurface = null;
+						targetDestination = rayHit.point;
+						SetMovement(rayHit.transform, targetDestination);
+						performAction = false;
+					}
 					break;
 					
 					//Hide against blend surface if correct colour
 				case "Blend Surface" :
+					print("[DEBUG] Ray 1     " +currentBlendSurface);
 					if(rayHit.transform != currentBlendSurface){
+						print("[DEBUG] Ray 2");
 						SetMovement(rayHit.transform, rayHit.transform.position + (-rayHit.transform.forward * 0.3f));
 						Color newColor = bodyParts[0].GetComponent<Renderer>().material.color;
 						Color wallColor = rayHit.transform.GetComponent<Renderer>().material.color;
 						colorDistance = Vector3.Distance(new Vector3(newColor.r, newColor.g, newColor.b), new Vector3(wallColor.r, wallColor.g, wallColor.b));
+						print ("DEBUG: "+currentMoveState + " : " + colorDistance);
+						
 						if(colorDistance < 0.1f){
+							print("[DEBUG] Ray 3");
 							performAction = true;
 							currentBlendSurface = rayHit.transform;
 							isBlending = true;
@@ -268,6 +282,7 @@ public class PlayerController : MonoBehaviour {
 							currentMoveState = MoveState.Run;
 						}
 						else{
+							currentBlendSurface = null;
 							performAction = false;
 							isBlending = false;
 							currentMoveState = MoveState.Run;
@@ -319,32 +334,41 @@ public class PlayerController : MonoBehaviour {
 					SetMovement(rayHit.transform, rayHit.transform.position + (-rayHit.transform.forward * 0.5f));
 					performAction = true;
 					break;
+					
+					//				case "Player":
+					//					currentMoveState = MoveState.Idle;
+					//					currentBlendSurface = null;
+					//					performAction = false;
+					//					break;
 				}
+				
+				
 			}
 		}
 	}
 	
 	
 	void SetMovement(Transform t, Vector3 v){
-		if(Vector3.Distance(transform.position, new Vector3(v.x, transform.position.y, v.z)) > 0.5f){
-			ClearPath();
-			targetPosition 		= new Vector3(v.x, transform.position.y, v.z);
-			if(!leftClick) 
-				currentMoveState 	= MoveState.Sneak;
-			else 
-				currentMoveState 	= MoveState.Run;
+		print ("[DEBUG] SetMovement");
+		if (Vector3.Distance (transform.position, new Vector3 (v.x, transform.position.y, v.z)) > 0.4f) {
+			ClearPath ();
+			targetPosition = new Vector3 (v.x, transform.position.y, v.z);
+			if (!leftClick) currentMoveState = MoveState.Sneak;
+			else currentMoveState = MoveState.Run;
+		} 
+		else {
+			currentMoveState = MoveState.Idle;
 		}
-		else currentMoveState = MoveState.Idle;
 	}
 	
 	void Idle(){
 		agent.destination = agent.transform.position;
-		distance = 1000f;
+		//distance = 1000f;
 	}
 	
 	void BlendWhileStanding(){
 		if(isBlending){
-			transform.position = Vector3.MoveTowards(transform.position, currentBlendSurface.position, Time.deltaTime);
+			transform.position = Vector3.MoveTowards(transform.position, currentBlendSurface.position, Time.deltaTime * 7);
 			newColor = bodyParts[0].GetComponent<Renderer>().material.color;
 			if(rayHit.transform.tag == "Blend Surface")wallColor = rayHit.transform.GetComponent<Renderer>().material.color;
 			if(buttonBlendOrder)wallColor = buttonBlendObject.GetComponent<Renderer>().material.color;
@@ -362,7 +386,7 @@ public class PlayerController : MonoBehaviour {
 		SetSneakSpeed();
 		PathIndicator();
 		
-		if(distance < 0.4f){
+		if(distance < 1f){
 			if(performAction)
 				PerformAnAction();
 			else currentMoveState = MoveState.Idle;
@@ -379,7 +403,7 @@ public class PlayerController : MonoBehaviour {
 		SetRunSpeed();
 		PathIndicator();
 		
-		if(distance < 0.4f){
+		if(distance < 1f){
 			if(performAction)
 				PerformAnAction();
 			else currentMoveState = MoveState.Idle;

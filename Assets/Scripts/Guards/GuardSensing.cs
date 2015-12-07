@@ -21,7 +21,7 @@ public class GuardSensing : MonoBehaviour {
 	public 		bool 				playerDetected;
 	public 		bool 				playerHeard;
 	public 		bool 				soundProofed;
-	public 		bool				freeShot;
+	//public 		bool				freeShot;
 	public 		AudioClip 			guardAlertRoar;
 
 	// private variables
@@ -44,7 +44,6 @@ public class GuardSensing : MonoBehaviour {
 	// temp variables for CheckHearing loop
 	public 		GameObject[] 		footsteps;
 	private 	Footfall 			tempFootstep;
-	public 		GameObject 			marker;
 
 
 	void Start () 
@@ -98,18 +97,18 @@ public class GuardSensing : MonoBehaviour {
 						if(playerController.isVisible)
 						{
 							playerInSight = true;
-							freeShot = false;
+							//freeShot = false;
 							lastPlayerSighting = player.transform.position;
-							if(Physics.SphereCast(transform.position + Vector3.up, 1.0f, directionToPlayer, out sphereHit))
-							{
-								if(sphereHit.transform.tag == "Player")
-								{
-									print ("Spherecast hit player!");
-									freeShot = true;
-								} else {
-									print ("Sphere cast hit: " + sphereHit.transform.name);
-								}
-							}
+//							if(Physics.SphereCast(transform.position + Vector3.up, 1.0f, directionToPlayer, out sphereHit))
+//							{
+//								if(sphereHit.transform.tag == "Player")
+//								{
+//									print ("Spherecast hit player!");
+//									freeShot = true;
+//								} else {
+//									print ("Sphere cast hit: " + sphereHit.transform.name);
+//								}
+//							}
 
 							if(canRoar)
 							{
@@ -193,15 +192,13 @@ public class GuardSensing : MonoBehaviour {
 				if(spawnOrder == 0.0f)
 				{
 					spawnOrder = tempFootstep.startTime;
+					investigationLocation = echo.transform.position;
 					footstepInRange = true;
 				}
 				else if(tempFootstep.startTime > spawnOrder)
 				{
 					spawnOrder = tempFootstep.startTime;
 					investigationLocation = echo.transform.position;
-					if(marker){
-						marker.transform.position = investigationLocation;
-					}
 				}
 			}
 		}

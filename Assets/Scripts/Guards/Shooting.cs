@@ -9,6 +9,7 @@ public class Shooting : MonoBehaviour {
 
 	public 			int 				shotDmg;
 	public 			float 				reloadTime;
+	public 			bool				shotBlocked = false;
 
 	private 		GuardSensing		sensing;
 	private 		Animator 			anim;
@@ -57,7 +58,21 @@ public class Shooting : MonoBehaviour {
 		// set aim weight for aiming weapon
 		if(aimWeight > 1.0f){
 			aimWeight = 1.0f;
+
+			// Testing Line of Sight from GunBarrel
+//			RaycastHit hit;
+//			Debug.DrawRay(gunBarrel.transform.position, torso.transform.position);
+//			if(Physics.Raycast(gunBarrel.transform.position, torso.transform.position - gunBarrel.transform.position, out hit, 8.0f))
+//			{
+//				if(hit.collider.tag != "Player"){
+//					print ("can't hit player from weapon!");
+//					shotBlocked = true;
+//				} else {
+//					shotBlocked = false;
+//				}
+//			}
 		}
+
 		if (player) {
 			// if there is a player, aim the guard's right hand at the player's torso
 			anim.SetIKPosition (AvatarIKGoal.RightHand, torso.transform.position);

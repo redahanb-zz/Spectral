@@ -145,17 +145,19 @@ public class HUD_Inv_Button : MonoBehaviour {
 		// get touch that initiated the drag
 		findTouchbyID(fingerID);
 
-		// track the dragging touch, update icon position to drag position
-		dragImage.transform.position = dragPosition;
-		dragImage.GetComponent<Image> ().sprite = playerInventory.playerInventory [slotIndex].GetComponent<InventoryItem> ().itemIcon;
+		if(playerInventory.playerInventory[slotIndex]){
+			// track the dragging touch, update icon position to drag position
+			dragImage.transform.position = dragPosition;
+			dragImage.GetComponent<Image> ().sprite = playerInventory.playerInventory [slotIndex].GetComponent<InventoryItem> ().itemIcon;
 
-		// chang eicon colour
-		Color iconColor = playerInventory.playerInventory [slotIndex].GetComponent<InventoryItem> ().itemColor;
-		iconColor.a = 1;
-		dragImage.GetComponent<Image> ().color = iconColor;
+			// chang eicon colour
+			Color iconColor = playerInventory.playerInventory [slotIndex].GetComponent<InventoryItem> ().itemColor;
+			iconColor.a = 1;
+			dragImage.GetComponent<Image> ().color = iconColor;
 
-		// display icon
-		dragImage.SetActive(true);
+			// display icon
+			dragImage.SetActive(true);
+		}
 	}
 
 

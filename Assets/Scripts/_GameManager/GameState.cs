@@ -111,7 +111,7 @@ public class GameState : MonoBehaviour {
 
 			// Update player stats from save file
 			pHealth.maxHealth = data.maxHealth;
-			pHealth.playerHealth = data.currentHealth;
+			pHealth.playerHealth = data.maxHealth; // give player full health at start of a new scene
 			pInventory.inventorySize = data.inventorySize;
 			pInventory.playerInventory = new GameObject[pInventory.inventorySize];
 

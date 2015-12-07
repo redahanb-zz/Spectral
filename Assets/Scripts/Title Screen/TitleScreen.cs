@@ -19,7 +19,8 @@ public class TitleScreen : MonoBehaviour {
 									gameManagerObject, 	//game manager gameobject
 									playerCameraObject, //player camera gameobject
 									alertSystemObject, 	//alert system gameobject
-									roomInfoObject;		//next room info gameobject
+									roomInfoObject,		//next room info gameobject
+									upgradeAreaTrigger;	//upgrade area
 
 	private Level 					lvl;				//instance of level script
 	public 	RawImage 				logoImage;			//the logo image
@@ -45,6 +46,7 @@ public class TitleScreen : MonoBehaviour {
 	HUD_Inventory 					invHUD;					//instance of inventory
 	HUD_Healthbar					healthHUD;				//instance of healthbar
 	HideHUDElement					hidePause, hideTime;	//instances of hide hud element
+	HideHUDElement					hideMapButton;			//instance of hide hud element
 
 	// Use this for initialization
 	void Start () {
@@ -65,9 +67,11 @@ public class TitleScreen : MonoBehaviour {
 		dof.objectFocus = lookAtTarget.transform;
 
 		gradientImage = transform.Find("Rainbow Gradient").GetComponent<RawImage>();
+		upgradeAreaTrigger = GameObject.Find("Upgrade Area Trigger");
+		upgradeAreaTrigger.GetComponent<UpgradeArea> ().enabled = false;
 
-		healthObject.GetComponent<HUD_Healthbar>().enabled = false;
-		inventoryObject.GetComponent<HUD_Inventory>().enabled = false;
+		//healthObject.GetComponent<HUD_Healthbar>().enabled = false;
+		//inventoryObject.GetComponent<HUD_Inventory>().enabled = false;
 		playerObject.SetActive(false);
 
 		lvl = GameObject.Find("Level").GetComponent<Level>();
@@ -76,7 +80,7 @@ public class TitleScreen : MonoBehaviour {
 		logoImage.color = new Color(0,0,0,0);
 		continueText.color = new Color(0,0,0,0);
 
-
+		hideMapButton = GameObject.Find ("Map Button").GetComponent<HideHUDElement> ();
 
 		if(!invHUD){
 			invHUD = GameObject.Find("HUD_Inventory").GetComponent<HUD_Inventory>();
@@ -156,16 +160,20 @@ public class TitleScreen : MonoBehaviour {
 
 	//Restores in-game hud and controls
 	void EnableHudAndControls(){
-		healthObject.GetComponent<HUD_Healthbar>().enabled = true;
-		inventoryObject.GetComponent<HUD_Inventory>().enabled = true;
+		healthObject.GetComponent<HUD_Healthbar> ().toggleHide ();
+		inventoryObject.GetComponent<HUD_Inventory> ().toggleHide ();
 		cController.lookAtOtherTarget = null;
 
 		gameManagerObject.SetActive(true);
 		alertSystemObject.SetActive(true);
-		healthObject.SetActive(true);
-		inventoryObject.SetActive(true);
+		//healthObject.SetActive(true);
+		//inventoryObject.SetActive(true);
 		timeButtonObject.SetActive(true);
+		hideTime.toggleHide ();
+		hidePause.toggleHide ();
+		hideMapButton.toggleHide ();
 		lvl.enabled = true;
+		upgradeAreaTrigger.GetComponent<UpgradeArea> ().enabled = true;
 
 		roomInfoObject.SetActive(true);
 

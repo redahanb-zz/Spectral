@@ -19,6 +19,15 @@ public class HideHUDElement : MonoBehaviour {
 	void Start () 
 	{
 		rectTran = GetComponent<RectTransform> ();
+
+		if (Application.loadedLevelName == "Restore Point") 
+		{
+			if(!GameObject.Find("HideTitleObject"))
+			{
+				hideHUDPiece = true;
+				rectTran.position = hideLocation;
+			}
+		}
 	}
 	
 

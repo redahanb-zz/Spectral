@@ -22,7 +22,7 @@ public class HUD_Inventory : MonoBehaviour {
 	private			Image 				itemIcon;
 	private			Color 				iconColor;
 	private			Text 				valueText;
-
+	
 
 	void Start () 
 	{
@@ -32,6 +32,17 @@ public class HUD_Inventory : MonoBehaviour {
 		if (Application.loadedLevelName == "Upgrade Screen") {
 			hideInvHUD = true;
 		}
+
+		// hide inv_HUD on title screen
+		if (Application.loadedLevelName == "Restore Point") 
+		{
+			if(!GameObject.Find("HideTitleObject"))
+			{
+				hideInvHUD = true;
+				rectTran.anchoredPosition = new Vector3(0, -75, 0);
+			}
+		}
+
 	}
 	
 

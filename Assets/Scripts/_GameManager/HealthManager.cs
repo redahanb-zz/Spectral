@@ -6,7 +6,7 @@ public class HealthManager : MonoBehaviour
 
     public 		int 			maxHealth;
     public 		int 			playerHealth;
-    public 		bool 			playerDead 		= 		false;
+    public 		bool 			playerDead = false;
 
     private 	PlayerBodyparts bodyParts;
     private 	HUD_Healthbar 	healthUI;
@@ -22,7 +22,9 @@ public class HealthManager : MonoBehaviour
         if (Application.loadedLevelName != "Upgrades Screen")
         {
             healthUI = GameObject.Find("HUD_Healthbar").GetComponent<HUD_Healthbar>();
-            bodyParts = GameObject.FindWithTag("Player").GetComponent<PlayerBodyparts>();
+            if(GameObject.FindWithTag("Player")){
+				bodyParts = GameObject.FindWithTag("Player").GetComponent<PlayerBodyparts>();
+			}
         }
         else
         {
@@ -34,7 +36,13 @@ public class HealthManager : MonoBehaviour
 
     void Update()
     {
-        if (playerHealth <= 0)
+		// in case the player spawns late, set up reference here
+		if(GameObject.FindWithTag("Player")){
+			bodyParts = GameObject.FindWithTag("Player").GetComponent<PlayerBodyparts>();
+		}
+
+		// mark player as dead if health is less than or equal to zero
+		if (playerHealth <= 0)
         {
             playerDead = true;
         }
@@ -49,7 +57,6 @@ public class HealthManager : MonoBehaviour
 
         if (playerHealth <= 0)
         {
-            //print ("Player was killed...");
             if (Application.loadedLevelName != "Upgrades Screen") bodyParts.selfDestruct();
         }
     }

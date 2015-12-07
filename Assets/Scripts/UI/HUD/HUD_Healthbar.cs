@@ -29,7 +29,18 @@ public class HUD_Healthbar : MonoBehaviour {
 		// hide the healthbar in the upgrade screen
 		if (Application.loadedLevelName == "Upgrade Screen") {
 			hideHealthHUD = true;
+		} 
+
+		// hide health_HUD on title screen
+		if(Application.loadedLevelName == "Restore Point")
+		{
+			if(!GameObject.Find("HideTitleObject"))
+			{
+				hideHealthHUD = true;
+				rectTran.anchoredPosition = new Vector3(0, 75, 0);
+			}
 		}
+
 	} // end Start
 
 	void Update () 

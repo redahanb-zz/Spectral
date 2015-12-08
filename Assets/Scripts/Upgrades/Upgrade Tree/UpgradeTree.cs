@@ -32,6 +32,11 @@ public class UpgradeTree : MonoBehaviour {
 	Vector3 centerPoint, startPoint,  healthPoint, inventoryPoint, speedPoint, colourPoint, noisePoint, timescalePoint;
 
 	Text selectUpgradeText;
+
+	RectTransform 			mouseTransform;
+	Image 					mouseImage;
+	private Sprite 			defaultCursor;					//The default cursor used for movement.
+	GameObject mouseCursorObject;
 		
 
 	// Use this for initialization
@@ -54,11 +59,28 @@ public class UpgradeTree : MonoBehaviour {
 		timescalePoint = GameObject.Find("Timescale Button").GetComponent<RectTransform>().localPosition;
 
 		centerPoint = startPoint;
+		SetupMouseCursor();
+	}
 
+	void SetupMouseCursor(){
+		mouseCursorObject = Instantiate(Resources.Load("Mouse Cursor"), Vector3.zero, Quaternion.identity) as GameObject;
+		mouseCursorObject.transform.parent = GameObject.Find("Canvas").transform;
+		mouseCursorObject.name = "Mouse Cursor";
+		mouseTransform = mouseCursorObject.GetComponent<RectTransform>();
+		mouseTransform.sizeDelta = new Vector3(32,32,0);
+		mouseImage = mouseCursorObject.GetComponent<Image>();
+		
+		defaultCursor = Resources.Load<Sprite>("UI/Cursors/Cursor_Main");
+
+		Cursor.visible = false;
+		
+		mouseImage.sprite = defaultCursor;
 	}
 	
 	// Update is called once per frame
 	void Update () {
+		MouseCursorMovment();
+
 		if(returnToCenter){
 			rTransform.localPosition = Vector3.Lerp(rTransform.localPosition, centerPoint, Time.deltaTime * 0.5f);
 		}
@@ -71,6 +93,11 @@ public class UpgradeTree : MonoBehaviour {
 		}
 		//print(rTransform.localPosition);
 		//print(mouseStartPosition + "  :  " +currentMousePosition + "  :  " +positionOffset);
+	}
+
+	//Set position of mouse.
+	void MouseCursorMovment(){
+		mouseTransform.position = Input.mousePosition + new Vector3(mouseTransform.sizeDelta.x/2 , -mouseTransform.sizeDelta.y/2, 0);
 	}
 
 	void ShowPanel(){

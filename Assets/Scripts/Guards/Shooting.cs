@@ -73,18 +73,23 @@ public class Shooting : MonoBehaviour {
 //			}
 		}
 
-		if (player) {
+		if (player && !pHealth.playerDead && sensing.playerInSight) {
 			// if there is a player, aim the guard's right hand at the player's torso
 			anim.SetIKPosition (AvatarIKGoal.RightHand, torso.transform.position);
 			anim.SetIKPositionWeight (AvatarIKGoal.RightHand, aimWeight);
-		} else if(pHealth.playerDead) {
+		} else if (pHealth.playerDead) {
 			// stop aiming at player is he is dead
-			anim.SetBool("InSight", false);
-			anim.SetFloat("Aim Weight", 0.0f);
+			anim.SetBool ("InSight", false);
+			anim.SetFloat ("Aim Weight", 0.0f);
+		} else {
+			// stop aiming at player is he is dead
+			anim.SetBool ("InSight", false);
+			anim.SetFloat ("Aim Weight", 0.0f);
 		}
 	}
 
-	// fire weapon 
+
+	// function to fire weapon 
 	public void Shoot() {
 		// if reloading is complete and player is alive and weapon is fully raised, FIRE
 		if (counter <= 0 && !pHealth.playerDead && anim.GetFloat("Aim Weight") >= 1.0f) {

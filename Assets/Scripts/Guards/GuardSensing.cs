@@ -21,7 +21,6 @@ public class GuardSensing : MonoBehaviour {
 	public 		bool 				playerDetected;
 	public 		bool 				playerHeard;
 	public 		bool 				soundProofed;
-	//public 		bool				freeShot;
 	public 		AudioClip 			guardAlertRoar;
 
 	// private variables
@@ -97,18 +96,7 @@ public class GuardSensing : MonoBehaviour {
 						if(playerController.isVisible)
 						{
 							playerInSight = true;
-							//freeShot = false;
 							lastPlayerSighting = player.transform.position;
-//							if(Physics.SphereCast(transform.position + Vector3.up, 1.0f, directionToPlayer, out sphereHit))
-//							{
-//								if(sphereHit.transform.tag == "Player")
-//								{
-//									print ("Spherecast hit player!");
-//									freeShot = true;
-//								} else {
-//									print ("Sphere cast hit: " + sphereHit.transform.name);
-//								}
-//							}
 
 							if(canRoar)
 							{

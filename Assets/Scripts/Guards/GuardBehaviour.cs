@@ -286,7 +286,7 @@ public class GuardBehaviour : MonoBehaviour {
 				waitCount = Time.time;
 			}
 			if(Time.time - waitCount >= 2.5f){
-				// if time reaches +3 seconds, de-aggro guard, reset timer
+				// if time reaches +2.5 seconds, de-aggro guard, reset timer
 				guardAI.aggro = false;
 				waitCount = 0.0f;
 			}
@@ -300,7 +300,7 @@ public class GuardBehaviour : MonoBehaviour {
 	// function for when the guard hears a noise, sends the guard to investigate the sources of the noise
 	{
 		lastPlayerSighting = guardSensing.investigationLocation;
-		// pause the guard's motion, and start a quick timer
+		// pause the guard's motion, and start a timer
 		if (listenCount == 0.0f) {
 			listenCount = Time.time;
 			anim.SetFloat("Speed", 0.0f);
@@ -318,7 +318,7 @@ public class GuardBehaviour : MonoBehaviour {
 				if(waitCount == 0.0f){
 					waitCount = Time.time;
 				}
-				if(Time.time - waitCount >= 4.0f){
+				if(Time.time - waitCount >= 3.5f){
 					// once the wait timer has elasped, reset the timers and set the curious parameter to false
 					// the guardAI script will handle the behaviour change based on the false 'curious' parameter
 					guardAI.curious = false;

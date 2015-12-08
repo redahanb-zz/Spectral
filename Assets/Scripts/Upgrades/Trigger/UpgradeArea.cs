@@ -4,16 +4,19 @@ using System.Collections;
 
 public class UpgradeArea : MonoBehaviour {
 	
-	RawImage tintImage;
-	Text instructionText, activateText;
-	bool displayDropInstructions = false, displayActivateInstructions = false, offerItem = false;
-	ScreenFade fade;
-	Transform itemTransform;
-	Transform playerTransform;
-	BoxCollider boxCol;
-	HUD_Inventory hudInv;
-	CameraController cController;
-	
+	private RawImage 	tintImage;
+	private Text 		instructionText, 
+	activateText;
+	private bool 		displayDropInstructions = false,  
+	offerItem = false;
+	public 	bool 		displayActivateInstructions = false;
+	private ScreenFade 	fade;
+	public 	Transform 	itemTransform;
+	private Transform 	playerTransform;
+	private BoxCollider boxCol;
+	private HUD_Inventory hudInv;
+	private CameraController cController;
+	public 	GameObject[] objs;
 	
 	// Use this for initialization
 	void Start () {
@@ -41,7 +44,9 @@ public class UpgradeArea : MonoBehaviour {
 	void Update () {
 		//if(boxCol.bounds.Contains(playerTransform.position))print("Player inside trigger");
 		//   else print("Player outside trigger");
-		
+		//print (displayDropInstructions + " : " + displayActivateInstructions);
+		if (!itemTransform)
+			displayActivateInstructions = false;
 		
 		if (displayActivateInstructions) {
 			if(cController.mapButtonDown)hudInv.hide();
@@ -50,29 +55,6 @@ public class UpgradeArea : MonoBehaviour {
 		else {
 			if(cController.mapButtonDown)hudInv.hide();
 			else hudInv.show ();
-		}
-		
-		
-		GameObject[] objs = GameObject.FindGameObjectsWithTag("Pickup");
-		foreach(GameObject g in objs){
-			if(boxCol.bounds.Contains(g.transform.position)){
-				itemTransform = g.transform;
-				//displayDropInstructions = false;
-				displayActivateInstructions = true;
-				//hudInv.hide();
-			}
-			else{
-				//displayDropInstructions = true;
-				displayActivateInstructions = false;
-				//hudInv.show();
-				
-			}
-		}
-		if(objs.Length <= 0){
-			//	displayDropInstructions = true;
-			displayActivateInstructions = false;
-			//hudInv.show();
-			
 		}
 		
 		Instructions();
@@ -131,22 +113,30 @@ public class UpgradeArea : MonoBehaviour {
 	void OnTriggerEnter(Collider c){
 		if(c.tag == "Player"){
 			displayDropInstructions = true;
+			if(itemTransform)displayActivateInstructions = true;
 		}
-		//		else if(c.tag == "Pickup"){
-		//			itemTransform = c.transform;
-		//			displayDropInstructions = false;
-		//			displayActivateInstructions = true;
-		//		}
+		if (displayDropInstructions) {
+			
+			if(c.tag == "Pickup"){
+				itemTransform = c.transform;
+				displayActivateInstructions = true;
+			}
+		}
 	}
 	
 	void OnTriggerExit(Collider c){
-		if(c.tag == "Player"){
+		if (c.tag == "Player") {
 			displayDropInstructions = false;
 			displayActivateInstructions = false;
+			//itemTransform = null;
+		} 
+		else if (c.tag == "Pickup") {
+			itemTransform = null;
 		}
-		//		else if(c.tag == "Pickup"){
-		//			displayDropInstructions = true;
-		//			displayActivateInstructions = false;
-		//		}
+		
+	}
+	
+	void OnTriggerStay(Collider c){
+		
 	}
 }

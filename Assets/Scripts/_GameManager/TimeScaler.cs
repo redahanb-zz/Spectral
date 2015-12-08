@@ -90,8 +90,8 @@ public class TimeScaler : MonoBehaviour {
 
 	//Input for slowing/resuming time
 	void KeyInput(){
-		if(Input.GetKey(KeyCode.T))SlowTime();
-		else if(Input.GetKeyUp(KeyCode.T))ResumeTime();
+		if(Input.GetKey(KeyCode.Space))SlowTime();
+		else if(Input.GetKeyUp(KeyCode.Space))ResumeTime();
 	}
 	
 	// Update is called once per frame

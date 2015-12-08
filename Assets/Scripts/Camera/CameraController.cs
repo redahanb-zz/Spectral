@@ -36,15 +36,18 @@ public class CameraController : MonoBehaviour {
 						mapButtonDown = false;	//indicates if map button is pressed
 
 	private GameObject 	mapCamObject;			//the map camera object for the current room
+
+	private bool 		upgradeHide = false;
 	
 	HUD_Inventory 		invHUD;					//instance of inventory
 	HUD_Healthbar		healthHUD;				//instance of healthbar
 	HideHUDElement		hidePause, hideTime;	//instances of hide hud element
-	HideHUDElement		hideMap;	//instances of hide hud element
+	HideHUDElement		hideMap;				//instances of hide hud element
 
 	TitleScreen tScreen;
 	private PauseManager pManager;
 	private HealthManager hManager;
+	private UpgradeArea upArea;
 
 
 	// Use this for initialization
@@ -65,11 +68,13 @@ public class CameraController : MonoBehaviour {
 
 		if(Application.loadedLevelName == "Restore Point"){
 			tScreen = GameObject.Find("Title Screen Canvas").GetComponent<TitleScreen>();
+			upArea = GameObject.Find("Upgrade Area Trigger").GetComponent<UpgradeArea>();
 			if(tScreen.showTitleScreen){
 				invHUD.hide();
 				healthHUD.hide();
 				hidePause.hide();
 				hideTime.hide();
+				hideMap.hide();
 			}
 		}
 	}
@@ -110,6 +115,10 @@ public class CameraController : MonoBehaviour {
 		myTime = timeNow - lastInterval;
 		lastInterval = timeNow;
 
+		if (upArea) {
+			upgradeHide = upArea.displayActivateInstructions;
+		}
+
 
 		if(lookAtOtherTarget){
 			transform.LookAt(lookAtOtherTarget.position);
@@ -130,7 +139,7 @@ public class CameraController : MonoBehaviour {
 			}
 
 
-			if(Input.GetKey(KeyCode.C)){
+			if(Input.GetKey(KeyCode.M)){
 				mapButtonDown = true;
 
 				if(!invHUD){
@@ -146,11 +155,13 @@ public class CameraController : MonoBehaviour {
 					hideTime.hide();
 				}
 			}
-			else if(Input.GetKeyUp(KeyCode.C)){
+			else if(Input.GetKeyUp(KeyCode.M)){
 					if(invHUD){
+					mapButtonDown = false;
 						if(!hManager.playerDead && !pManager.gamePaused){
-							mapButtonDown = false;
-							invHUD.show();
+							if(!upgradeHide){
+								invHUD.show();
+							}
 							healthHUD.show ();
 							hidePause.show();
 							hideTime.show();
@@ -165,7 +176,7 @@ public class CameraController : MonoBehaviour {
 			}
 
 			else{
-				if(!hManager.playerDead && !pManager.gamePaused){
+				if(!hManager.playerDead && !pManager.gamePaused && !upgradeHide){
 					invHUD.show();
 					healthHUD.show ();
 					hidePause.show();

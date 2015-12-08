@@ -70,8 +70,6 @@ public class TitleScreen : MonoBehaviour {
 		upgradeAreaTrigger = GameObject.Find("Upgrade Area Trigger");
 		upgradeAreaTrigger.GetComponent<UpgradeArea> ().enabled = false;
 
-		//healthObject.GetComponent<HUD_Healthbar>().enabled = false;
-		//inventoryObject.GetComponent<HUD_Inventory>().enabled = false;
 		playerObject.SetActive(false);
 
 		lvl = GameObject.Find("Level").GetComponent<Level>();
@@ -166,8 +164,7 @@ public class TitleScreen : MonoBehaviour {
 
 		gameManagerObject.SetActive(true);
 		alertSystemObject.SetActive(true);
-		//healthObject.SetActive(true);
-		//inventoryObject.SetActive(true);
+
 		timeButtonObject.SetActive(true);
 		hideTime.toggleHide ();
 		hidePause.toggleHide ();

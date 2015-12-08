@@ -62,7 +62,9 @@ public class AlertManager : MonoBehaviour {
 
 		mixer.SetFloat("AlertMusicVolume", alertVolume);
 		mixer.SetFloat("NormalMusicVolume", normalVolume);
-		if(Input.GetKeyDown(KeyCode.B))alertActive = !alertActive;
+
+		// Key for debugging, manual disable of alarm!
+		//if(Input.GetKeyDown(KeyCode.B))alertActive = !alertActive;
 
 		if(alertActive){
 			if(alertVolume < -10f)alertVolume = alertVolume + 1.0f;

@@ -24,6 +24,7 @@ public class HUD_Inv_Button : MonoBehaviour {
 	private 	int 				fingerID;
 
 	private 	PlayerInventory 	playerInventory;
+	private		PlayerController	pController;
 	private 	EventSystem 		eventSystem;
 	private 	int 				slotIndex;
 	private 	float 				timePressed = 0;
@@ -32,6 +33,7 @@ public class HUD_Inv_Button : MonoBehaviour {
 	void Start () 
 	{
 		playerInventory = GameObject.Find("Inventory Manager").GetComponent<PlayerInventory>();
+		if(GameObject.FindWithTag("Player")){ pController = GameObject.FindWithTag ("Player").GetComponent<PlayerController> ();}
 		eventSystem = GameObject.Find ("EventSystem").GetComponent<EventSystem> ();
 		slotIndex = GetComponent<SimpleIndex> ().index;
 
@@ -47,6 +49,11 @@ public class HUD_Inv_Button : MonoBehaviour {
 	{
 		//findTouch ();
 
+		// set up late player controller reference
+		if (!pController) {
+			if(GameObject.FindWithTag("Player")){ pController = GameObject.FindWithTag ("Player").GetComponent<PlayerController> ();}
+		}
+
 		// if the button is held down, start the counter, otherwise reset the timer
 		if (countUp) {
 			timePressed += 3*Time.deltaTime;
@@ -55,7 +62,7 @@ public class HUD_Inv_Button : MonoBehaviour {
 		}
 
 		// if the inventory button is held down for long enough, enable dragging and show the dragging icon
-		if (timePressed >= timeToDrag) {
+		if (timePressed >= timeToDrag && !pController.isBlending) {
 			draggable = true;
 			dragging = true;
 			spawnIcon();
@@ -135,7 +142,7 @@ public class HUD_Inv_Button : MonoBehaviour {
 	
 	// public function to set player target colour to the colour of the the object in the inventory slot
 	public void changeColour(){
-		if (playerInventory.playerInventory [slotIndex] != null) {
+		if (playerInventory.playerInventory [slotIndex] != null && !pController.isBlending) {
 			GameObject.FindWithTag ("Player").GetComponent<PlayerController> ().targetcolor = playerInventory.playerInventory [slotIndex].GetComponent<InventoryItem> ().itemColor;
 		}
 	}

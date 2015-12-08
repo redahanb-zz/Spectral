@@ -129,7 +129,7 @@ public class PauseManager : MonoBehaviour {
 	public void HomeBase()
 	{
 		// Quit current level and return to homebase
-		Application.LoadLevel (0);
+		Application.LoadLevel ("Restore Point");
 	}
 
 

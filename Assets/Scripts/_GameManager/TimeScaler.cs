@@ -74,11 +74,18 @@ public class TimeScaler : MonoBehaviour {
 
 	//SlowTime if stored time is greater than 0
 	public void SlowTime(){
-		if(currentStoredTime > 0.01f){
-			timeSlowed 		= true;
-			timeStopped = false;
+
+		if (Application.loadedLevelName == "Restore Point") {
+			if (GameObject.Find ("HideTitleObject")) {
+
+			}
+		} else {
+			if (currentStoredTime > 0.01f) {
+				timeSlowed = true;
+				timeStopped = false;
+			} else
+				ResumeTime ();
 		}
-		else ResumeTime();
 		
 	}
 
